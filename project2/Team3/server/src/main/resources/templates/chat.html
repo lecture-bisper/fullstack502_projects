@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket 토큰 테스트</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        #log {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        #token {
+            width: 50%;
+        }
+
+        #target {
+            width: 20%;
+        }
+
+        #message {
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+
+<h2>WebSocket 토큰 테스트</h2>
+
+<p>
+    토큰: <input id="token" placeholder="토큰 입력">
+    <button onclick="connect()">Connect</button>
+</p>
+
+<div id="chatContainer" style="display:none;">
+    <div id="log"></div>
+    <p>
+        보내는 대상: <input id="target" placeholder="userId">
+    </p>
+    <p>
+        메시지: <input id="message" placeholder="메시지 입력">
+        <button onclick="sendMessage()">Send</button>
+    </p>
+</div>
+
+<script>
+    let socket;
+
+    function appendLog(msg) {
+        const log = document.getElementById("log");
+        log.innerHTML += `<p>${msg}</p>`;
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function connect() {
+        const token = document.getElementById("token").value.trim();
+        if (!token) {
+            alert("토큰을 입력하세요.");
+            return;
+        }
+
+        // WebSocket 연결 (쿼리 파라미터로 토큰 전송)
+        socket = new WebSocket(`ws://10.100.202.32:8080/chat?token=${token}`);
+
+        socket.onopen = () => {
+            appendLog("WebSocket 연결 성공");
+            document.getElementById("chatContainer").style.display = "block";
+        };
+
+        socket.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            appendLog(`${data.sender} -> ${data.target}: ${data.message}`);
+        };
+
+        socket.onclose = () => appendLog("WebSocket 종료");
+        socket.onerror = (err) => appendLog("WebSocket 오류: " + err);
+    }
+
+    function sendMessage() {
+        const target = document.getElementById("target").value.trim();
+        const message = document.getElementById("message").value.trim();
+        if (!target || !message) {
+            alert("대상과 메시지를 입력하세요.");
+            return;
+        }
+
+        const chatDTO = {target: target, message: message};
+
+        socket.send(JSON.stringify(chatDTO));
+        appendLog(`나 -> ${target}: ${message}`);
+        document.getElementById("message").value = "";
+    }
+</script>
+
+</body>
+</html>

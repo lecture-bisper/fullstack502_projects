@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Title</title>
+    <script>
+        $(document).ready(function () {
+            $("#btn-check").on("click", function () {
+                const data8 = $("#input-data8").val()
+                const data9 = $("#input-data9").val()
+
+                const datas = {checkType: data8, userData: data9}
+
+                $.ajax({
+                    url: "/api/auth/check",
+                    type: "GET",
+                    data: datas,
+                    success: function (resp) {
+                        alert(resp)
+                    },
+                    error: function (xhr, status, error) {
+                        alert("중복 확인 중 오류 발생")
+                    }
+                })
+            });
+
+            $("#btn-register").on("click", function () {
+                const data1 = $("#input-data1").val()
+                const data2 = $("#input-data2").val()
+                const data3 = $("#input-data3").val()
+                const data4 = $("#input-data4").val()
+                const data5 = $("#input-data5").val()
+                const data18 = $("#input-data18").val()
+
+                const datas = {
+                    userId: data1,
+                    password: data2,
+                    email: data3,
+                    phone: data4,
+                    userName: data5,
+                    role: data18
+                };
+
+                $.ajax({
+                    url: "/api/auth/register",
+                    type: "POST",
+                    contentType: 'application/json',
+                    data: JSON.stringify(datas),
+                    success: function () {
+                        alert("회원가입 성공");
+                    },
+                    error: function () {
+                        alert("회원가입 중 오류 발생")
+                    }
+                })
+            });
+
+            $("#btn-login").on("click", function () {
+                const data6 = $("#input-data6").val()
+                const data7 = $("#input-data7").val()
+                const data17 = $("#input-data17").val()
+
+                const datas = {userId: data6, password: data7, role: data17, isAutoLogin: false}
+
+                $.ajax({
+                    url: "/api/auth/login",
+                    type: "POST",
+                    data: datas,
+                    success: function (resp) {
+                        alert(resp)
+                    },
+                    error: function () {
+                        alert("로그인 중 오류 발생")
+                    }
+                })
+            });
+
+            $("#btn-validate").on("click", function () {
+                const data10 = $("#input-data10").val()
+
+                $.ajax({
+                    url: "/api/auth/validate",
+                    type: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + data10
+                    },
+                    data: data10,
+                    success: function (resp) {
+                        alert(resp);
+                    },
+                    error: function () {
+                        alert("유효성 검사 중 오류 발생");
+                    }
+                })
+            });
+
+            $("#btn-user-info").on("click", function () {
+                const data11 = $("#input-data11").val()
+
+                $.ajax({
+                    url: "/api/user/info",
+                    type: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + data11
+                    },
+                    data: data11,
+                    success: function (resp) {
+                        console.log(resp);
+                    },
+                    error: function () {
+                        alert("유저 정보 불러오는 중 오류 발생")
+                    }
+                })
+            });
+
+            $("#btn-change-password").on("click", function () {
+                const data12 = $("#input-data12").val()
+                const data13 = $("#input-data13").val()
+                const data14 = $("#input-data14").val()
+                const data15 = $("#input-data15").val()
+
+                const datas = {
+                    oldPassword: data12,
+                    newPassword: data13,
+                    newPasswordConfirm: data14
+                }
+
+                $.ajax({
+                    url: "/api/auth/password",
+                    type: "PUT",
+                    data: datas,
+                    headers: {
+                        "Authorization": "Bearer " + data15
+                    },
+                    success: function (resp) {
+                        alert(resp);
+                    },
+                    error: function () {
+                        alert("비밀번호 변경 중 오류 발생");
+                    }
+                })
+            });
+
+            $("#btn-delete-user").on("click", function () {
+                const data16 = $("#input-data16").val()
+
+                $.ajax({
+                    url: "/api/auth/delete",
+                    type: "DELETE",
+                    headers: {
+                        "Authorization": "Bearer " + data16
+                    },
+                    success: function (resp) {
+                        alert(resp);
+                    },
+                    error: function () {
+                        alert("회원탈퇴 중 오류 발생");
+                    }
+                })
+            });
+
+            $("#btn-rename-Image").on("click", function () {
+                const data19 = $("#input-data19").val()
+
+                $.ajax({
+                    url: "/renameImg",
+                    type: "GET",
+                    data: {userId: data19},
+                    success: function (resp) {
+                        alert(resp);
+                    },
+                    error: function () {
+                        alert("오류 발생")
+                    }
+                })
+            });
+        });
+    </script>
+</head>
+<body>
+<div>
+    <input id="input-data8" type="text" placeholder="타입">
+    <input id="input-data9" type="text" placeholder="데이터">
+    <button type="button" id="btn-check">중복 확인</button>
+</div>
+<div>
+    <input id="input-data1" type="text" placeholder="아이디">
+    <input id="input-data2" type="text" placeholder="비밀번호">
+    <input id="input-data3" type="text" placeholder="이메일">
+    <input id="input-data4" type="text" placeholder="전화번호">
+    <input id="input-data5" type="text" placeholder="이름">
+    <input id="input-data18" type="text" placeholder="권한">
+    <button type="button" id="btn-register">회원가입</button>
+</div>
+<div>
+    <input id="input-data6" type="text" placeholder="아이디">
+    <input id="input-data7" type="text" placeholder="비밀번호">
+    <input id="input-data17" type="text" placeholder="권한">
+    <button type="button" id="btn-login">로그인</button>
+</div>
+<div>
+    <input id="input-data10" type="text" placeholder="유저 토큰값">
+    <button type="button" id="btn-validate">유효성 검사</button>
+</div>
+<div>
+    <input id="input-data11" type="text" placeholder="유저 토큰값">
+    <button type="button" id="btn-user-info">유저 정보</button>
+</div>
+<div>
+    <input id="input-data12" type="text" placeholder="현재 비밀번호">
+    <input id="input-data13" type="text" placeholder="새 비밀번호">
+    <input id="input-data14" type="text" placeholder="새 비밀번호 확인">
+    <input id="input-data15" type="text" placeholder="유저 토큰값">
+    <button type="button" id="btn-change-password">비밀번호 변경</button>
+</div>
+<div>
+    <input id="input-data16" type="text" placeholder="유저 토큰값">
+    <button type="button" id="btn-delete-user">회원탈퇴</button>
+</div>
+<div>
+    <input id="input-data19" type="text" placeholder="유저 아이디">
+    <button type="button" id="btn-rename-Image">이름 변환</button>
+</div>
+</body>
+</html>
