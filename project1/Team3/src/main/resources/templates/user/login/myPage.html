@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>spring project Scene, Share</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+          crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/css/common.css">
+  <script src="/js/common.js"></script>
+
+</head>
+<body>
+<div class="wrap">
+
+  <header th:replace="~{/user/layout/header :: headerBasic('마이페이지')}"></header>
+
+
+  <main>
+    <div class="container page-bottom">
+      <h3 class="sub-top-title">마이페이지</h3>
+
+      <section>
+        <div class="my-infor">
+          <div class="imgBox">
+            <figure class="profile-img">
+              <img src="/img/test-profile-img.jpg">
+            </figure>
+          </div>
+
+          <div class="my-infor-list">
+            <dl>
+              <dt>아이디</dt>
+              <dd>abc가나</dd>
+            </dl>
+            <dl>
+              <dt>이름</dt>
+              <dd>홍길동</dd>
+            </dl>
+            <dl>
+              <dt>E-mail</dt>
+              <dd>abcd@gmail.com</dd>
+            </dl>
+            <dl>
+              <dt>성별</dt>
+              <dd>남</dd>
+            </dl>
+
+          </div>
+
+          <div class="my-update-area">
+            <a href="myUpdate.html" th:href="@{/user/myUpdate.do}" target="_blank" class="btn-my-update-go">회원정보 수정</a>
+          </div>
+        </div>
+      </section>
+
+
+      <section>
+        <div class="sub-title">
+          <h4>보고싶어요한 영화</h4>
+        </div>
+
+        <!-- 보고싶어요한 영화가 없는 경우 -->
+        <div class="none" style="display: none">선택한 영화가 없습니다.</div>
+
+        <!-- 보고싶어요한 영화가 있는 경우 -->
+        <div class="movie-list col10">
+          <div class="movie-box">
+            <div class="movie-img">
+              <a href="#">
+                <figure>
+                  <img src="../img/test1-img.jpg">
+                </figure>
+              </a>
+            </div>
+            <div class="movie-title">
+              <p class="sTitle">하이파이브</p>
+              <p class="gpa">평점<img src="/img/star_icon.svg" alt="star_icon">
+                <em>3.5</em>
+              </p>
+            </div>
+          </div>
+
+          <div class="movie-box">
+            <div class="movie-img">
+              <a href="#">
+                <figure>
+                  <img src="/img/test6-img.jpg" alt="영화 포스터">
+                </figure>
+              </a>
+            </div>
+            <div class="movie-title">
+              <p class="sTitle">좀비딸</p>
+              <p class="gpa">평점<img src="/img/star_icon.svg" alt="star_icon">
+                <em>4</em>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section>
+        <div class="sub-title">
+          <h4>리뷰/댓글 작성한 영화</h4>
+        </div>
+
+        <!-- 리뷰한 영화/댓글이 없는 경우 -->
+        <div class="none" style="display: none">아직 작성한 리뷰가 없습니다.</div>
+
+        <!-- 리뷰한 영화/댓글이 있는 경우 -->
+        <div class="review-list">
+          <div class="review-box">
+            <a href="">
+              <div class="top my">
+                <h6>영화 제목</h6>
+                <div class="star-view">
+                  <img src="/img/star_icon.svg">
+                  <span>0</span>
+                </div>
+              </div>
+              <div class="center">
+                <figure class="imgBox">
+                  <img src="/img/test1-img.jpg" lt="영화 포스터">
+                </figure>
+                <div class="infor">
+                  <p class="in-text">영화 관람 후기 및 추천 리뷰 내용입니다. 영화 관람 후기 및 추천 리뷰 내용입니다. 영화 관람 후기 및 추천 리뷰
+                    내용입니다. 영화 관람 후기 및 추천 리뷰 내용입니다. 영화 관람 후기 및 추천 리뷰 내용입니다. </p>
+                </div>
+              </div>
+              <div class="bottom">댓글 <em>7</em>
+              </div>
+            </a>
+          </div>
+
+          <div class="review-box">
+            <a href="">
+              <div class="top my">
+                <h6>영화 제목</h6>
+                <div class="star-view">
+                  <img src="/img/star_icon.svg" alt="star">
+                  <span>0</span>
+                </div>
+              </div>
+              <div class="center">
+                <figure class="imgBox">
+                  <img src="/img/test7-img.jpg" alt="영화 포스터">
+                </figure>
+                <div class="infor">
+                  <p class="in-text">영화 관람 후기 및 추천 리뷰 내용입니다. 영화 관람 후기 및 추천 리뷰 내용입니다. 영화 관람 후기 및 추천 리뷰
+                    내용입니다. 영화 관람 후기 및 추천 리뷰 내용입니다. 영화 관람 후기 및 추천 리뷰 내용입니다. </p>
+                </div>
+              </div>
+              <div class="bottom">댓글 <em>7</em>
+              </div>
+            </a>
+          </div>
+
+          <div class="review-box">
+            <a href="">
+              <div class="top my">
+                <h6>영화 제목</h6>
+                <div class="star-view">
+                  <img src="/img/star_icon.svg" alt="star">
+                  <span>0</span>
+                </div>
+              </div>
+              <div class="center">
+                <figure class="imgBox">
+                  <img src="/img/test5-img.jpg" alt="영화 포스터">
+                </figure>
+                <div class="infor">
+                  <p class="in-text">영화 관람 후기 및 추천 리뷰 내용입니다. 영화 관람 후기 및 추천 리뷰 내용입니다. 영화 관람 후기 및 추천 리뷰
+                    내용입니다. 영화 관람 후기 및 추천 리뷰 내용입니다. 영화 관람 후기 및 추천 리뷰 내용입니다. </p>
+                </div>
+              </div>
+              <div class="bottom">댓글 <em>7</em>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+
+  <footer th:replace="~{/user/layout/footer :: footer}"></footer>
+
+</div>
+</body>
+</html>

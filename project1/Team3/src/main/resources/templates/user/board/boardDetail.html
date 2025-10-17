@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>spring project Scene, Share</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+          crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/css/common.css">
+  <script src="/js/common.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+  <header th:replace="~{/user/layout/header :: headerBasic('리뷰(게시글) 상세보기')}"></header>
+
+  <main>
+    <div class="container page-bottom">
+
+      <form id="frm" method="post">
+        <!-- ★ data-board-id/data-login 을 통해 JS가 안정적으로 boardId/로그인 상태를 읽도록 함 -->
+        <div class="review-box grey" id="board-detail-root"
+             th:attr="data-board-id=${board.boardId}, data-login=${loginUserId != null}">
+          <!-- hidden 값 정리 -->
+          <input type="hidden" name="boardId"    th:value="${board.boardId}">
+          <input type="hidden" name="userId"     th:value="${board.userId}">
+          <input type="hidden" name="movieId"    th:value="${board.movieId}">
+          <input type="hidden" name="title"      th:value="${board.title}">
+          <input type="hidden" name="contents"   th:value="${board.contents}">
+          <input type="hidden" name="rating"     th:value="${board.rating}">
+          <input type="hidden" name="createDate" th:value="${board.createDate}">
+          <input type="hidden" name="updateDate" th:value="${board.updateDate}">
+          <input type="hidden" name="genre"      th:value="${board.genre}">
+          <input type="hidden" name="reply"      th:value="${board.reply}">
+
+          <!-- 상단 -->
+          <div class="top">
+            <h6>
+              <!-- 프로필 이미지: 유저 이미지 없으면 기본 -->
+              <img th:if="${board.userImg != null}"
+                   th:src="@{'/img/profile/' + ${board.userImg}}" class="profile-img" alt="profile">
+              <img th:unless="${board.userImg != null}"
+                   th:src="@{/img/profile_img_bg.svg}" class="profile-img" alt="profile">
+
+              <span th:text="${board.userId}">userId</span>
+              <small class="date" th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd')}"></small>
+            </h6>
+            <div class="star-view">
+              <img src="/img/star_icon.svg" alt="star">
+              <span th:text="${board.rating != null ? board.rating : 0}">0</span>
+            </div>
+          </div>
+
+          <!-- 가운데: 영화정보 + 포스터 -->
+          <div class="center"
+               th:with="
+       posterSafe=${movie != null
+         ? (#strings.isEmpty(movie.posterUrl)
+             ? (#strings.isEmpty(movie.moviePosterUrl) ? '/img/no-image.png' : movie.moviePosterUrl)
+             : movie.posterUrl)
+         : '/img/no-image.png'},
+       yearText=${movie != null && movie.releaseDate != null ? #temporals.format(movie.releaseDate,'yyyy') : ''},
+       genreText=${movie != null && movie.movieGenre != null ? movie.movieGenre : '장르 미정'},
+       countryText=${movie != null && movie.movieCountry != null ? movie.movieCountry : ''},
+       timeText=${movie != null && movie.movieTime != null ? movie.movieTime : ''},
+       ageText=${movie != null && movie.movieAge != null ? movie.movieAge : ''}">
+            <figure class="imgBox">
+              <img th:src="${posterSafe}" alt="영화 포스터">
+            </figure>
+            <div class="infor">
+              <h5 class="in-title" th:text="${movie != null ? movie.movieTitle : '(제목 없음)'}">movieTitle</h5>
+              <p class="in-row1">
+                <span th:text="${yearText}">2025</span>
+                &#183;
+                <span th:text="${genreText}">장르</span>
+                &#183;
+                <span th:text="${countryText}">국가</span>
+              </p>
+              <p class="in-row2">
+                <span th:text="${timeText}">러닝타임</span>
+                &#183;
+                <span th:text="${ageText}">관람등급</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- 리뷰 본문 -->
+          <p class="review-all" th:text="${board.contents}"></p>
+
+          <!-- 하단: 댓글 수 + 버튼 (게시글의 수정/삭제는 작성자만) -->
+          <div class="bottom"
+               th:with="loginId=${loginUserId}">
+            <p class="reply">댓글 <em id="reply-count" th:text="${replyCount}">0</em></p>
+            <div class="btn-area">
+              <!-- 로그인 사용자는 댓글 버튼 노출 -->
+              <button type="button" class="btn-re-write"
+                      th:if="${loginId != null}"
+                      onclick="openReplyWrite()">댓글</button>
+
+              <!-- 게시글 작성자만 수정/삭제 -->
+              <button type="button" class="btn-update"
+                      th:if="${loginId != null and loginId == board.userId}"
+                      onclick="openReviewUpdate()">수정</button>
+              <button type="button" class="btn-delete"
+                      th:if="${loginId != null and loginId == board.userId}"
+                      onclick="location.href='#popup_delete';">삭제</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- 댓글 목록 -->
+      <div class="reply-list" id="reply-list" th:if="${replies != null}">
+        <div class="reply-box" th:each="r : ${replies}"
+             th:with="mine=${loginUserId != null and (loginUserId == r.userId)}">
+          <h6 class="re-user-id">
+            <!-- 기본 이미지 -->
+            <img class="profile-img" alt="프로필 이미지"
+                 th:if="${r.userImg == null or #strings.isEmpty(r.userImg)}"
+                 th:src="@{/img/profile_img_bg.svg}">
+
+            <!-- 사용자 이미지 -->
+            <img class="profile-img" alt="프로필 이미지"
+                 th:unless="${r.userImg == null or #strings.isEmpty(r.userImg)}"
+                 th:src="@{/img/profile/{fn}(fn=${r.userImg})}"
+                 onerror="this.onerror=null; this.src='/img/profile_img_bg.svg';">
+            <span th:text="${r.userId}">user</span>
+            <small class="re-date" th:text="${#temporals.format(r.createDate, 'yyyy-MM-dd HH:mm')}"></small>
+          </h6>
+          <div class="re-text" th:text="${r.contents}"></div>
+          <div class="re-btn-area" th:if="${mine}">
+            <button type="button" class="btn-re-update"
+                    th:attr="data-id=${r.replyId}" onclick="openReplyUpdate(this)">수정</button>
+            <span></span>
+            <button type="button" class="btn-delete"
+                    th:if="${loginId != null and loginId == board.userId}"
+                    th:attr="data-board-id=${board.boardId}"
+                    onclick="openBoardDelete(this)">삭제</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 리뷰 수정 팝업 -->
+  <div class="overlay_flight" id="popup_update">
+    <div class="pop_con">
+      <div class="pop_header">
+        <h5 class="pop_title"></h5>
+        <button type="button" class="btn_close" onclick="location.href='#';"></button>
+      </div>
+      <div class="pop_input">
+        <div class="rating">
+          <!-- (별점 마크업은 동일) -->
+          <label class="rating__label rating__label--half" for="starhalf">
+            <input type="radio" id="starhalf" class="rating__input" name="rating" value="">
+            <span class="star-icon"></span>
+          </label>
+          <label class="rating__label rating__label--full" for="star1">
+            <input type="radio" id="star1" class="rating__input" name="rating" value="">
+            <span class="star-icon"></span>
+          </label>
+          <label class="rating__label rating__label--half" for="star1half">
+            <input type="radio" id="star1half" class="rating__input" name="rating" value="">
+            <span class="star-icon"></span>
+          </label>
+          <label class="rating__label rating__label--full" for="star2">
+            <input type="radio" id="star2" class="rating__input" name="rating" value="">
+            <span class="star-icon"></span>
+          </label>
+          <label class="rating__label rating__label--half" for="star2half">
+            <input type="radio" id="star2half" class="rating__input" name="rating" value="">
+            <span class="star-icon"></span>
+          </label>
+          <label class="rating__label rating__label--full" for="star3">
+            <input type="radio" id="star3" class="rating__input" name="rating" value="">
+            <span class="star-icon"></span>
+          </label>
+          <label class="rating__label rating__label--half" for="star3half">
+            <input type="radio" id="star3half" class="rating__input" name="rating" checked>
+            <span class="star-icon"></span>
+          </label>
+          <label class="rating__label rating__label--full" for="star4">
+            <input type="radio" id="star4" class="rating__input" name="rating" value="">
+            <span class="star-icon"></span>
+          </label>
+          <label class="rating__label rating__label--half" for="star4half">
+            <input type="radio" id="star4half" class="rating__input" name="rating" value="">
+            <span class="star-icon"></span>
+          </label>
+          <label class="rating__label rating__label--full" for="star5">
+            <input type="radio" id="star5" class="rating__input" name="rating" value="">
+            <span class="star-icon"></span>
+          </label>
+        </div>
+
+        <textarea class="contents" maxlength="10000" placeholder="이 작품에 대한 생각을 자유롭게 표현해주세요."></textarea>
+      </div>
+      <div class="pop_footer">
+        <div class="counter">
+          <span class="charCount">0</span> / 10000
+        </div>
+        <!-- ★ submit -> button + onclick 으로 JS 직접 호출 -->
+        <button type="button" class="save" id="btn-review-update" onclick="updateReview()">수정</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 리뷰 삭제 팝업 -->
+  <div class="overlay_flight" id="popup_delete">
+    <div class="pop_con comfirm">
+      <div class="pop_message">
+        <h5>알림</h5>
+        <p>리뷰를 삭제하시겠습니까?</p>
+      </div>
+      <div class="pop_btns">
+        <!-- 취소: 팝업 닫기 -->
+        <button type="button" class="btn_cancel" onclick="location.href='#';">취소</button>
+        <!-- 확인: 리뷰 삭제 호출 -->
+        <button type="button" class="btn_delete" onclick="deleteBoard()">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 리뷰 삭제 완료 팝업 -->
+  <div class="overlay_flight" id="popup_delete_done">
+    <div class="pop_con comfirm">
+      <div class="pop_message">
+        <h5>알림</h5>
+        <p>리뷰가 삭제되었습니다.</p>
+      </div>
+      <div class="pop_btns">
+        <!-- 확인: 목록 이동 -->
+        <button type="button" class="btn_delete" onclick="afterDeleteGoList()">확인</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 팝업: 댓글 쓰기 -->
+  <div class="overlay_flight" id="popup_re_write">
+    <div class="pop_con">
+      <div class="pop_header">
+        <h5 class="pop_title">댓글</h5>
+        <button type="button" class="btn_close" onclick="closeOverlays()"></button>
+      </div>
+      <div class="pop_input">
+        <textarea id="reply-contents" class="contents" maxlength="1000"
+                  placeholder="이 작품에 대한 생각을 자유롭게 표현해주세요."
+                  oninput="updateCharCount(this)"></textarea>
+      </div>
+      <div class="pop_footer">
+        <div class="counter"><span class="charCount">0</span> / 1000</div>
+        <button type="button" class="save" onclick="createReply()">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 팝업: 댓글 수정 -->
+  <div class="overlay_flight" id="popup_re_update">
+    <div class="pop_con">
+      <div class="pop_header">
+        <h5 class="pop_title">댓글 수정</h5>
+        <button type="button" class="btn_close" onclick="closeOverlays()"></button>
+      </div>
+      <div class="pop_input">
+        <textarea id="reply-contents-edit" class="contents" maxlength="1000"></textarea>
+      </div>
+      <div class="pop_footer">
+        <div class="counter"><span class="charCount">0</span> / 1000</div>
+        <button type="button" class="save" onclick="updateReply()">수정</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 댓글 삭제 팝업 -->
+  <div class="overlay_flight" id="popup_re_delete">
+    <div class="pop_con comfirm">
+      <div class="pop_message">
+        <h5>알림</h5>
+        <p>댓글을 삭제하시겠습니까?</p>
+      </div>
+      <div class="pop_btns">
+        <button type="button" class="btn_cancel" onclick="location.href='#';">취소</button>
+        <button type="button" class="btn_delete" onclick="location.href='#';">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <footer th:replace="~{/user/layout/footer :: footer}"></footer>
+</div>
+
+<script th:inline="javascript">
+  // ===== 공통: boardId 안전 획득 (★ TDZ/스코프 이슈 회피)
+  function getBoardId() {
+    const root = document.getElementById('board-detail-root');
+    if (root?.dataset?.boardId) return Number(root.dataset.boardId);
+    const hidden = document.querySelector('#frm input[name="boardId"]')?.value;
+    return Number(hidden ?? 0);
+  }
+
+  // 폼 hidden 유틸
+  function getHidden(name) {
+    const el = document.querySelector(`#frm input[name="${name}"]`);
+    return el ? el.value : '';
+  }
+  function setHidden(name, val) {
+    const el = document.querySelector(`#frm input[name="${name}"]`);
+    if (el) el.value = val;
+  }
+
+  // ★ loginId 는 서버에서 바로 주입
+  const loginId = /*[[${loginUserId}]]*/ null;
+
+  // ===== 리뷰 수정(팝업 열기) =====
+  function openReviewUpdate() {
+    const popup = document.getElementById('popup_update');
+    const ta = popup.querySelector('.contents');
+    const charCount = popup.querySelector('.charCount');
+
+    const currentContents = getHidden('contents') || '';
+    const currentRating = parseFloat(getHidden('rating')) || 0;
+
+    ta.value = currentContents;
+    if (charCount) charCount.textContent = String(ta.value.length);
+
+    const radios = popup.querySelectorAll('.rating .rating__input');
+    const stars  = popup.querySelectorAll('.rating .star-icon');
+
+    radios.forEach((inp, idx) => {
+      inp.value = ((idx + 1) / 2).toFixed(1); // 0.5 ~ 5.0
+      inp.checked = parseFloat(inp.value) === currentRating;
+      inp.onchange = () => paintStars(stars, parseFloat(inp.value));
+    });
+    paintStars(stars, currentRating);
+
+    ta.onkeydown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        updateReview();
+      }
+    };
+
+    location.hash = '#popup_update';
+    setTimeout(() => ta.focus(), 0);
+  }
+
+  function paintStars(stars, rating) {
+    const n = Math.round((rating || 0) * 2); // 0~10
+    stars.forEach((s, i) => s.classList.toggle('filled', i < n));
+  }
+
+  // ===== 리뷰 수정 저장 (★ boardId는 getBoardId()로 매번 획득)
+  async function updateReview() {
+    const popup = document.getElementById('popup_update');
+    const ta = popup.querySelector('.contents');
+    const selected = popup.querySelector('.rating .rating__input:checked');
+
+    const contents = (ta.value || '').trim();
+    const rating = selected ? parseFloat(selected.value) : 0;
+    if (!contents) { alert('내용을 입력하세요.'); ta.focus(); return; }
+
+    const id = getBoardId();
+
+    try {
+      const res = await fetch(`/api/boards/${encodeURIComponent(id)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        credentials: 'same-origin',
+        body: new URLSearchParams({ boardId: String(id), contents, rating: String(rating) })
+      });
+
+      if (res.status === 401) { alert('로그인이 필요합니다.'); return; }
+      if (!res.ok) { alert('리뷰 수정에 실패했습니다.'); return; }
+
+      // 화면 반영 (옵셔널 체이닝 없이!)
+      const reviewEl = document.querySelector('.review-all');
+      if (reviewEl) reviewEl.textContent = contents;
+      const star = document.querySelector('.star-view span');
+      if (star) star.textContent = String(rating);
+
+      // hidden 동기화
+      setHidden('contents', contents);
+      setHidden('rating', rating);
+
+      location.hash = '#';
+    } catch (e) {
+      console.error(e);
+      alert('네트워크 오류가 발생했습니다.');
+    }
+  }
+
+  // ★ 팝업에서 실제로 지울 게시글 ID를 보관
+  let pendingDeleteBoardId = null;
+
+  // 삭제 팝업 열 때 호출 (버튼의 data-board-id를 우선 사용)
+  function openBoardDelete(btn) {
+    const idFromBtn = btn?.dataset?.boardId;
+    pendingDeleteBoardId = idFromBtn ? Number(idFromBtn) : getBoardId(); // getBoardId()는 기존 함수
+    location.hash = '#popup_delete';
+  }
+
+  // 확인 클릭 시 실제 삭제 호출
+  const BOARD_LIST_URL = '/main/boardList';  // 예) '/user/board/list' 라면 여기를 바꾸세요
+
+  // 삭제 확인 팝업에서 '확인' 클릭 시 호출되는 함수 (이미 작성한 부분)
+  async function deleteBoard() {
+    const id = (typeof pendingDeleteBoardId === 'number' && pendingDeleteBoardId)
+        ? pendingDeleteBoardId
+        : getBoardId();
+    if (!id) { alert('게시글 ID를 찾을 수 없습니다.'); return; }
+
+    const okBtn = document.querySelector('#popup_delete .btn_delete');
+    okBtn?.setAttribute('disabled', 'true'); // 중복 클릭 방지
+
+    try {
+      const res = await fetch(`/api/boards/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        credentials: 'same-origin'
+      });
+
+      if (res.status === 401) { alert('로그인이 필요합니다.'); return; }
+      if (res.status === 403) { alert('삭제 권한이 없습니다.'); return; }
+
+      // 존재하지 않는 글(404)도 UX상 성공으로 간주하여 목록으로 보내도 됨
+      if (res.ok || res.status === 404) {
+        pendingDeleteBoardId = null;
+        // 1) 현재 확인 팝업 닫기
+        location.hash = '#';
+        // 2) "삭제되었습니다" 팝업 열기 (동일 UI)
+        setTimeout(() => { location.hash = '#popup_delete_done'; }, 0);
+        return;
+      }
+
+      alert('리뷰 삭제에 실패했습니다.');
+    } catch (e) {
+      console.error(e);
+      alert('네트워크 오류가 발생했습니다.');
+    } finally {
+      okBtn?.removeAttribute('disabled');
+    }
+  }
+
+  // '삭제되었습니다' 팝업의 확인 버튼 클릭 시 호출
+  function afterDeleteGoList() {
+    location.hash = '#';             // 팝업 닫기
+    location.href = BOARD_LIST_URL;  // 목록으로 이동
+    // 목록 URL이 불명확하면: history.back();
+  }
+
+  // ===== 댓글 팝업 열기/닫기 =====
+  let editingReplyId = null;
+
+  function openReplyWrite() {
+    location.hash = '#popup_re_write';
+    const ta = document.getElementById('reply-contents');
+    if (ta) { ta.value = ''; updateCharCount(ta); setTimeout(() => ta.focus(), 0); }
+  }
+  function openReplyUpdate(btn) {
+    editingReplyId = btn.dataset.id;
+    const box = btn.closest('.reply-box');
+    const text = box.querySelector('.re-text')?.textContent?.trim() ?? '';
+    const ta = document.getElementById('reply-contents-edit');
+    if (ta) { ta.value = text; setTimeout(() => ta.focus(), 0); }
+    location.hash = '#popup_re_update';
+  }
+  function closeOverlays() { location.hash = '#'; }
+
+  // ===== 렌더/유틸 =====
+  function escapeHtml(s){ return (s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function nl2br(s){ return (s ?? '').replace(/\n/g, '<br>'); }
+  function updateCharCount(el){ const span = document.querySelector('#popup_re_write .counter .charCount'); if (span) span.textContent = String(el.value.length); }
+  function setReplyCount(n){ const el = document.getElementById('reply-count'); if (el) el.textContent = String(n ?? 0); }
+
+  function formatYmdHm(x) {
+    if (!x) return '';
+    const s = String(x).replace('T',' ');
+    return s.slice(0, 16);
+  }
+
+  function renderReplies(items) {
+    const wrap = document.getElementById('reply-list');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    items.forEach(it => {
+      const mine = it.mine === true || (loginId && String(it.userId) === String(loginId));
+      const imgSrc = it.userImg ? `/img/profile/${encodeURIComponent(it.userImg)}` : '/img/profile_img_bg.svg';
+      const dateTxt = formatYmdHm(it.createDate);
+      const html = `
+        <div class="reply-box">
+          <h6 class="re-user-id">
+            <img src="${imgSrc}" class="profile-img" alt="프로필 이미지" onerror="this.onerror=null; this.src='/img/profile_img_bg.svg';">
+            <span>${escapeHtml(it.userId ?? 'user')}</span>
+            <small class="re-date">${escapeHtml(dateTxt)}</small>
+          </h6>
+          <div class="re-text">${nl2br(escapeHtml(it.contents || ''))}</div>
+          ${mine ? `
+            <div class="re-btn-area">
+              <button type="button" class="btn-re-update" data-id="${it.replyId}" onclick="openReplyUpdate(this)">수정</button>
+              <span></span>
+              <button type="button" class="btn-re-delete" data-id="${it.replyId}" onclick="deleteReply(this)">삭제</button>
+            </div>` : ``}
+        </div>`;
+      wrap.insertAdjacentHTML('beforeend', html);
+    });
+  }
+
+  // ===== 댓글 API =====
+  async function refreshReplies() {
+    const id = getBoardId(); // ★
+    try {
+      const res = await fetch(`/api/replies?boardId=${encodeURIComponent(id)}`, { credentials: 'same-origin' });
+      if (!res.ok) return;
+      const data = await res.json();
+      const items = Array.isArray(data) ? data : (data.items ?? []);
+      const count = Array.isArray(data) ? items.length : (data.count ?? items.length);
+      setReplyCount(count);
+      renderReplies(items);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function createReply() {
+    const id = getBoardId(); // ★
+    const ta = document.getElementById('reply-contents');
+    const contents = (ta?.value ?? '').trim();
+    if (!contents) { alert('내용을 입력하세요.'); ta?.focus(); return; }
+    try {
+      const res = await fetch('/api/replies', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        credentials: 'same-origin',
+        body: new URLSearchParams({ boardId: String(id), contents })
+      });
+      if (res.status === 401) { alert('로그인 후 이용해 주세요.'); return; }
+      if (!res.ok) { alert('등록에 실패했습니다.'); return; }
+      closeOverlays();
+      await refreshReplies();
+    } catch (e) {
+      console.error(e);
+      alert('네트워크 오류가 발생했습니다.');
+    }
+  }
+
+  async function updateReply() {
+    const ta = document.getElementById('reply-contents-edit');
+    const contents = (ta?.value ?? '').trim();
+    if (!contents) { alert('내용을 입력하세요.'); ta?.focus(); return; }
+    try {
+      const res = await fetch(`/api/replies/${editingReplyId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        credentials: 'same-origin',
+        body: new URLSearchParams({ contents })
+      });
+      if (res.status === 401) { alert('로그인 후 이용해 주세요.'); return; }
+      if (res.status === 403) { alert('수정 권한이 없습니다.'); return; }
+      if (!res.ok) { alert('수정에 실패했습니다.'); return; }
+      closeOverlays();
+      await refreshReplies();
+    } catch (e) {
+      console.error(e);
+      alert('네트워크 오류가 발생했습니다.');
+    }
+  }
+
+  async function deleteReply(btn) {
+    if (!confirm('댓글을 삭제할까요?')) return;
+    const id = btn.dataset.id;
+    try {
+      const res = await fetch(`/api/replies/${id}`, { method: 'DELETE', credentials: 'same-origin' });
+      if (res.status === 401) { alert('로그인 후 이용해 주세요.'); return; }
+      if (res.status === 403) { alert('삭제 권한이 없습니다.'); return; }
+      if (!res.ok) { alert('삭제에 실패했습니다.'); return; }
+      await refreshReplies();
+    } catch (e) {
+      console.error(e);
+      alert('네트워크 오류가 발생했습니다.');
+    }
+  }
+
+  // ===== 초기 바인딩 =====
+  document.addEventListener('DOMContentLoaded', () => {
+    refreshReplies();
+
+    const ta = document.getElementById('reply-contents');
+    if (ta) {
+      ta.addEventListener('input', () => updateCharCount(ta));
+      ta.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          createReply();
+        }
+      });
+    }
+    const tae = document.getElementById('reply-contents-edit');
+    if (tae) {
+      tae.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          updateReply();
+        }
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

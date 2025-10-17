@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>spring project Scene, Share</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+          crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/css/common.css">
+  <script src="/js/common.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const postsPerPage = 5;
+      const reviews = document.querySelectorAll(".review");
+      const totalPosts = reviews.length;
+      const totalPages = Math.ceil(totalPosts / postsPerPage);
+      const pagination = document.getElementById("pagination");
+
+      let currentPage = 1;
+
+      function showPage(page) {
+        const start = (page - 1) * postsPerPage;
+        const end = start + postsPerPage;
+
+        // 리뷰 표시 여부 처리
+        let visibleCount = 0;
+        reviews.forEach((review, index) => {
+          if (index >= start && index < end) {
+            review.style.display = "flex";
+            visibleCount++;
+          } else {
+            review.style.display = "none";
+          }
+        });
+
+        // 게시글 없을 때 메시지 표시
+        const noPostsMessage = document.getElementById("no-reviews");
+        if (noPostsMessage) {
+          noPostsMessage.style.display = visibleCount === 0 ? "block" : "none";
+        }
+
+        renderPaginationButtons(page);
+      }
+
+      function renderPaginationButtons(page) {
+        pagination.innerHTML = "";
+
+        // 이전 버튼
+        const prevBtn = document.createElement("button");
+        prevBtn.innerHTML = "&#8592; <em>Prev</em>";
+        prevBtn.classList.add("nav-btn", "prev-btn");
+
+        if (page <= 1) {
+          prevBtn.disabled = true;
+          prevBtn.classList.add("disabled");
+        } else {
+          prevBtn.onclick = () => showPage(page - 1);
+        }
+
+        pagination.appendChild(prevBtn);
+
+        // 페이지 번호 버튼
+        for (let i = 1; i <= totalPages; i++) {
+          const btn = document.createElement("button");
+          btn.textContent = i;
+          btn.classList.add("page-btn");
+
+          // 현재 페이지이면 active 클래스 추가
+          if (i === page) {
+            btn.classList.add("active");
+            btn.setAttribute("aria-current", "page");
+          }
+
+          btn.onclick = () => showPage(i);
+          pagination.appendChild(btn);
+        }
+
+        // 다음 버튼
+        const nextBtn = document.createElement("button");
+        nextBtn.innerHTML = "<em>Next</em> &#8594;";
+        nextBtn.classList.add("nav-btn", "next-btn");
+
+        if (page >= totalPages) {
+          nextBtn.disabled = true;
+          nextBtn.classList.add("disabled");
+        } else {
+          nextBtn.onclick = () => showPage(page + 1);
+        }
+
+        pagination.appendChild(nextBtn);
+      }
+
+      // 초기 페이지 표시
+      showPage(currentPage);
+    });
+  </script>
+
+</head>
+<body>
+<div class="wrap">
+
+  <header th:replace="~{/user/layout/header :: headerBasic('리뷰(게시글) 리스트')}"></header>
+
+
+  <main>
+    <div class="container page-bottom">
+      <h3 class="sub-top-title">영화 추천 리뷰</h3>
+
+      <!-- 데이터가 없는 경우 -->
+      <!--                <div class="none h100" th:unless="${#lists.size(boardList)} > 0">등록된 게시글이 없습니다.</div>-->
+      <div class="none h100" id="no-reviews" style="display:none;">등록된 게시글이 없습니다.</div>
+
+
+      <ul class="review-list-page">
+        <li class="top-title">
+          <p class="cnt">순번</p>
+          <p class="n-title">제목</p>
+          <p class="user-id">작성자</p>
+          <p class="date">작성일</p>
+        </li>
+        <li class="notice">
+          <p class="cnt"><span class="notice-label">공지</span></p>
+          <p class="n-title"><a href="/user/noticeDetail" th:href="@{/user/noticeDetail.do}">공지사항 제목입니다.</a></p>
+          <p class="user-id">관리자</p>
+          <p class="date">2025.07.15</p>
+        </li>
+        <li class="notice">
+          <p class="cnt"><span class="notice-label">공지</span></p>
+          <p class="n-title"><a href="/user/noticeDetail" th:href="@{/user/noticeDetail.do}">공지사항 제목입니다.</a></p>
+          <p class="user-id">관리자</p>
+          <p class="date">2025.07.15</p>
+        </li>
+        <li class="notice">
+          <p class="cnt"><span class="notice-label">공지</span></p>
+          <p class="n-title"><a href="/user/noticeDetail" th:href="@{/user/noticeDetail.do}">공지사항 제목입니다.</a></p>
+          <p class="user-id">관리자</p>
+          <p class="date">2025.07.15</p>
+        </li>
+
+        <li class="review" th:if="${#lists.size(boardList)} > 0" th:each="item : ${boardList}">
+          <p class="cnt" th:text="${item.boardId}">0</p>
+          <p class="n-title">
+            <a th:href="@{|/user/boardDetail/${item.boardId}|}" th:text="${item.contents}"></a>
+            <span>댓글 <b th:text="${item.replyCount != null ? item.replyCount : 0}">0</b></span>
+          </p>
+          <p class="user-id" th:text="${item.userId}">userId</p>
+          <p class="date" th:text="${#temporals.format(item.createDate, 'yyyy-MM-dd')}"></p>
+        </li>
+
+      </ul>
+
+      <div class="pagination" id="pagination"></div>
+
+    </div>
+  </main>
+
+
+  <footer th:replace="~{/user/layout/footer :: footer}"></footer>
+
+</div>
+</body>
+</html>

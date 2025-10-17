@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>spring project Scene, Share</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+          crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/css/common.css">
+  <script src="/js/common.js"></script>
+
+
+</head>
+<body>
+<div class="wrap sub-header" id="header-scroll">
+
+  <!-- ✅ 수정: 선행 슬래시 제거 -->
+  <header th:replace="~{user/layout/header :: headerBasic('영화정보 상세보기')}"></header>
+
+  <main>
+    <form id="frm" method="get">
+
+      <div class="none h100" th:unless="${movie != null}">영화 정보를 불러올 수 없습니다.</div>
+
+      <div class="sub-top-visual" th:if="${movie != null}">
+        <div class="inner"
+             th:with="
+               posterSafe=${#strings.isEmpty(movie.posterUrl) ? (#strings.isEmpty(movie.moviePosterUrl) ? '/img/no-image.png' : movie.moviePosterUrl) : movie.posterUrl},
+               bg=${#strings.isEmpty(movie.subTopImgUrl) ? posterSafe : movie.subTopImgUrl},
+               yearText=${movie.releaseDate != null ? #temporals.format(movie.releaseDate,'yyyy') : ''},
+               genreText=${movie.movieGenre != null ? movie.movieGenre : '장르 미정'},
+               countryText=${movie.movieCountry != null ? movie.movieCountry : '국가 미정'},
+               timeText=${movie.movieTime != null ? movie.movieTime : ''},
+               ratingVal=${movie.ratingAvg != null ? movie.ratingAvg : (movie.movieRatingAvg != null ? movie.movieRatingAvg : 0)}
+             "
+             th:style="|background-image: url('${bg}');|">
+
+          <div class="text-area container">
+            <input type="hidden" name="title" th:value="|[추천] ${movie.movieTitle}|">
+            <input type="hidden" id="movie-id" name="movieId" th:value="${movie.movieId}"/>
+            <input type="hidden" name="movieTitle" th:value="${movie.movieTitle}"/>
+            <input type="hidden" name="movieGenre" th:value="${genreText}"/>
+            <input type="hidden" name="movieDirector" th:value="${movie.movieDirector}"/>
+
+            <!-- ✅ 수정: movieDescription 없으면 moviePlot을 **참조하지 않고** 비워 둠 (템플릿에서 한 번만 선택) -->
+            <input type="hidden" name="movieDescription" th:value="${movie.movieDescription}"/>
+
+            <!-- ✅ 수정: posterUrl은 안전값 사용(존재 안해도 OK) -->
+            <input type="hidden" name="posterUrl" th:value="${posterSafe}"/>
+
+            <!-- ✅ 수정: releaseDate 직접 접근 제거(없을 수 있음) → yearText 저장 -->
+            <input type="hidden" name="releaseDate" th:value="${yearText}"/>
+
+            <input type="hidden" id="ratingAvg" name="ratingAvg" th:value="${ratingVal}"/>
+            <input type="hidden" id="movieCountry" name="movieCountry" th:value="${countryText}"/>
+            <input type="hidden" id="movieTime" name="movieTime" th:value="${timeText}"/>
+            <input type="hidden" id="movieAge" name="movieAge" th:value="${movie.movieAge}"/>
+            <input type="hidden" id="movieActors" name="movieActors" th:value="${movie.movieActors}"/>
+
+
+            <h4 th:text="${movie.movieTitle}">제목</h4>
+            <p>
+              <span th:text="${yearText}"></span> &#183;
+              <span th:text="${genreText}">장르 미정</span> &#183;
+              <span th:text="${countryText}">국가</span>
+            </p>
+            <p>
+              <span th:text="${timeText}">러닝타임</span> &#183;
+              <span th:text="${movie.movieAge != null ? movie.movieAge : ''}">등급</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="container" th:if="${movie != null}">
+        <section>
+          <div class="movie-infor">
+            <div class="imgBox">
+              <figure>
+                <!-- ✅ 수정: 안전한 포스터 경로만 사용 -->
+                <img th:src="${#strings.isEmpty(movie.posterUrl) ? (#strings.isEmpty(movie.moviePosterUrl) ? '/img/no-image.png' : movie.moviePosterUrl) : movie.posterUrl}"
+                     alt="영화 포스터">
+              </figure>
+            </div>
+            <div class="right">
+              <div class="right-top">
+                <div class="gpa">
+                  <p>평점</p>
+                  <div class="flex">
+                    <img src="/img/star_icon.svg" alt="star_icon">
+                    <span th:text="${movie.ratingAvg != null ? movie.ratingAvg : (movie.movieRatingAvg != null ? movie.movieRatingAvg : 0)}">0</span>
+                  </div>
+                </div>
+
+                <div class="btn-area">
+                  <button type="button" class="bookmark">보고 싶어요</button>
+                  <button type="button" class="btn-write" onclick="location.href='#popup_write';">영화추천 글쓰기</button>
+                </div>
+              </div>
+
+              <!-- ✅ 수정: 한 곳에서만 안전 선택(존재하지 않는 필드 참조 금지) -->
+              <div class="plot"
+                   th:text="${movie.movieDescription != null ? movie.movieDescription : '줄거리 없음'}">
+                줄거리 없음
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="sub-title">
+            <h4>출연/제작</h4>
+          </div>
+
+          <ul class="member-list" th:if="${movie.movieActors != null}">
+            <li><small>감독</small><span th:text="${movie.movieDirector != null ? movie.movieDirector : '정보 없음'}"></span></li>
+
+            <!-- ✅ 수정: ':' 없는 형식도 안전 처리(배열 인덱스 오류 방지) -->
+            <li th:each="actorString : ${#strings.arraySplit(movie.movieActors, ',')}">
+              <small th:if="${#strings.contains(actorString, ':')}"
+                     th:text="${#strings.arraySplit(actorString, ':')[0].trim()}">주연</small>
+              <small th:unless="${#strings.contains(actorString, ':')}">출연</small>
+
+              <span th:if="${#strings.contains(actorString, ':')}"
+                    th:text="${#strings.arraySplit(actorString, ':')[1].trim()}">배우명</span>
+              <span th:unless="${#strings.contains(actorString, ':')}"
+                    th:text="${actorString.trim()}">배우명</span>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </form>
+
+    <div class="container page-bottom" id="reviews">
+      <section>
+        <div class="sub-title">
+          <h4>영화 추천 리뷰 <em class="main-color" th:text="${boardTotal}">0</em></h4>
+        </div>
+
+        <!-- ★ 기존 카드 레이아웃 래퍼(.review-sub-list 등)를 유지하세요 -->
+        <div class="review-sub-list"
+             th:if="${boardList != null and !#lists.isEmpty(boardList)}">
+
+          <div class="review-sub-box" th:each="item : ${boardList}">
+            <a th:href="@{/user/boardDetail/{boardId}(boardId=${item.boardId})}">
+              <div class="top" style="display:flex;align-items:center;justify-content:space-between;">
+                <h6 style="display:flex;align-items:center;gap:8px;margin:0;line-height:1;font-size:14px;">
+                  <img th:if="${item.userImg != null}"
+                       th:src="@{'/img/profile/' + ${item.userImg}}"
+                       alt="avatar" style="width:20px;height:20px;border-radius:50%;object-fit:cover;display:block;">
+                  <img th:unless="${item.userImg != null}"
+                       th:src="@{/img/profile_img_bg.svg}"
+                       alt="avatar" style="width:20px;height:20px;border-radius:50%;object-fit:cover;display:block;">
+                  <span th:text="${item.userId}">userId</span>
+                </h6>
+                <div class="star-view" style="display:flex;align-items:center;gap:4px;">
+                  <img src="/img/star_icon.svg" alt="star" style="width:16px;height:16px;display:block;">
+                  <span th:text="${item.rating}">0</span>
+                </div>
+              </div>
+
+              <div class="center">
+                <p class="in-text" th:text="${item.contents}"></p>
+              </div>
+
+              <div class="bottom">
+                <span th:text="${#temporals.format(item.createDate, 'yyyy.MM.dd HH:mm')}">2025.10.10 19:30</span>
+                · 댓글 <em>0</em>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- 비어있을 때 -->
+        <div th:if="${boardList == null or #lists.isEmpty(boardList)}" style="color:#777;">
+          아직 등록된 리뷰가 없습니다.
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ✅ 수정: 선행 슬래시 제거 -->
+  <footer th:replace="~{user/layout/footer :: footer}"></footer>
+
+  <!-- 리뷰 글쓰기 팝업 -->
+  <div class="overlay_flight" id="popup_write" th:if="${movie != null}">
+    <div class="pop_con">
+      <form id="reviewWriteForm" th:action="@{|/movieDetail/${movie.movieId}|}" method="post">
+        <div class="pop_header mb-0">
+          <h4 class="pop_title ps-1 mb-2" th:text="${movie.movieTitle}"></h4>
+
+          <!-- ✅ 추가: 서버가 title을 요구하는 경우 폼 안으로 이동/추가 -->
+          <input type="hidden" name="title" th:value="|[추천] ${movie.movieTitle}|"/>
+
+          <input type="hidden" name="movieId" th:value="${movie.movieId}"/>
+
+          <div class="rating">
+            <!-- ✅ [수정] 라디오에 실제 점수 value 부여 -->
+            <label class="rating__label rating__label--half" for="starhalf">
+              <input type="radio" id="starhalf" class="rating__input" name="rating" value="0.5">
+              <span class="star-icon"></span>
+            </label>
+            <label class="rating__label rating__label--full" for="star1">
+              <input type="radio" id="star1" class="rating__input" name="rating" value="1.0">
+              <span class="star-icon"></span>
+            </label>
+            <label class="rating__label rating__label--half" for="star1half">
+              <input type="radio" id="star1half" class="rating__input" name="rating" value="1.5">
+              <span class="star-icon"></span>
+            </label>
+            <label class="rating__label rating__label--full" for="star2">
+              <input type="radio" id="star2" class="rating__input" name="rating" value="2.0">
+              <span class="star-icon"></span>
+            </label>
+            <label class="rating__label rating__label--half" for="star2half">
+              <input type="radio" id="star2half" class="rating__input" name="rating" value="2.5">
+              <span class="star-icon"></span>
+            </label>
+            <label class="rating__label rating__label--full" for="star3">
+              <input type="radio" id="star3" class="rating__input" name="rating" value="3.0">
+              <span class="star-icon"></span>
+            </label>
+            <label class="rating__label rating__label--half" for="star3half">
+              <!-- ✅ [수정] checked 라디오에도 value 지정 -->
+              <input type="radio" id="star3half" class="rating__input" name="rating" value="3.5" checked>
+              <span class="star-icon"></span>
+            </label>
+            <label class="rating__label rating__label--full" for="star4">
+              <input type="radio" id="star4" class="rating__input" name="rating" value="4.0">
+              <span class="star-icon"></span>
+            </label>
+            <label class="rating__label rating__label--half" for="star4half">
+              <input type="radio" id="star4half" class="rating__input" name="rating" value="4.5">
+              <span class="star-icon"></span>
+            </label>
+            <label class="rating__label rating__label--full" for="star5">
+              <input type="radio" id="star5" class="rating__input" name="rating" value="5.0">
+              <span class="star-icon"></span>
+            </label>
+          </div>
+          <button type="button" class="btn_close" onclick="location.href='#';"></button>
+        </div>
+
+        <div class="pop_input">
+          <!-- 별점 UI 그대로 -->
+          <textarea class="contents" name="contents" maxlength="10000"
+                    placeholder="이 작품에 대한 생각을 자유롭게 표현해주세요."></textarea>
+        </div>
+
+        <div class="pop_footer">
+          <div class="counter">
+            <span class="charCount">0</span> / 10000
+          </div>
+          <button type="submit" class="save">저장</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  (function bindSubmitLogger() {
+    function onReady() {
+      const form = document.getElementById('reviewWriteForm');
+      if (!form) {
+        console.warn('reviewWriteForm not found');
+        return;
+      }
+
+      // 바인딩 확인 로그
+      console.log('✅ submit logger bound to #reviewWriteForm');
+
+      form.addEventListener('submit', function (e) {
+        // ▼ 리다이렉트되며 콘솔이 지워지는 걸 막기 위해 잠시 전송 중단
+        // e.preventDefault();
+        //
+        // const fd = new FormData(form);
+        //
+        // console.group('📨 Review form submit payload');
+        // console.log('action:', form.action);
+        // console.log('method:', form.method.toUpperCase());
+        // // 전체를 한 번에 확인
+        // console.log('as object:', Object.fromEntries(fd.entries()));
+        // // 개별 필드 샘플
+        // console.log('title    =', fd.get('title'));
+        // console.log('movieId  =', fd.get('movieId'));
+        // console.log('rating   =', fd.get('rating'));   // 선택된 별점 (예: "3.5")
+        // console.log('contents =', fd.get('contents'));
+        // console.groupEnd();
+        //
+        // // ▼ 실제로 서버로 보내고 싶으면 주석 해제 (0.5초 뒤 전송)
+        // setTimeout(() => form.submit(), 500);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', onReady);
+    } else {
+      onReady();
+    }
+  })();
+</script>
+
+</body>
+</html>

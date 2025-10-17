@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>spring project Scene, Share</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+          crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/css/common.css">
+  <script src="/js/common.js"></script>
+
+</head>
+<body>
+<div class="wrap rows2">
+  <main class="flex">
+    <div class="container">
+      <h1 class="full-view-title success">회원가입 완료!</h1>
+      <h2 class="full-view-text1"><span class="logo"><em>Scene,</em> Share</span> 회원이 되신 것을 환영해요.</h2>
+      <p class="full-view-text2">앞으로 다양한 <b>영화 추천 리뷰와 활동</b>을 기대할게요.</p>
+      <div class="full-view-btns flex">
+        <a href="/user/login.do" th:href="@{/user/login.do}">로그인</a>
+        <a href="/main" th:href="@{/main}">홈으로</a>
+      </div>
+    </div>
+  </main>
+
+  <footer th:replace="~{/user/layout/footer :: footer}"></footer>
+</div>
+</body>
+</html>

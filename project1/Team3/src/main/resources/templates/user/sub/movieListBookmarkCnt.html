@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>spring project Scene, Share</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+          crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/css/common.css">
+  <script src="/js/common.js"></script>
+
+</head>
+<body>
+<div class="wrap">
+
+  <header th:replace="~{/user/layout/header :: headerBasic('가장 많이 찾는 영화 리스트')}"></header>
+
+
+  <main>
+    <div class="container page-bottom">
+      <h3 class="sub-top-title-left">가장 많이 찾는 영화</h3>
+
+      <!-- 데이터가 없는 경우 -->
+      <div class="none h100" th:unless="${#lists.size(movieListBookmarkCnt)} > 0">현재 조회된 영화가 없습니다.</div>
+
+
+      <div class="movie-list">
+        <div class="movie-box" th:if="${#lists.size(movieListBookmarkCnt)} > 0" th:each="item : ${movieListBookmarkCnt}">
+          <div class="movie-img">
+            <a href="#" th:href="@{|/movieDetail/${item.movieId}|}">
+              <figure>
+                <img th:src="${#strings.isEmpty(item.moviePosterUrl)} ? '/img/no-image.svg' : ${item.moviePosterUrl}" alt="영화 포스터">
+              </figure>
+            </a>
+            <button type="button" class="bookmark">
+              <span class="heart">보고싶어요</span>
+              <span class="count"><a th:text="${item.bookmarkCnt}">0</a></span>
+            </button>
+          </div>
+          <div class="movie-title">
+            <p class="sTitle" th:text="${item.movieTitle}">영화제목</p>
+            <p class="gpa">
+              평점<img src="/img/star_icon.svg" alt="star_icon">
+              <em th:text="${#lists.size(movieListBookmarkCnt)}">0</em>
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+
+  <footer th:replace="~{/user/layout/footer :: footer}"></footer>
+
+</div>
+</body>
+</html>

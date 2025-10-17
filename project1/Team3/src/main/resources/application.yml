@@ -1,0 +1,42 @@
+server:
+  port: 8080
+
+omdb:
+  base-url: https://www.omdbapi.com
+  api-key: 1c73d218   # 로컬 테스트면 임시로 실제키를 써도 되고, 환경변수로 빼는 걸 권장
+
+
+spring:
+  application:
+    name: SceneShare
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+  datasource:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/first_project_sceneshare_db?characterEncoding=UTF-8&serverTimezone=UTC
+      username: first_project_sceneshare
+      password: full502
+      connection-test-query: SELECT 1
+
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+    defer-datasource-initialization: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update #update (run ? data.sql ?? 1?? ?? ?? ??)
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: Asia/Seoul
