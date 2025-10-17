@@ -1,0 +1,582 @@
+/* 전체 CSS 적용 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Pretendard', serif;
+}
+
+/* 버튼 기본 속성 초기화  */
+button {
+    padding: 0;
+    border: none;
+    background: transparent;
+    line-height: 0;
+    cursor: pointer;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('/PretendardVariable.woff2') format('woff2-variations'),
+    url('/PretendardVariable.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+.main-title {
+    font-size: 3em;
+    font-weight: 700;
+    color: white;
+}
+
+/*Main*/
+.main {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #247CFF;
+    align-items: center;
+    padding-top: 90px;
+}
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 35px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.header_menu_img {
+    width: 100%;
+    height: 100%;
+}
+
+.header_menu_img:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.header_menu_btn {
+    width: 50px;
+    height: 50px;
+}
+
+.header_logo_img {
+    width: 140px;
+    height: 100%;
+    padding: 2px 10px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.header_logo_img:hover {
+    cursor: pointer;
+}
+
+.header_text {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+@media (max-width: 728px) {
+    .header_text {
+        display: none;
+    }
+}
+
+.header_right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Footer */
+.footer {
+    width: 100%;
+    height: auto;
+    background-color: #247CFF;
+    border-top: 2px solid white;
+    padding: 30px 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.footer-mainTitle {
+    font-size: 25px;
+    font-weight: 500;
+    color: white;
+}
+
+.footer-mainBox {
+    display: flex;
+    font-size: 17px;
+    gap: 20px;
+    font-weight: 500;
+    color: white;
+}
+
+@media (max-width:1051px) {
+    .footer-mainBox {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .footer-mainBox > * {
+        flex: 1 1 calc(50% - 10px);
+        min-width: 250px;
+    }
+}
+/* 사이드바 */
+.sidebar-panel {
+    position: fixed;
+    left: -320px;
+    width: 320px;
+    height: 100%;
+    background: #fff;
+    border-right: 1px solid #cfcfcf;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: left 0.4s ease;
+    z-index: 1100;
+    box-shadow: 6px 0 12px -6px rgba(0, 0, 0, 0.2);
+}
+
+
+.sidebar-panel.show {
+    left: 0;
+}
+
+.sidebar-list {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.sidebar-list.open {
+    max-height: 500px;
+    opacity: 1;
+}
+
+.sidebar-list.closed {
+    max-height: 0;
+    opacity: 0;
+}
+
+.sidebar-mainTitle {
+    list-style-type: none;
+    font-size: 24px;
+    text-align: left;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.sidebar-mainTitle:hover {
+    font-weight: 700;
+}
+
+.sidebar-subtitle {
+    list-style-type: none;
+    font-size: 24px;
+    text-align: left;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.section-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    color: #000;
+}
+
+.section-button:hover {
+    font-weight: 700;
+}
+
+.sidebar-arrow {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+    rotate: -90deg;
+}
+
+.sidebar-subtitle.is-open .sidebar-arrow {
+    transform: rotate(180deg);
+}
+
+.item-box {
+    list-style-type: none;
+    margin-top: 6px;
+}
+
+.sidebar-item {
+    font-size: 18px;
+    list-style-type: none;
+    margin-bottom: 6px;
+    margin-left: 16px;
+    text-align: left;
+}
+
+.sidebar-item:hover {
+    color: white;
+    background-color: #007fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 70px);
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+/* FilterBar */
+.filterBar {
+    border-radius: 8px;
+    background: white;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 20px;
+    padding: 15px 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.filter-bar-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto; /* 화면 좁아지면 가로 스크롤 */
+    flex-shrink: 1;
+    scroll-behavior: smooth;
+}
+
+.filter-bar-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.filter-bar-scroll::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+
+/* Input */
+.input {
+    flex-shrink: 0;
+}
+
+.inputText {
+    font-weight: 700;
+}
+
+.inputBox {
+    border: 1px solid black;
+    border-radius: 15px;
+    height: 30px;
+    text-align: center;
+}
+
+.inputBox2 {
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 50px;
+    width: 100%;
+    text-align: center;
+}
+
+/* SelectBox */
+.selectBoxText {
+    font-weight: 700;
+}
+
+.selectBox {
+    border: 1px solid black;
+    height: 30px;
+    text-align: center;
+}
+
+/* Bar */
+.Bar {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.line {
+    height: 30px;
+    border-right: 1px solid black;
+}
+
+/* ItemDetail */
+.itemDetailSection {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 15px;
+    gap: 50px;
+}
+
+.itemDetailBox {
+    height: auto;
+    width: auto;
+}
+
+.itemDetailBtnBox {
+    display: flex;
+    gap: 50px;
+    margin-top: 20px;
+}
+
+/* WhiteBox*/
+.whiteBox {
+    border-radius: 35px;
+    background: white;
+    width: 50%; /* 기본값 */
+    height: auto; /* 기본값 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 13px;
+    margin-bottom: 20px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* DatePicker */
+.datePickerInput {
+    border: 1px solid black;
+    height: 30px;
+}
+
+/* CustomButton */
+.custom-btn {
+    border: none;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 16px;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.custom-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+/* SearchButton */
+.search-btn {
+    margin-left: auto;
+    width: auto;
+    height: auto;
+    background-color: #0058DB;
+}
+
+.search-btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+
+/* ChangeRole */
+.user-form-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap; /* 줄바꿈 가능하게 */
+}
+
+@media (max-width: 1850px) {
+    .user-form-row {
+        justify-content: flex-start; /* 왼쪽 정렬 */
+    }
+
+    .user-form-row > * {
+        flex: 1 1 calc(50% - 10px); /* 2열 배치 */
+        min-width: 250px; /* 최소 너비 */
+    }
+}
+
+/* ChangeRole */
+.detail-form-row {
+    display: flex;
+    gap: 50px;
+    flex-wrap: wrap; /* 줄바꿈 가능하게 */
+    margin-top: 20px;
+}
+
+@media (max-width: 1115px) {
+    .detail-form-row {
+        justify-content: flex-start; /* 왼쪽 정렬 */
+        gap: 10px;
+    }
+
+    .detail-form-row > * {
+        flex: 1 1 calc(50% - 10px); /* 2열 배치 */
+        min-width: 250px; /* 최소 너비 */
+    }
+}
+
+/* ChangeRole */
+.order-form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    gap: 50px;
+}
+
+@media (max-width: 1750px) {
+    .order-form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .order-form-row > * {
+        flex: 1 1 calc(50% - 10px); /* 2열 배치 */
+        min-width: 250px; /* 최소 너비 */
+    }
+}
+
+/* ChangeRole */
+.warehouse {
+    display: flex;
+    gap: 30px;
+}
+
+@media (max-width: 649px) {
+    .warehouse {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .warehouse > * {
+        flex: 1 1 calc(50% - 10px); /* 2열 배치 */
+        min-width: 250px; /* 최소 너비 */
+    }
+}
+
+/*NewItemPending*/
+.pending-dtn-form-row {
+    display: flex;
+    width: 100%;
+    margin-top: 20px;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.cancel {
+    margin-left: 29%;
+}
+
+.manager-btn {
+    display: flex;
+    gap: 30px;
+}
+
+@media (max-width: 1000px) {
+    .pending-dtn-form-row {
+        justify-content: center;
+    }
+
+    .cancel {
+        margin-left: 30px;
+    }
+
+}
+
+@media (max-width: 710px) {
+    .pending-dtn-form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .pending-dtn-form-row > * {
+        flex: 1 1 calc(50% - 10px); /* 2열 배치 */
+        min-width: 250px; /* 최소 너비 */
+    }
+
+    .cancel {
+        margin-left: 0;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 540px) {
+    .manager-btn {
+        display: flex;
+        gap: 10px;
+    }
+}
+
+/*login*/
+.login-btn {
+    font-size: 30px;
+}
+
+@media (max-width: 781px) {
+    .login-btn {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 500px) {
+    .login-btn {
+        font-size: 10px;
+    }
+}
+
+/*CostStatics*/
+.mode-btn {
+    display: flex;
+    gap: 10px;
+}
+
+@media (max-width: 718px) {
+    .mode-btn {
+        flex-direction: column;
+    }
+}

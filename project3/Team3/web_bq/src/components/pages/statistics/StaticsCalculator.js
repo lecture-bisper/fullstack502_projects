@@ -1,0 +1,1 @@
+export const StaticsCalculator = () => {return <h1>StaticsCalculator</h1>}
