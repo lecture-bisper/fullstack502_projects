@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css"/>
+    <link href="https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/css/SpoqaHanSansNeo.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+    <style>
+        /* 전체 배경 및 기본 텍스트 */
+        body {
+            background-color: #e5e5f7;
+            color: #222;
+            font-family: 'Spoqa Han Sans Neo', 'Pretendard', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            text-decoration: none !important;
+            color: inherit;
+        }
+
+        ul, li {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .movie-detail {
+            display: flex;
+            gap: 30px;
+            margin: 40px 0 60px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            padding: 30px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .movie-info-line {
+            display: flex;
+            gap: 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #2b3a67;
+            margin-bottom: 8px;
+        }
+
+        .movie-info-line .rating,
+        .movie-info-line .date,
+        .movie-info-line .runtime {
+            white-space: nowrap;
+        }
+
+        /* 포스터 */
+        .poster {
+            width: 400px;
+            height: 600px;
+            background: #ddd;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #666;
+            font-size: 1.5rem;
+            user-select: none;
+        }
+
+        .info {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .info h2 {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: #2b3a67;
+            margin-bottom: 10px;
+        }
+
+        .info ul li {
+            font-size: 1.1rem;
+            color: #444;
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .info ul li p {
+            margin: 0;
+            font-weight: 600;
+            color: #2b3a67;
+        }
+
+        .info textarea.form-control {
+            border-radius: 10px;
+            resize: none;
+            font-size: 1rem;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            color: #333;
+            min-height: 120px;
+            font-family: 'Spoqa Han Sans Neo', 'Pretendard', sans-serif;
+            transition: border-color 0.3s ease;
+
+        }
+
+        .info i::-webkit-scrollbar {
+            display: none;
+        }
+
+        .info textarea.form-control:focus {
+            border-color: #2b3a67;
+            box-shadow: 0 0 6px rgba(43, 58, 103, 0.5);
+            outline: none;
+        }
+
+        /* 댓글 버튼 */
+        .comments-btn {
+            background-color: #2b3a67; /* 진한 네이비 */
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px 0;
+            font-size: 1.3rem;
+            font-weight: 800;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .comments-btn:hover {
+            background-color: #1e2b50;
+        }
+
+        .comments-btn:active {
+            background-color: #2b3a67 !important;
+            color: white !important;
+        }
+
+        /* 댓글 영역 */
+        .comments {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            margin-bottom: 60px;
+            font-size: 1rem;
+            color: #222;
+            max-width: 1500px;
+        }
+
+        .comments h3 {
+            font-weight: 900;
+            color: #2b3a67;
+            margin-bottom: 25px;
+            font-size: 1.6rem;
+        }
+
+        .comments form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .comments form div:first-child {
+            font-weight: 700;
+            color: #2b3a67;
+            font-size: 1.1rem;
+        }
+
+        .comments form textarea,
+        .comments form input[type='text'] {
+            resize: none;
+            min-height: 40px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-family: 'Spoqa Han Sans Neo', 'Pretendard', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .comments form textarea:focus,
+        .comments form input[type='text']:focus {
+            border-color: #2b3a67;
+            box-shadow: 0 0 6px rgba(43, 58, 103, 0.5);
+            outline: none;
+        }
+
+        .comments form button {
+            align-self: flex-start;
+            background-color: #2b3a67;
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            font-weight: 800;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .comments form button:hover {
+            background-color: #1e2b50;
+        }
+
+        /* 댓글 리스트 */
+        .comment-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .comment-list li {
+            background: #E5E5E5;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+            position: relative;
+        }
+
+        .comment-list li div.content {
+            font-weight: 400;
+            color: #444;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .movie-detail {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .poster {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 2 / 3;
+            }
+
+            .comments-btn {
+                font-size: 1.1rem;
+                padding: 12px 0;
+            }
+        }
+
+        .comments_txt {
+            resize: none;
+        }
+
+        /* 별점 */
+        .star-rating {
+            display: flex;
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            background: none;
+            user-select: none;
+            vertical-align: middle;
+        }
+
+        .fa-star-rating i {
+            color: orange;
+            margin-right: 2px;
+            font-size: 1.2em;
+        }
+
+        .swiper {
+            width: 100%;
+            height: 190px;
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .star-rating1 {
+            display: flex;
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            background: none;
+            user-select: none;
+            vertical-align: middle;
+            pointer-events: none;
+            align-items: center;
+        }
+
+        .star1 {
+            display: inline-block;
+            position: relative;
+            color: #ccc;
+            cursor: pointer;
+            margin-bottom: 1px;
+        }
+
+        .star1.full::before,
+        .star1.half::before {
+            content: '★';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .star1.full::before {
+            color: orange;
+        / 가득찬 별 * /
+        }
+
+        .star1.half::before {
+            background: linear-gradient(to right, orange 50%, #ccc 50%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .delete-btn {
+            background-color: gray;
+            color: white;
+            border: none;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 22px;
+            height: 22px;
+            font-size: 13px;
+        }
+
+        .info-i {
+            display: block;
+            border-radius: 10px;
+            font-size: 1rem;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            color: #333;
+            height: 120px;
+            font-family: 'Spoqa Han Sans Neo', 'Pretendard', sans-serif;
+            overflow-y: scroll;
+            font-style: normal;
+        }
+
+        .bookmark {
+            font-size: 20px;
+            font-weight: 300;
+            color: #F4D35E; /* 머스타드 옐로우 */
+            padding: 5px 10px;
+            background-color: #102B70; /* 진한 파랑 */
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            width: fit-content;
+            border: none;
+            cursor: pointer;
+        }
+
+        .bookmark.active {
+            background-color: #ff6f00; /* 머스타드 옐로우 */
+            color: #F4D35E; /* 진한 파랑 */
+            box-shadow: inset 0 6px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .message {
+            position: absolute;
+            left: 0;
+            top: 100%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            color: gray;
+            border-radius: 4px;
+            white-space: nowrap;
+            pointer-events: none;
+            font-size: 15px;
+            margin-left: 3px;
+        }
+
+        .message.show {
+            opacity: 1;
+        }
+    </style>
+
+</head>
+<body>
+<header th:replace="~{/layout/header :: headerNavbar}"></header>
+
+<main class="container">
+    <div class="movie-detail">
+        <img class="poster"
+             th:src="${content.posterPath != null} ? 'https://image.tmdb.org/t/p/w780/' + ${content.posterPath} : '/images/no-image.png'"
+             th:alt="${content.originalTitle}"/>
+        <div class="info">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 th:text="${content.title}">영화제목</h2>
+                <div style="position: relative;">
+                    <button class="bookmark"><i class="fa-regular fa-bookmark"></i></button>
+                    <div class="message" id="bookmarkMessage"></div>
+                </div>
+            </div>
+            <ul>
+                <li class="movie-info-line">
+                    <span class="date"
+                          th:text="${type.equals('movie')}
+                                         ? ('&nbsp;개봉일&nbsp;&nbsp;' + (${content.releaseDate} != null ? ${content.releaseDate} : '미정'))
+                                         : ('&nbsp;방영일&nbsp;&nbsp;' + (${content.releaseDate} != null ? ${content.releaseDate} : '미정'))">2000-01-01</span>
+                    <span class="runtime"
+                          th:text="${type.equals('movie')} ? '런타임 ' + ${content.runtime} + '분' : '에피소드 ' + ${content.numOfEpisodes} + '화'">2h00m</span>
+                    <span class="rating" th:text="${content.originCountry}">testCountry</span>
+                </li>
+                <li class="d-flex">
+                    <div style="font-weight: 600">&nbsp;장르&nbsp;&nbsp;</div>
+                    <div th:text="${convertGenre}" style="border: none">testGenre</div>
+                </li>
+                <li>
+                    <div class="star-rating1"
+                         th:attr="data-current-rating=${content.voteAverage}, data-vote-count=${content.voteCount}">
+                        <div style="font-weight: 600">&nbsp;평점&nbsp;&nbsp;</div>
+                        <span class="star1" data-index="1">★</span>
+                        <span class="star1" data-index="2">★</span>
+                        <span class="star1" data-index="3">★</span>
+                        <span class="star1" data-index="4">★</span>
+                        <span class="star1" data-index="5">★</span>
+                        <div style="font-size: 12px;"
+                             th:text="'&nbsp;&nbsp;(' + ${#numbers.formatDecimal(content.voteAverage/2, 0, 1)} + ')'">
+                            3.5
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <p>&nbsp;줄거리</p>
+                    <i class="info-i" th:text="${content.overview}"></i>
+                </li>
+                <li style="height: 196px; border: none;">
+                    <p>&nbsp;출연진</p>
+                    <div class="swiper mySwiper">
+                        <div class="swiper-wrapper mb-2">
+                            <div class="swiper-slide" style="display: flex; flex-direction: column;"
+                                 th:if="${#lists.size(memberList)} > 0" th:each="item : ${memberList}">
+                                <img style="width: 96px; height: auto; border-radius: 10px;"
+                                     th:alt="${item.originalName}"
+                                     th:src="${item.profilePath != null} ? 'https://image.tmdb.org/t/p/w185/' + ${item.profilePath} : '/images/no-image.png'"/>
+                                <div style="font-size: 13px; width: 100%">
+                                    <div class="text-truncate" th:text="${item.name}">testName</div>
+                                    <div class="text-truncate" th:text="${item.character}">testChar</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-scrollbar"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <button class="btn btn-lg comments-btn">댓글</button>
+
+    <div class="comments" style="display: none">
+        <h3>댓글</h3>
+        <input type="hidden" id="user-id" th:data-user-id="${user.id}" th:data-type="${type}"
+               th:data-content-id="${content.id}" th:data-user-name="${user.name}"/>
+        <form class="border-bottom pb-3" style="margin-bottom: 0">
+            <div class="star-rating" id="current-rating" data-comment-id="form">
+                <div style="margin-right: 10px;">평점</div>
+                <span class="star" data-index="1"><i class="fa-solid fa-star"></i></span>
+                <span class="star" data-index="2"><i class="fa-solid fa-star"></i></span>
+                <span class="star" data-index="3"><i class="fa-solid fa-star"></i></span>
+                <span class="star" data-index="4"><i class="fa-solid fa-star"></i></span>
+                <span class="star" data-index="5"><i class="fa-solid fa-star"></i></span>
+            </div>
+            <textarea class="comments_txt" placeholder="댓글 내용을 입력하세요"></textarea>
+            <div style="display: flex; justify-content: flex-end;">
+                <button type="button" id="submit-comment">작성</button>
+            </div>
+        </form>
+        <ul class="comment-list mt-3" id="comment-container">
+            <li>
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex mb-1" style="font-size: 13px; color: dimgray">평점:&nbsp;&nbsp;
+                        <span class="star-rating1" th:data-current-rating="${content.voteAverage}">
+                            <span class="star1" data-index="1">★</span>
+                            <span class="star1" data-index="2">★</span>
+                            <span class="star1" data-index="3">★</span>
+                            <span class="star1" data-index="4">★</span>
+                            <span class="star1" data-index="5">★</span>
+                        </span>
+                        <span>&nbsp;&nbsp;|&nbsp;&nbsp;작성자:&nbsp;&nbsp;익명&nbsp;&nbsp;|&nbsp;&nbsp;작성일:&nbsp;&nbsp;2025-07-16</span>
+                    </div>
+                    <button class="delete-btn btn-comment-delete">X</button>
+                </div>
+                <div class="content">테스트 댓글</div>
+            </li>
+        </ul>
+    </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script th:inline="javascript">
+    const favoritesIds = [[${favoritesIds}]];
+    const contentId = [[${content.id}]];
+
+    if (favoritesIds.includes(contentId)) {
+        const btn = document.querySelector('.bookmark');
+        btn.classList.add('active');
+        const icon = btn.querySelector('i');
+        icon.classList.remove('fa-regular');
+        icon.classList.add('fa-solid');
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        const dataBox = $("#user-id");
+        const userName = dataBox.data("user-name");
+        const userId = dataBox.data("user-id");
+        const type = dataBox.data("type");
+        const contentId = dataBox.data("content-id")
+        const commentSection = $(".comments");
+        const commentContainer = $("#comment-container");
+        let isCommentShow = false;
+
+        // 댓글창 버튼 클릭 시
+        $(".comments-btn").on("click", function () {
+            // 댓글창 펼치기 토글
+            if (commentSection.css("display") === "none") {
+                commentSection.css("display", "block");
+                isCommentShow = true;
+            } else {
+                commentSection.css("display", "none");
+                isCommentShow = false;
+            }
+
+            // 댓글 불러오기
+            if (isCommentShow) loadComments();
+        });
+
+        // 댓글 저장
+        $("#submit-comment").on("click", function () {
+            const commentBox = $(".comments_txt");
+            const comment = commentBox.val();
+            const today = new Date();
+
+            if (!comment.trim()) {
+                alert("댓글 내용을 입력하세요.");
+                return;
+            }
+            if (formRating === 0) {
+                alert("평점을 선택하세요.");
+                return;
+            }
+
+            const data = {comment: comment, rating: formRating};
+
+            $.ajax({
+                url: "/comment/" + type + "/" + contentId,
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (resp) {
+                    const html = `
+                        <li data-comment-idx="${resp.id}">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex mb-1" style="font-size: 13px; color: dimgray">
+                                    <span>작성자:&nbsp;&nbsp;${userName}&nbsp;&nbsp;|&nbsp;&nbsp;작성일:&nbsp;&nbsp;${formatDate(today)}&nbsp;&nbsp;|&nbsp;&nbsp;평점:&nbsp;&nbsp;</span>
+                                    <span class="star-rating1" data-current-rating="${formRating * 2}">
+                                        <span class="star1" data-index="1">★</span>
+                                        <span class="star1" data-index="2">★</span>
+                                        <span class="star1" data-index="3">★</span>
+                                        <span class="star1" data-index="4">★</span>
+                                        <span class="star1" data-index="5">★</span>
+                                    </span>
+                                </div>
+                                <button type="button" class="delete-btn btn-comment-delete">X</button>
+                            </div>
+                            <div class="content">${comment}</div>
+                        </li>`
+                    commentBox.val("");
+                    commentContainer.prepend(html);
+                    initStarRating(document.querySelector('#current-rating'));
+                    loadStar();
+                },
+                error: function () {
+                    alert("로그인이 필요한 서비스 입니다.");
+                }
+            })
+        });
+
+        // 댓글 삭제
+        $(document).on("click", ".btn-comment-delete", function () {
+            if (confirm("정말 삭제하시겠습니까?")) {
+                const commentIdx = $(this).closest("li").data("comment-idx");
+
+                $.ajax({
+                    url: "/comment/" + type + "/" + contentId + "/" + commentIdx,
+                    type: "DELETE",
+                    success: function () {
+                        loadComments();
+                    }
+                })
+            }
+        });
+
+        // 댓글 불러오기
+        function loadComments() {
+            $.ajax({
+                url: "/comment/" + type + "/" + contentId,
+                method: "GET",
+                success: function (commentList) {
+                    commentContainer.empty();
+                    commentList.forEach(function (resp) {
+                        const isOwner = (resp.userId === userId);
+                        const deleteButtonHtml = isOwner
+                            ? `<button type="button" class="delete-btn btn-comment-delete">X</button>`
+                            : "";
+                        const formattedDate = formatDate(resp.commentDate);
+                        const html = `
+                                        <li data-comment-idx="${resp.id}">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex mb-1" style="font-size: 13px; color: dimgray">
+                                                    <span>작성자:&nbsp;&nbsp;${resp.userName}&nbsp;&nbsp;|&nbsp;&nbsp;작성일:&nbsp;&nbsp;${formattedDate}&nbsp;&nbsp;|&nbsp;&nbsp;평점:&nbsp;&nbsp;</span>
+                                                        <span class="star-rating1" data-current-rating="${resp.rating * 2}">
+                                                        <span class="star1" data-index="1">★</span>
+                                                        <span class="star1" data-index="2">★</span>
+                                                        <span class="star1" data-index="3">★</span>
+                                                        <span class="star1" data-index="4">★</span>
+                                                        <span class="star1" data-index="5">★</span>
+                                                    </span>
+                                                </div>
+                                                ${deleteButtonHtml}
+                                            </div>
+                                            <div class="content">${resp.comment}</div>
+                                        </li>`
+
+                        commentContainer.append(html);
+                    });
+
+                    loadStar();
+                },
+                error: function () {
+                    alert('댓글 불러오기 실패');
+                }
+            });
+        }
+
+    });
+
+    // 날짜 포멧 변경
+    function formatDate(isoString) {
+        const date = new Date(isoString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+    }
+</script>
+
+<script>
+    let formRating = 0;
+
+    // 별점 아이콘 생성 (기존 함수 그대로)
+    function createStarRatingFontAwesome(rating) {
+        const starsDiv = document.createElement('span');
+        starsDiv.className = 'fa-star-rating';
+
+        const fullStars = Math.floor(rating);
+        const halfStar = (rating % 1) >= 0.5 ? 1 : 0;
+        const emptyStars = 5 - fullStars - halfStar;
+
+        for (let i = 0; i < fullStars; i++) {
+            const star = document.createElement('i');
+            star.className = 'fa-solid fa-star';
+            starsDiv.appendChild(star);
+        }
+
+        if (halfStar) {
+            const star = document.createElement('i');
+            star.className = 'fa-solid fa-star-half-stroke';
+            starsDiv.appendChild(star);
+        }
+
+        for (let i = 0; i < emptyStars; i++) {
+            const star = document.createElement('i');
+            star.className = 'fa-regular fa-star';
+            starsDiv.appendChild(star);
+        }
+
+        return starsDiv;
+    }
+
+    function setRating(rating, stars) {
+        stars.forEach((star, index) => {
+            const icon = star.querySelector('i');
+            const starValue = index + 1;
+
+            if (!icon) return;
+
+            icon.className = '';
+
+            if (rating >= starValue) {
+                icon.classList.add('fa-solid', 'fa-star');
+                icon.style.color = 'orange';
+            } else if (rating >= starValue - 0.5) {
+                icon.classList.add('fa-solid', 'fa-star-half-stroke');
+                icon.style.color = 'orange';
+            } else {
+                icon.classList.add('fa-regular', 'fa-star');
+                icon.style.color = '#ccc';
+            }
+        });
+    }
+
+    function initStarRating(starRating) {
+        const stars = starRating.querySelectorAll('.star');
+        let currentRating = 0;
+
+        setRating(currentRating, stars);
+
+        function getHoverRating(e, star) {
+            const rect = star.getBoundingClientRect();
+            const offsetX = e.clientX - rect.left;
+            return parseInt(star.dataset.index) - (offsetX < rect.width / 2 ? 0.5 : 0);
+        }
+
+        stars.forEach(star => {
+            star.addEventListener('mousemove', e => {
+                const hoverRating = getHoverRating(e, star);
+                setRating(hoverRating, stars);
+            });
+
+            star.addEventListener('mouseleave', () => {
+                setRating(currentRating, stars);
+            });
+
+            star.addEventListener('click', e => {
+                currentRating = getHoverRating(e, star);
+                formRating = currentRating;
+                setRating(currentRating, stars);
+            });
+        });
+    }
+
+    // 초기 별점 세팅
+    initStarRating(document.querySelector('#current-rating'));
+</script>
+
+<!-- 스와이퍼 설정 -->
+<script>
+    const swiperOptions = {
+        slidesPerView: 7,
+        spaceBetween: 10,
+        freeMode: true,
+        mousewheel: true,
+    }
+    var swiper = new Swiper(".mySwiper", {
+        ...swiperOptions,
+        scrollbar: {
+            el: ".swiper-scrollbar",
+            hide: true,
+        },
+        breakpoints: {
+            1400: {
+                slidesPerView: 7,
+                spaceBetween: 10,
+            },
+            1200: {
+                slidesPerView: 5,
+                spaceBetween: 10,
+            },
+            992: {
+                slidesPerView: 4,
+                spaceBetween: 10,
+            },
+            768: {
+                slidesPerView: 5,
+                spaceBetween: 10,
+            },
+            576: {
+                slidesPerView: 5,
+                spaceBetween: 10,
+            },
+            0: {
+                slidesPerView: 5,
+                spaceBetween: 10,
+            }
+        }
+    });
+    //북마크 버튼
+    const bookmarkBtn = document.querySelector('.bookmark');
+    const message = document.getElementById('bookmarkMessage');
+
+    bookmarkBtn.addEventListener('click', () => {
+        const isActive = bookmarkBtn.classList.toggle('active');
+
+        // 메시지 내용 설정
+        if (isActive) {
+            message.textContent = '등록';
+        } else {
+            message.textContent = '취소';
+        }
+
+        // 메시지 표시
+        message.classList.add('show');
+
+        // 잠깐 후에 숨김
+        setTimeout(() => {
+            message.classList.remove('show');
+        }, 500);
+    });
+</script>
+
+<script src="/js/star3.js" defer></script>
+
+<!-- 북마크 기능 -->
+<script>
+    $(function () {
+        $('.bookmark').on('click', function () {
+            const $button = $(this);
+            const $input = $('#user-id');
+
+            const userId = $input.data('user-id');
+            const type = $input.data('type');
+            const contentId = $input.data('content-id');
+
+            if ($button.hasClass('active')) {
+                $.ajax({
+                    url: '/bookmark',
+                    type: 'POST',
+                    data: {type: type, contentId: contentId},
+                    success: () => {
+                        $button.addClass('active');
+                        $button.find('i').removeClass('fa-regular').addClass('fa-solid');
+                    },
+                    error: () => alert('북마크 저장 실패')
+                });
+            } else {
+                $.ajax({
+                    url: '/bookmark',
+                    type: 'DELETE',
+                    data: {type: type, contentId: contentId},
+                    success: () => {
+                        $button.removeClass('active');
+                        $button.find('i').removeClass('fa-solid').addClass('fa-regular');
+                    },
+                    error: () => alert('북마크 취소 실패')
+                });
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

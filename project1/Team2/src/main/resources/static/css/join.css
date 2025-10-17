@@ -1,0 +1,150 @@
+/* 전체 배경 및 기본 텍스트 */
+body {
+    background-color: #E5E5F7;
+    color: white;
+
+}
+
+a {
+    text-decoration: none !important;
+}
+
+
+table {
+    margin: 50px auto 20px auto;
+    border: 2px solid #4A5568; /* 차분한 다크 그레이 */
+    border-collapse: separate;
+    width: auto;
+    height: auto;
+    font-size: 15px;
+    background-color: #FFFFFF; /* 화이트 */
+    color: #1F1F3F;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+}
+
+
+/* 버튼 스타일링 */
+.checkId {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 30px;
+    padding: 1px;
+    background-color: #71b0fa;
+    color: white;
+    border: 1px solid #71b0fa;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1E2B50;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.user, .pass, .name, .email, .year {
+    color: black;
+    margin: 5px;
+}
+
+.errorid, .errorpw, .errorname, .erroremail, .errorsel, .erroremt, .errordom, .errorbirth, .id-dup, .id-pos {
+    display: none;
+    color: red;
+    margin: 0;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    height: 40px;
+    font-size: 15px;
+    border: 2px solid #CBD5E0;       /* 연그레이 */
+    border-radius: 7px;
+    outline: none;
+    padding-left: 10px;
+    background-color: rgb(233,233,233);
+}
+
+
+.email-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+    align-items: center;
+}
+
+.my-button {
+    text-align: center;
+}
+
+.box {
+    width: 100%;
+    height: 40px;
+    box-sizing: border-box;
+    margin-left: 5px;
+    padding: 1px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+option {
+    font-size: 16px;
+}
+
+
+.birth-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+#username {
+    flex: 3 1 85%
+}
+
+#gender {
+    margin: auto;
+    text-align: left;
+    color: black;
+    flex: 1 1 15%;
+    width: auto;
+}
+
+#joinbtn {
+    background-color: #2B3A67; /* 진한 네이비 */
+    color: white;
+    border: none;
+    width: 400px;
+}
+
+#joinbtn:hover {
+    background-color: #1E2B50;
+}
+
+.join-border {
+    border-left: 1px solid #CBD5E0;
+    border-right: 1px solid #CBD5E0;
+    border-bottom: 1px solid #CBD5E0;
+    border-top: 1px solid #CBD5E0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background: white;
+
+}
+.join-border-line {
+    border-top: 1px solid #CBD5E0;
+}

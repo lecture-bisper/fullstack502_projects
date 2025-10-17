@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http:www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width , initial-scale=1.0">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/lostpw.css">
+    <style>
+
+    </style>
+</head>
+<body>
+<header th:replace="~{/layout/header :: headerNavbar}"></header>
+<table class="rounded-4 pt-4 pb-4 ps-3 pe-3">
+    <tr>
+        <td><h2 class="mb-3">비밀번호 찾기</h2></td>
+    </tr>
+    <tr>
+        <td class="p-0">
+            <div class="id_border p-3">
+                <p class="userid"> 아이디 </p>
+                <p class="errorid"> 아이디를 입력해주세요 </p>
+                <!--            <p class ="loginfail"> 존재하지 않거나 이메일이 틀렸습니다 </p>-->
+                <input type="text" id="user-id" placeholder="아이디를 입력하세요">
+            </div>
+            <div class="pw_border p-3">
+                <p class="email"> 이메일 </p>
+                <p class="erroremail"> 이메일을 입력해주세요 </p>
+                <input type="text" id="user-email" placeholder="이메일을 입력하세요">
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="links mx-3">
+            <div>
+                <a href="lostid" class="d-block"> 아이디 찾기</a>
+                <a href="login" class="d-block">로그인 하기</a>
+            </div>
+            <a href="join">회원가입</a>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="text-center">
+            <input type="submit" value="비밀번호 찾기" class="btn btn-lg mt-5" id="findpw">
+        </td>
+    </tr>
+</table>
+<script>
+    $("#findpw").click(function (e) {
+        let userid = document.querySelector("#user-id").value;
+        let useremail = document.querySelector("#user-email").value;
+
+        let hasError = false;
+
+        if (userid.length === 0) {
+            $("p.errorid").css('display', 'block');
+            hasError = true;
+        } else {
+            $("p.errorid").css('display', 'none');
+        }
+
+        if (useremail.length === 0) {
+            $("p.erroremail").css('display', 'block');
+            hasError = true;
+        } else {
+            $("p.erroremail").css('display', 'none');
+        }
+
+        if (!hasError) {
+            $.ajax({
+                url: "/auth/findPw",
+                type: "POST",
+                data: {
+                    userId: userid,
+                    email: useremail
+                },
+                success: function (response) {
+                    alert("비밀번호는: " + response);
+                },
+                error: function (xhr) {
+                    alert(xhr.responseText); // 예: "일치하는 회원이 없습니다."
+                }
+            });
+        }
+    });
+</script>
+
+
+</body>
+<footer th:replace="~{/layout/footer :: footer}"></footer>
+</html>

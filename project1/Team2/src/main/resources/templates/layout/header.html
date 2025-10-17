@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>title</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css"/>
+    <link href="https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/css/SpoqaHanSansNeo.css" rel="stylesheet"/>
+</head>
+<body>
+<header class="navbar navbar-expand-sm header-navbar" style="background-color: #0B1D51; min-height: 80px;"
+        th:fragment="headerNavbar">
+    <link rel="stylesheet" href="/css/header.css"/>
+    <div class="main-container">
+        <!-- 로고: 머스타드 옐로우 -->
+        <a href="/main" class="navbar-brand fw-bold fs-2" style="color: #F4D35E;">MyCinema</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse header-navbar2" id="navbarContent">
+            <ul class="navbar-nav ms-4">
+                <li class="nav-item">
+                    <a href="/search/movie" class="px-3 my-nav-link">영화</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/search/tv" class="px-3 my-nav-link">TV프로그램</a>
+                </li>
+            </ul>
+            <select class="form-select form-select-sm genre-select" id="main-search-type" style="width: 80px; height: 37px; margin-left: 250px;">
+                <option value="movie" selected>영화</option>
+                <option value="tv">TV</option>
+            </select>
+            <div class="d-flex align-items-center gap-3 ms-auto header-navbar3">
+                <form class="d-flex m-0" role="search">
+                    <input class="form-control me-2 header-input" type="search" placeholder="영화, TV프로그램, 인물 검색..."
+                           aria-label="Search" id="main-search-keyword"/>
+                    <button type="button" id="btn-main-search" class="btn" style="color: #0B1D51; background-color: #F4D35E; border: none;">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+
+                <a href="/auth/login" class="btn" style="background-color: #F4D35E; color: #0B1D51; font-weight: 600;">로그인</a>
+                <div class="dropdown">
+                    <button id="userBtn">
+                        <img id="headerProfileImg" th:src="${loginUser.profileImg}"
+                             width="45" height="45" alt="프로필 이미지" style="border-radius: 10px;">
+                    </button>
+                    <div id="userMenu">
+                        <ul>
+                            <li><a href="/profile" class="profile-btn">마이페이지</a></li>
+                            <li><a href="/auth/logoutProcess" class="profile-btn">로그아웃</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        let userName = [[${loginUser.id}]];
+    </script>
+    <script src="/js/header.js"></script>
+</header>
+</body>
+</html>

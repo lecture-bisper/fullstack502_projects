@@ -1,0 +1,255 @@
+/* 전체 배경 및 폰트 */
+body {
+    background-color: #E5E5F7; /* 연보라색 배경 */
+    color: white;
+    font-family: 'Spoqa Han Sans Neo', sans-serif;
+}
+
+/* 네비게이션 링크*/
+.my-nav-link {
+    color: white !important;
+    font-weight: 800;
+    transition: color 0.3s ease, font-weight 0.3s ease;
+}
+.my-nav-link:hover {
+    color: #F4D35E !important; /* 머스타드 옐로우 */
+    font-weight: 900;
+}
+a {
+    text-decoration: none !important; /* 밑줄 제거 */
+}
+
+/* 섹션 제목 */
+section > div > div.mt-3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #F4D35E;
+    margin-bottom: 1rem;
+    padding: 10px 20px;
+    background-color: #102B70; /* 진한 파랑 배경 */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    width: fit-content;
+}
+
+/* Swiper 컨테이너 */
+
+/* 기본 (768px 이상) */
+.swiper.mySwiper1 {
+    width: 100%;
+    height: 310px;             /* 전체 높이 */
+    margin-bottom: 3rem;      /* 아래 여백 */
+}
+
+/* 768px 이하 */
+@media (max-width: 768px) {
+    .swiper.mySwiper1 {
+        width: 68%;
+    }
+}
+
+/* 576px 이하 */
+@media (max-width: 576px) {
+    .swiper.mySwiper1 {
+        width: 33%;
+    }
+}
+
+/* 슬라이드 내용 */
+.mySwiper1 .swiper-slide {
+    text-align: center;       /* 텍스트 중앙 정렬 */
+    font-size: 18px;
+    color: white;
+    font-weight: 600;
+}
+
+/* 슬라이드 이미지 */
+.swiper .swiper-slide img
+{
+    width: 100%;
+    height: 250px;            /* 이미지 높이 */
+    object-fit: cover;        /* 비율 유지하며 채우기 */
+    display: block;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* 그림자 */
+}
+.mySwiper1 .swiper-slide img {
+    width: 100%;
+    height: 250px;            /* 이미지 높이 */
+    object-fit: cover;        /* 비율 유지하며 채우기 */
+    display: block;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* 그림자 */
+    border-radius: 10px;
+}
+
+/*  스크롤바 */
+.mySwiper1 .swiper-scrollbar {
+    background: #244182;      /* 스크롤바 배경 */
+    border-radius: 10px;
+    height: 3px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mySwiper1 .swiper-scrollbar-drag {
+    background: #F4D35E;      /* 드래그바 색상 */
+    border-radius: 10px;
+}
+
+/* 영화 제목/날짜 */
+.movie-title {
+    font-size: 25px;
+    font-weight: 700;
+    color: #000;
+}
+.movie-date {
+    display: flex;
+    font-size: 20px;
+    color: #000;
+}
+.my-movie-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #000;
+    text-align: left;
+}
+.my-movie-date {
+    display: flex;
+    font-size: 0.7rem;
+    color: #000;
+    text-align: left;
+}
+
+/* 긴 텍스트 말줄임 */
+.limit-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+/* 별점 */
+.main-star-rating,
+.star-rating {
+    display: flex;
+    direction: ltr;
+    unicode-bidi: bidi-override;
+    background: none;
+    user-select: none;
+    vertical-align: middle;
+    pointer-events: none;
+}
+.main-star-rating {
+    margin-left: 60px;
+}
+.star-rating {
+    margin-left: 20px;
+}
+.star {
+    display: inline-block;
+    position: relative;
+    color: #ccc; /* 회색 별 */
+    cursor: pointer;
+}
+.star.full::before,
+.star.half::before {
+    content: '★';
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.star.full::before {
+    color: orange; /* 가득찬 별 */
+}
+.star.half::before {
+    background: linear-gradient(to right, orange 50%, #ccc 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.rating-info {
+    font-size: 24px;
+    vertical-align: middle;
+    margin-left: 15px;
+    color: #444;
+    user-select: none;
+}
+
+/* 토글 버튼 (인기 콘텐츠) */
+.toggle {
+    display: inline-flex;
+    border: 1px solid #0a2942;
+    border-radius: 999px;
+    overflow: hidden;
+    width: 150px;
+    height: 40px;
+    justify-content: center;
+    margin-left: 15px;
+    margin-top: 23px;
+}
+.option {
+    padding: 6px 16px;
+    border: none;
+    background: none;
+    color: #0a2942;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 50%;
+}
+.option.active {
+    background-color: #0a2942;
+    color: #6fffd3;
+}
+
+/* 토글 버튼 (최신 콘텐츠) */
+.toggle1 {
+    display: inline-flex;
+    border: 1px solid #0a2942;
+    border-radius: 999px;
+    overflow: hidden;
+    width: 150px;
+    height: 40px;
+    justify-content: center;
+    margin-left: 15px;
+    margin-top: 23px;
+}
+.option1 {
+    padding: 6px 16px;
+    border: none;
+    background: none;
+    color: #0a2942;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 50%;
+}
+.option1.active1 {
+    background-color: #0a2942;
+    color: #6fffd3;
+}
+
+/* 토글 버튼 (추천 콘텐츠) */
+.toggle2 {
+    display: inline-flex;
+    border: 1px solid #0a2942;
+    border-radius: 999px;
+    overflow: hidden;
+    width: 150px;
+    height: 40px;
+    justify-content: center;
+    margin-left: 15px;
+    margin-top: 23px;
+}
+.option2 {
+    padding: 6px 16px;
+    border: none;
+    background: none;
+    color: #0a2942;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 50%;
+}
+.option2.active2 {
+    background-color: #0a2942;
+    color: #6fffd3;
+}

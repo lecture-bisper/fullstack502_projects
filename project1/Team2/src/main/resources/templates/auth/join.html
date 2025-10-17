@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http:www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width , initial-scale=1.0">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/join.css">
+
+</head>
+<body>
+<header th:replace="~{/layout/header :: headerNavbar}"></header>
+
+<main>
+    <table class="rounded-4 pt-4 pb-4 ps-3 pe-3">
+        <tr>
+            <td class="title" id="title">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <h2 class="mb-3"> 회원가입</h2>
+                    <p class="fs-6">회원이 되어서 다양한 기능을 체험해보세요</p>
+                </div>
+            </td>
+        </tr>
+        <tr class="d-flex flex-column join-border">
+            <td class="mx-3 mt-3 mb-2">
+                <p class="user"> 아이디 </p>
+                <p class="errorid"> 아이디를 최소 4자 이상으로 해주세요 </p>
+                <!--            <p class ="id-dup"> 아이디가 중복됩니다 </p>  &lt;!&ndash; db 중복 &ndash;&gt;-->
+                <!--            <p class ="id-pos"> 아이디 사용이 가능합니다 </p>  &lt;!&ndash; db 중복 &ndash;&gt;-->
+                <div class="input-container">
+                    <input type="text" id="userid" placeholder="아이디를 입력하세요">
+                    <button type="button" name="dbCheckId" id="CheckId" class="checkId">중복 확인
+                    </button>
+                </div>
+            </td>
+            <td class="join-border-line"></td>
+            <td class="mx-3 mb-2">
+                <div class="input-container">
+                    <p class="pass"> 비밀번호 </p>
+                    <p class="errorpw"> 패스워드를 최소 6자 이상으로 해주세요 </p>
+                    <input type="password" id="userpw" placeholder="비밀번호를 입력하세요">
+                </div>
+            </td>
+            <td class="join-border-line"></td>
+            <td class="mx-3 mb-2">
+                <div class="d-flex align-items-center justify-content-between">
+                    <p class="name"> 이름 </p>
+                    <p class="name" style="margin-right: 38px;">성별</p>
+                </div>
+                <p class="errorname"> 이름을 입력해주세요 </p>
+                <div class="email-container">
+                    <input type="text" id="username" placeholder="이름을 입력하세요">
+                    <select class="box" id="gender">
+                        <option value="female" selected>미지정</option>
+                        <option value="male">남</option>
+                        <option value="female">여</option>
+                    </select>
+                </div>
+            </td>
+            <td class="join-border-line"></td>
+            <td class="mx-3 mb-2">
+                <p class="email"> 이메일 </p>
+                <p class="erroremail"> 이메일을 입력해주세요 </p>
+                <p class="errorsel"> 주소를 입력하거나 선택해주세요 </p>
+                <p class="erroremt"> 너무 짧은 이메일은 사용할수 없습니다 </p>
+                <p class="errordom"> 도메인을 입력해주세요</p>
+                <div class="email-container">
+                    <input type="text" id="useremail">
+                    <select class="box" id="email-list">
+                        <option value="type">직접 입력</option>
+                        <option value="naver.com">naver.com</option>
+                        <option value="google.com">google.com</option>
+                        <option value="hanmail.net">hanmail.net</option>
+                        <option value="nate.com">nate.com</option>
+                        <option value="kakao.com">kakao.com</option>
+                    </select>
+                </div>
+            </td>
+            <td class="join-border-line"></td>
+            <td class="info mx-3 mb-3" id="info-birth">
+                <p class="year"> 생년월일 </p>
+                <p class="errorbirth"> 생년월일을 선택해주세요</p>
+                <div class="birth-container">
+                    <select class="box" id="birth-year">
+                        <option value="" disabled selected hidden> 출생 연도</option>
+                    </select>
+                    <select class="box" id="birth-month">
+                        <option value="" disabled selected hidden> 월</option>
+                    </select>
+                    <select class="box" id="birth-day">
+                        <option value="" disabled selected hidden> 일</option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="my-button"><input type="submit" value="회원가입" class="btn btn-lg mt-5" id="joinbtn"></td>
+        </tr>
+    </table>
+</main>
+
+<script>
+    let hasError = false;
+
+    $("#backbtn").click(function (e) {
+        window.location.href = "/auth/login";
+    });
+    $("#joinbtn").click(function (e) {
+        let userid = document.querySelector("#userid").value;
+        let userpw = document.querySelector("#userpw").value;
+        let username = document.querySelector("#username").value;
+        let useremail = document.querySelector("#useremail").value;
+        let usersel = document.querySelector("#email-list").value;
+
+        let birthYear = document.querySelector("#birth-year").value;
+        let birthMonth = document.querySelector("#birth-month").value;
+        let birthDay = document.querySelector("#birth-day").value;
+
+        hasError = false
+        console.log(hasError);
+        console.log(duplicateCheck)
+
+        if (userid.length < 4) {
+            $("p.errorid").css('display', 'block');
+            hasError = true;
+        } else {
+            $("p.errorid").css('display', 'none');
+        }
+        if (userpw.length < 5) {
+            $("p.errorpw").css('display', 'block');
+            hasError = true;
+        } else {
+            $("p.errorpw").css('display', 'none');
+        }
+        if (username.length === 0) {
+            $("p.errorname").css('display', 'block');
+            hasError = true;
+        } else {
+            $("p.errorname").css('display', 'none');
+        }
+        if (useremail.length === 0) {
+            $("p.erroremail").css('display', 'block');
+            hasError = true;
+        } else {
+            $("p.erroremail").css('display', 'none');
+        }
+        if (birthYear === "" || birthMonth === "" || birthDay === "") {
+            $("p.errorbirth").css('display', 'block');
+            hasError = true;
+        } else {
+            $("p.errorbirth").css('display', 'none');
+        }
+        if (usersel === "type") {
+            if (useremail.length === 0) {
+                $("p.erroremail").css('display', 'block');
+                hasError = true;
+            } else {
+                $("p.erroremail").css('display', 'none');
+            }
+            if (!useremail.includes('@')) {
+                $("p.errorsel").css('display', 'block');
+                hasError = true;
+            } else {
+                $("p.errorsel").css('display', 'none');
+            }
+            if (useremail.indexOf('@') < 3) {
+                $("p.erroremt").css('display', 'block');
+                hasError = true;
+            } else {
+                $("p.erroremt").css('display', 'none');
+            }
+            if (useremail.indexOf('.') < useremail.indexOf('@') + 2) {
+                $("p.errordom").css('display', 'block');
+                hasError = true;
+            } else {
+                $("p.errordom").css('display', 'none');
+            }
+
+
+        } else {
+            if (usersel === "type" && useremail.length === 0) {
+                $("p.errorsel").css('display', 'block');
+                hasError = true;
+            } else {
+                $("p.errorsel").css('display', 'none');
+                $("p.errordom").css('display', 'none');
+            }
+        }
+        if (useremail.length < 3) {
+            $("p.erroremt").css('display', 'block');
+            hasError = true;
+        } else {
+            $("p.erroremt").css('display', 'none');
+
+        }
+        if (!hasError) {
+
+            if (!duplicateCheck) {
+                alert("아이디 중복 확인이 되지 않았습니다.");
+                return;
+            }
+            $.ajax({
+                url: '/auth/joinProcess',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id: userid,
+                    password: userpw,
+                    name: username,
+                    email: usersel === 'type' ? useremail : useremail + '@' + usersel,
+                    birthDate: birthYear + '-' + birthMonth + '-' + birthDay,
+                    gender: $('#gender').val() === 'male' ? 'M' : ($('#gender').val() === 'female' ? 'F' : 'N'),
+                    profileImg: '/images/profile_male4.png',
+                    admin: 'N'
+                }),
+                success: function (response) {
+                    alert('회원가입이 완료되었습니다');
+                    window.location.href = '/auth/login';
+                },
+                error: function (xhr) {
+                    alert('회원가입에 실패했습니다: ' + xhr.responseText);
+                }
+            });
+        }
+    })
+
+    let duplicateCheck = false;
+
+    // 아이디 중복 확인
+    $(document).ready(function () {
+        $("#CheckId").on("click", function () {
+            const inputId = $("#userid").val();
+            let userid = document.querySelector("#userid").value;
+            hasError = false;
+
+            if (userid.length < 4) {
+                $("p.errorid").css('display', 'block');
+                hasError = true;
+                duplicateCheck = false;
+            } else {
+                $("p.errorid").css('display', 'none');
+                hasError = false;
+                $.ajax({
+                    url: "/auth/duplicateCheck",
+                    type: "GET",
+                    data: {userId: inputId},
+                    success: function (resp) {
+                        if (!resp) {
+                            alert("사용 가능한 아이디 입니다.")
+                            duplicateCheck = true;
+                        } else {
+                            alert("이미 사용 중 인 아이디 입니다.")
+                            duplicateCheck = false;
+                        }
+                    }
+                })
+            }
+        })
+    })
+</script>
+
+<script>
+    $(document).ready(function () {
+        for (var i = 1990; i <= 2050; i++) {
+            var day = i < 10 ? '0' + i : i;
+            $('#birth-year').append('<option value ="' + day + '">' + day + '년</option>');
+        }
+    });
+
+    $(document).ready(function () {
+        for (var i = 1; i <= 12; i++) {
+            var day = i < 10 ? '0' + i : i;
+            $('#birth-month').append('<option value ="' + day + '">' + day + '월</option>');
+        }
+    });
+
+    $(document).ready(function () {
+        for (var i = 1; i <= 31; i++) {
+            var day = i < 10 ? '0' + i : i;
+            $('#birth-day').append('<option value ="' + day + '">' + day + '일</option>');
+        }
+    });
+
+</script>
+<footer th:replace="~{/layout/footer :: footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css"/>
+    <link href="https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/css/SpoqaHanSansNeo.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/index-file.css"/>
+    <link rel="stylesheet" href="/css/header.css">
+
+    <!-- 북마크 -->
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            const favoriteSlider = /*[[${favoriteSlider}]]*/ null;
+            if (favoriteSlider == null || favoriteSlider.length === 0) {
+                $("#bookmark").hide();
+            } else {
+                $("#bookmark").show();
+            }
+        });
+    </script>
+
+    <!-- 토글 -->
+    <script>
+        $(document).ready(function () {
+            $(".btn-movie-toggle, .btn-tv-toggle").on("click", function () {
+                const toggleContainer = $(this).closest(".toggle");
+
+                toggleContainer.find(".option").removeClass("active");
+                $(this).addClass("active");
+
+                let targetMovie = $(this).closest("section").find(".div-movie");
+                let targetTV = $(this).closest("section").find(".div-tv");
+                let targetSwiperEl;
+
+                if ($(this).hasClass("btn-movie-toggle")) {
+                    targetSwiperEl = targetMovie.get(0);
+                    targetMovie.show();
+                    targetTV.hide();
+                } else {
+                    targetSwiperEl = targetTV.get(0);
+                    targetMovie.hide();
+                    targetTV.show();
+                }
+
+                requestAnimationFrame(() => {
+                    const swiper = swiperInstances.find(sw => sw.el === targetSwiperEl);
+                    if (swiper) {
+                        swiper.update();
+                        swiper.slideTo(0, 0);
+                    }
+                });
+            });
+        });
+    </script>
+
+</head>
+<body>
+<header th:replace="~{/layout/header :: headerNavbar}"></header>
+
+<main class="container mt-5">
+    <!-- 메인 슬라이더 -->
+    <header class="swiper mySwiper"
+            style="padding: 20px; border-top: 2px solid #9999CC; border-bottom: 2px solid #9999CC;">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" th:if="${#lists.size(mainSlider)} > 0" th:each="item: ${mainSlider}">
+                <a th:href="|/movie/${item.id}|" style="display: inline-block;">
+                    <img src="#" th:alt="${item.originalTitle}"
+                         th:src="${item.posterPath != null} ? 'https://image.tmdb.org/t/p/w780/' + ${item.posterPath} : '/images/no-image.png'"
+                         style="width: 300px; height: 450px;"/>
+                </a>
+                <div class="movie-title mt-2 limit-text" style="max-width: 338px;" th:text="${item.title}">test-title
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="movie-date" th:text="${item.releaseDate}">2000-01-01</div>
+                    <div class="star-rating"
+                         th:attr="data-current-rating=${item.voteAverage}, data-vote-count=${item.voteCount}">
+                        <span class="star" data-index="1">★</span>
+                        <span class="star" data-index="2">★</span>
+                        <span class="star" data-index="3">★</span>
+                        <span class="star" data-index="4">★</span>
+                        <span class="star" data-index="5">★</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
+    </header>
+
+    <!-- 인기 콘텐츠 -->
+    <section style="height: 430px; padding-top: 10px; border-bottom: 2px solid #9999CC;">
+        <div class="d-flex align-items-center">
+            <div class="mt-3">인기 콘텐츠</div>
+            <div class="toggle">
+                <button class="btn-movie-toggle option active">영화</button>
+                <button class="btn-tv-toggle option">TV</button>
+            </div>
+        </div>
+        <div class="swiper mySwiper1 mt-2 div-movie">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:if="${#lists.size(popularityMovieSlider)} > 0"
+                     th:each="item: ${popularityMovieSlider}">
+                    <a th:href="|/movie/${item.id}|" style="display: inline-block;">
+                        <img src="#" style="width: 166.66px; height: 250px;" th:alt="${item.originalTitle}"
+                             th:src="${item.posterPath != null} ? 'https://image.tmdb.org/t/p/w500/' + ${item.posterPath} : '/images/no-image.png'"/>
+                    </a>
+                    <div class="my-movie-title limit-text" th:text="${item.title}">test-title</div>
+                    <div class="d-flex align-items-center">
+                        <div class="my-movie-date" th:text="${item.releaseDate}">2000-01-01</div>
+                        <div class="star-rating"
+                             th:attr="data-current-rating=${item.voteAverage}, data-vote-count=${item.voteCount}">
+                            <span class="star" data-index="1">★</span>
+                            <span class="star" data-index="2">★</span>
+                            <span class="star" data-index="3">★</span>
+                            <span class="star" data-index="4">★</span>
+                            <span class="star" data-index="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-scrollbar"></div>
+        </div>
+        <div class="swiper mySwiper1 mt-2 div-tv" style="display: none">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:if="${#lists.size(popularityTVSlider)} > 0"
+                     th:each="item: ${popularityTVSlider}">
+                    <a th:href="|/tv/${item.id}|" style="display: inline-block;">
+                        <img src="#" style="width: 166.66px; height: 250px;" th:alt="${item.originalName}"
+                             th:src="${item.posterPath != null} ? 'https://image.tmdb.org/t/p/w500/' + ${item.posterPath} : '/images/no-image.png'"/>
+                    </a>
+                    <div class="my-movie-title limit-text" th:text="${item.name}">test-title</div>
+                    <div class="d-flex align-items-center">
+                        <div class="my-movie-date" th:text="${item.firstAirDate}">2000-01-01</div>
+                        <div class="star-rating"
+                             th:attr="data-current-rating=${item.voteAverage}, data-vote-count=${item.voteCount}">
+                            <span class="star" data-index="1">★</span>
+                            <span class="star" data-index="2">★</span>
+                            <span class="star" data-index="3">★</span>
+                            <span class="star" data-index="4">★</span>
+                            <span class="star" data-index="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-scrollbar"></div>
+        </div>
+    </section>
+
+    <!-- 최신 콘텐츠 -->
+    <section style="height: 430px; padding-top: 10px; border-bottom: 2px solid #9999CC;">
+        <div class="d-flex align-items-center">
+            <div class="mt-3">최신 콘텐츠</div>
+            <div class="toggle">
+                <button class="btn-movie-toggle option" data-value="releaseMovie">영화</button>
+                <button class="btn-tv-toggle option active" data-value="releaseTV">TV</button>
+            </div>
+        </div>
+        <div class="swiper mySwiper1 mt-2 div-movie" style="display: none">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:if="${#lists.size(releaseMovieSlider)} > 0"
+                     th:each="item: ${releaseMovieSlider}">
+                    <a th:href="|/movie/${item.id}|" style="display: inline-block;">
+                        <img src="#" style="width: 166.66px; height: 250px;" th:alt="${item.originalTitle}"
+                             th:src="${item.posterPath != null} ? 'https://image.tmdb.org/t/p/w500/' + ${item.posterPath} : '/images/no-image.png'"/>
+                    </a>
+                    <div class="my-movie-title limit-text" th:text="${item.title}">test-title</div>
+                    <div class="d-flex align-items-center">
+                        <div class="my-movie-date" th:text="${item.releaseDate}">2000-01-01</div>
+                        <div class="star-rating"
+                             th:attr="data-current-rating=${item.voteAverage}, data-vote-count=${item.voteCount}">
+                            <span class="star" data-index="1">★</span>
+                            <span class="star" data-index="2">★</span>
+                            <span class="star" data-index="3">★</span>
+                            <span class="star" data-index="4">★</span>
+                            <span class="star" data-index="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-scrollbar"></div>
+        </div>
+        <div class="swiper mySwiper1 mt-2 div-tv">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:if="${#lists.size(releaseTVSlider)} > 0"
+                     th:each="item: ${releaseTVSlider}">
+                    <a th:href="|/tv/${item.id}|" style="display: inline-block;">
+                        <img src="#" style="width: 166.66px; height: 250px;" th:alt="${item.originalName}"
+                             th:src="${item.posterPath != null} ? 'https://image.tmdb.org/t/p/w500/' + ${item.posterPath} : '/images/no-image.png'"/>
+                    </a>
+                    <div class="my-movie-title limit-text" th:text="${item.name}">test-title</div>
+                    <div class="d-flex align-items-center">
+                        <div class="my-movie-date" th:text="${item.firstAirDate}">2000-01-01</div>
+                        <div class="star-rating"
+                             th:attr="data-current-rating=${item.voteAverage}, data-vote-count=${item.voteCount}">
+                            <span class="star" data-index="1">★</span>
+                            <span class="star" data-index="2">★</span>
+                            <span class="star" data-index="3">★</span>
+                            <span class="star" data-index="4">★</span>
+                            <span class="star" data-index="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-scrollbar"></div>
+        </div>
+    </section>
+
+    <!-- 추천 콘텐츠 -->
+    <section style="height: 430px; padding-top: 10px; border-bottom: 2px solid #9999CC;">
+        <div class="d-flex align-items-center">
+            <div class="mt-3">추천 콘텐츠</div>
+            <div class="toggle">
+                <button class="btn-movie-toggle option active" data-value="movie">영화</button>
+                <button class="btn-tv-toggle option" data-value="tv">TV</button>
+            </div>
+        </div>
+        <div class="swiper mySwiper1 mt-2 div-movie">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:if="${#lists.size(recommendMovieSlider)} > 0"
+                     th:each="item: ${recommendMovieSlider}">
+                    <a th:href="|/movie/${item.id}|" style="display: inline-block;">
+                        <img src="#" style="width: 166.66px; height: 250px;" th:alt="${item.originalTitle}"
+                             th:src="${item.posterPath != null} ? 'https://image.tmdb.org/t/p/w500/' + ${item.posterPath} : '/images/no-image.png'"/>
+                    </a>
+                    <div class="my-movie-title limit-text" th:text="${item.title}">test-title</div>
+                    <div class="d-flex align-items-center">
+                        <div class="my-movie-date" th:text="${item.releaseDate}">2000-01-01</div>
+                        <div class="star-rating"
+                             th:attr="data-current-rating=${item.voteAverage}, data-vote-count=${item.voteCount}">
+                            <span class="star" data-index="1">★</span>
+                            <span class="star" data-index="2">★</span>
+                            <span class="star" data-index="3">★</span>
+                            <span class="star" data-index="4">★</span>
+                            <span class="star" data-index="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-scrollbar"></div>
+        </div>
+        <div class="swiper mySwiper1 mt-2 div-tv" style="display: none">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:if="${#lists.size(recommendTVSlider)} > 0"
+                     th:each="item: ${recommendTVSlider}">
+                    <a th:href="|/tv/${item.id}|" style="display: inline-block;">
+                        <img src="#" style="width: 166.66px; height: 250px;" th:alt="${item.originalName}"
+                             th:src="${item.posterPath != null} ? 'https://image.tmdb.org/t/p/w500/' + ${item.posterPath} : '/images/no-image.png'"/>
+                    </a>
+                    <div class="my-movie-title limit-text" th:text="${item.name}">test-title</div>
+                    <div class="d-flex align-items-center">
+                        <div class="my-movie-date" th:text="${item.firstAirDate}">2000-01-01</div>
+                        <div class="star-rating"
+                             th:attr="data-current-rating=${item.voteAverage}, data-vote-count=${item.voteCount}">
+                            <span class="star" data-index="1">★</span>
+                            <span class="star" data-index="2">★</span>
+                            <span class="star" data-index="3">★</span>
+                            <span class="star" data-index="4">★</span>
+                            <span class="star" data-index="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-scrollbar"></div>
+        </div>
+    </section>
+
+    <!-- 북마크 -->
+    <section id="bookmark" style="height: 430px; display:none; padding-top: 10px; border-bottom: 2px solid #9999CC;">
+        <div>
+            <div class="mt-3">북마크</div>
+        </div>
+        <div class="swiper mySwiper1 mt-2">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" th:if="${#lists.size(favoriteSlider)} > 0"
+                     th:each="item: ${favoriteSlider}">
+                    <a th:href="|/${item.type}/${item.id}|" style="display: inline-block;">
+                        <img src="#" style="width: 166.66px; height: 250px;" th:alt="${item.originalTitle}"
+                             th:src="${item.posterPath != null} ? 'https://image.tmdb.org/t/p/w500/' + ${item.posterPath} : '/images/no-image.png'"/>
+                    </a>
+                    <div class="my-movie-title limit-text" th:text="${item.title}">test-title</div>
+                    <div class="d-flex align-items-center">
+                        <div class="my-movie-date" th:text="${item.releaseDate}">2000-01-01</div>
+                        <div class="star-rating"
+                             th:attr="data-current-rating=${item.voteAverage}, data-vote-count=${item.voteCount}">
+                            <span class="star" data-index="1">★</span>
+                            <span class="star" data-index="2">★</span>
+                            <span class="star" data-index="3">★</span>
+                            <span class="star" data-index="4">★</span>
+                            <span class="star" data-index="5">★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-scrollbar"></div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{/layout/footer :: footer}"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="/js/swiper.js"></script>
+
+<!-- 최신 인기 추천 북마크 콘텐츠 관련 js 코드-->
+<script>
+    const swiperOptions = {
+        slidesPerView: 7,
+        spaceBetween: 10,
+        freeMode: true,
+        mousewheel: true,
+
+        breakpoints: {
+            1400: {  // xxl
+                slidesPerView: 7,
+                spaceBetween: 10,
+            },
+            1200: {  // xl
+                slidesPerView: 6,
+                spaceBetween: 10,
+            },
+            992: {   // lg
+                slidesPerView: 5,
+                spaceBetween: 8,
+            },
+            768: {   // md
+                slidesPerView: 4,
+                spaceBetween: 8,
+            },
+            576: {   // sm
+                slidesPerView: 1,
+                spaceBetween: 6,
+            },
+            0: {     // xs
+                slidesPerView: 1,
+                spaceBetween: 4,
+            }
+        }
+    };
+
+    const swiperInstances = [];
+
+    document.querySelectorAll('.mySwiper1').forEach((el) => {
+        const swiper = new Swiper(el, {
+            ...swiperOptions,
+            scrollbar: {
+                el: el.querySelector('.swiper-scrollbar'),
+                hide: false,
+                draggable: true,
+            },
+        });
+
+        swiperInstances.push(swiper); // 인스턴스를 배열에 저장
+    });
+</script>
+<!-- 스와이퍼 스크롤 바 opacity 기능 코드 -->
+<script>
+    document.querySelectorAll('.mySwiper1').forEach(swiperContainer => {
+        const scrollbar = swiperContainer.querySelector('.swiper-scrollbar');
+
+        scrollbar.style.opacity = '0';
+        scrollbar.style.transition = 'opacity 0.3s ease';
+
+        swiperContainer.addEventListener('mouseenter', () => {
+            scrollbar.style.opacity = '1';
+        });
+
+        swiperContainer.addEventListener('mouseleave', () => {
+            scrollbar.style.opacity = '0';
+        });
+    });
+</script>
+<script src="/js/star2.js" defer></script>
+</body>
+</html>

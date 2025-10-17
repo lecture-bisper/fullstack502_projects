@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="/css/header.css">
+    <!--    <link rel="stylesheet" href="/css/user.css">-->
+    <style>
+        body {
+            background-color: #E5E5F7;
+            color: white;
+        }
+
+        a {
+            text-decoration: none !important;
+        }
+
+        main > div.mt-5 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #F4D35E;
+            margin-bottom: 1rem;
+            padding: 10px 20px;
+            background-color: #102B70;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            width: fit-content;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            text-align: left;
+            padding: 20px;
+            /*transform: translateX(-25px);*/
+        }
+
+        .form-check {
+            position: relative;
+            padding-left: 30px; /* 체크박스 공간 확보 */
+            cursor: pointer;
+            user-select: none;
+            color: #102b70;
+        }
+
+        /* 박스 기본 모양 */
+        .form-check-label::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            border: 2px solid #102b70;
+            border-radius: 4px;
+            background-color: white; /* 기본 흰색 */
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* 체크됐을 때 배경색 채우기 */
+        .genre-checkbox:checked + .form-check-label::before {
+            background-color: #102b70; /* 원하는 채우기 색 (진한 파랑 예시) */
+            border-color: #102b70;
+        }
+
+        .genre-checkbox {
+            position: absolute; /* 화면 밖으로 숨기거나 투명 처리 */
+            opacity: 0;
+            width: 0;
+            height: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .preference-special-box {
+            border-radius: 5px; /* 모서리 둥글게 */
+            padding: 10px 15px; /* 안쪽 여백 */
+            background-color: white; /* 배경 흰색 */
+            font-size: 14px;
+            color: #102b70;
+            box-shadow: 0 4px 8px rgba(16, 43, 112, 0.1);
+        }
+
+        .profile-photo-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+
+        .profile-photo-container img {
+            width: 500px;
+            height: 210px;
+            object-fit: cover;
+            border-radius: 0.375rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        input {
+            border: 1px solid #CBD5E0;
+            background: #E5E5F7;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        #selectedGenresBox {
+            min-height: 50px;
+            white-space: pre-wrap;
+            font-weight: 500;
+            color: #333;
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .genre-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .genre-column {
+            width: 48%;
+            border-right: 1px solid #ccc;
+            padding-right: 10px;
+            color: #0d6efd;
+        }
+
+        .genre-column:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+
+        .form-check {
+            min-width: 100px;
+        }
+
+        .preference-genre-wrapper {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 8px rgba(16, 43, 112, 0.1);
+            color: #102b70;
+
+            max-width: 100%;
+            margin: 20px 0;
+            padding: 20px;
+        }
+
+        .preference-genre-wrapper label {
+            color: #102b70;
+        }
+
+        /* 영화 장르 영역 접고 펼치기 스타일 */
+        .genre-container {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            max-height: 125px; /* 기본 높이 - 6개 정도 */
+        }
+
+        .genre-container.expanded {
+            max-height: 1000px; /* 펼칠 때 */
+        }
+
+        /* 프로필 입력 필드 배경색 전환 */
+        input[readonly] {
+            background-color: #e5e5f7 !important;
+            color: #333 !important;
+        }
+
+        input:not([readonly]) {
+            background-color: white !important;
+            color: #000 !important;
+        }
+
+
+        /* 스와이퍼 기본 스타일 */
+        .swiper.mySwiper1 {
+            width: 100%;
+            height: 345px;
+            margin-bottom: 3rem;
+        }
+
+        .mySwiper1 .swiper-slide {
+            text-align: center;
+            font-size: 11px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .swiper-slide {
+            overflow: hidden;
+            padding: 10px;
+            transition: box-shadow 0.3s ease;
+            text-align: center;
+            width: 200px;
+        }
+
+        /* 이미지 확대 효과 */
+        .swiper-slide img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            border-radius: 6px;
+        }
+
+        /* hover 시 이미지 커짐 */
+        img:hover {
+            transform: scale(1.05);
+        }
+
+        .swiper .swiper-slide img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* x, y, blur, color */
+        }
+
+        .mySwiper1 .swiper-slide img {
+            width: 100%;
+            height: 275px;
+            object-fit: cover;
+            display: block;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* x, y, blur, color */
+        }
+
+        .mySwiper1 .swiper-scrollbar {
+            background: #244182;
+            border-radius: 10px;
+            height: 3px;
+        }
+
+        .mySwiper1 .swiper-scrollbar-drag {
+            background: #F4D35E;
+            border-radius: 10px;
+        }
+
+        .my-movie-title {
+            font-size: 1rem; /* 크기 ↑ */
+            font-weight: 700; /* 굵기 ↑ */
+            color: #000; /* 검은색 */
+            text-align: left;
+        }
+
+        .my-movie-date {
+            display: flex;
+            color: #000; /* 검은색 */
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .limit-text {
+            white-space: nowrap; /* 한 줄로 유지 */
+            overflow: hidden; /* 넘치는 텍스트 숨김 */
+            text-overflow: ellipsis; /* 넘치면 ... 표시 */
+            max-width: 200px; /* 최대 너비 지정 (원하는 값으로 조절) */
+        }
+
+        #fileInput,
+        #imageUpload {
+            display: none;
+        }
+
+        /* 섹션 제목 스타일 */
+        .bookmark {
+            font-size: 25px;
+            font-weight: 700;
+            color: #F4D35E; /* 머스타드 옐로우 */
+            padding: 5px 10px;
+            background-color: #102B70; /* 진한 파랑 계열 배경 */
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            width: fit-content;
+        }
+
+        .preference-wow-box {
+            height: 425px;
+            border-radius: 5px; /* 모서리 둥글게 */
+            padding: 10px 15px; /* 안쪽 여백 */
+            background-color: white; /* 배경 흰색 */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+        #userfile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #changeImgbtn {
+            padding: 10px 20px;
+            background-color: gray;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .delform {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        .delete-button {
+            margin: 0;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #F4D35E;
+            border: none;
+            margin-left: 10px;
+            background: #102B70;
+        }
+
+        .delete-button:hover {
+            transform: scale(1.05);
+        }
+
+        #imageUpload {
+            display: none;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        #toggleMovieGenresBtn {
+            color: #102B70;
+        }
+
+        #toggleTvGenresBtn {
+            color: #102B70;
+        }
+
+        #cardform {
+            background-color: white;
+        }
+
+        #selform {
+            height: 377px;
+            padding-top: 10px;
+        }
+
+    </style>
+    <style>
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(231, 231, 249, 0.4); /* 연보라 파스텔 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(6px); /* 살짝 더 흐림 처리 */
+            animation: modalPop 0.4s ease-out; /* 등장 애니메이션 */
+        }
+
+        @keyframes modalPop {
+            0% {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: white;
+            box-shadow: 0 12px 24px rgba(159, 143, 255, 0.2); /* 연보라 그림자 */
+            padding: 30px 20px;
+            border-radius: 12px;
+            text-align: center;
+            max-height: 80vh;
+            width: 360px; /* 크기 조정 */
+            overflow-y: auto;
+        }
+
+        .image-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .image-list img {
+            width: 70px;
+            height: 70px;
+            margin: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            transition: border-color 0.3s;
+        }
+
+        #selectDoneBtn {
+            background-color: #b89eff; /* 부드러운 라벤더 */
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 12px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(184, 158, 255, 0.4); /* 연보라 그림자 */
+            transition: background-color 0.3s ease;
+        }
+
+        #selectDoneBtn:hover {
+            background-color: #a388ff; /* hover 시 더 진한 보라 */
+            transform: scale(1.03); /* 작게 확대 */
+        }
+
+        .modal-content, .image-list, #selectDoneBtn {
+            font-family: 'Quicksand', 'Segoe UI', Tahoma, sans-serif;
+        }
+
+
+        .image-list img.selected {
+            border-color: #9f8fff; /* 연보라 포인트 */
+            box-shadow: 0 0 12px rgba(159, 143, 255, 0.5), 0 0 0 4px rgba(201, 191, 255, 0.3);
+            transform: scale(1.1) rotate(-1deg);
+        }
+
+        .modal-content h5 {
+            color: #7a5fff; /* 연보라-보라 계열 텍스트 색 */
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* 마우스를 올렸을 때 효과 */
+        .image-list img:hover {
+            border-color: #bbaaff;
+            transform: scale(1.05) rotate(-2deg);
+            box-shadow: 0 4px 10px rgba(187, 170, 255, 0.4);
+        }
+    </style>
+    <style>
+        .main-star-rating,
+        .star-rating {
+            display: flex;
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            background: none;
+            user-select: none;
+            vertical-align: middle;
+            pointer-events: none;
+        }
+
+        .main-star-rating {
+            margin-left: 60px;
+        }
+
+        .star-rating {
+        }
+
+        .star {
+            display: inline-block;
+            position: relative;
+            color: #ccc; /* 회색 별 */
+            cursor: pointer;
+        }
+
+        .star.full::before,
+        .star.half::before {
+            content: '★';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .star.full::before {
+            color: orange; /* 가득찬 별 */
+        }
+
+        .star.half::before {
+            background: linear-gradient(to right, orange 50%, #ccc 50%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .rating-info {
+            font-size: 24px;
+            vertical-align: middle;
+            margin-left: 15px;
+            color: #444;
+            user-select: none;
+        }
+
+    </style>
+</head>
+<body>
+<header th:replace="~{/layout/header :: headerNavbar}"></header>
+
+<main class="container py-4">
+    <div class="card shadow-lg border-0 rounded-4 px-4 py-5" id="cardform">
+        <div class="row align-items-center g-5">
+            <div class="col-md-4 text-center mb-4 mb-md-0 profile-photo-container d-flex flex-column align-items-center"
+                 id="userfile">
+                <img id="fileImg" th:src="${user.profileImg}"
+                     alt="프로필 사진" class="img-fluid rounded-3 shadow">
+                <input type="file" id="fileInput" accept="image/*">
+                <button class="btn btn-outline-secondary btn-sm mt-3" id="changeImgbtn">
+                    <i class="fas fa-pen"></i> 프로필수정
+                </button>
+                <input type="file" id="imageUpload" accept="image/*">
+            </div>
+
+            <!-- 프로필 정보 -->
+            <div class="col-md-8">
+                <div class="row gy-3 text-dark">
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">아이디</label>
+                        <input type="text" class="form-control" id="userId" th:value="${user.id}" readonly>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">이메일</label>
+                        <input type="email" class="form-control" id="email" th:value="${user.email}" readonly>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">생년월일</label>
+                        <input type="date" class="form-control" id="birthDate" th:value="${user.birthDate}" readonly>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">이름</label>
+                        <input type="text" class="form-control" id="name" th:value="${user.name}" readonly>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button class="btn btn-outline-secondary btn-sm" id="profileEditBtn">
+                        <i class="fas fa-pen"></i> 수정
+                    </button>
+                    <button class="btn btn-success btn-sm d-none" id="profileSaveBtn">저장</button>
+                    <button class="btn btn-secondary btn-sm d-none" id="profileCancelBtn">취소</button>
+                </div>
+                <div id="actionButtons" style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+                    <button id="deleteAccountBtn"
+                            style="background-color: #e74c3c; color: white; border: none; padding: 6px 10px; font-size: 14px; border-radius: 6px; cursor: pointer;">
+                        회원 탈퇴
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="container my-4 p-0">
+        <div class="preference-special-box rounded-3">
+            <!-- 선택된 장르 박스 -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">선호 장르</label>
+                <div class="p-3 bg-light border rounded" id="selectedGenresBox">선택된 장르가 없습니다.</div>
+            </div>
+        </div>
+
+        <div class="preference-genre-wrapper p-3 rounded-3">
+            <!-- 선호 장르 선택 + 톱니바퀴 버튼 -->
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <label class="form-label fw-bold mb-0">선호 장르 선택</label>
+                <div class="d-flex gap-2 align-items-center">
+                    <button class="btn btn-outline-secondary btn-sm" id="editBtn" title="수정">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button class="btn btn-success btn-sm d-none" id="saveBtn">저장</button>
+                    <button class="btn btn-secondary btn-sm d-none" id="cancelBtn">취소</button>
+                </div>
+            </div>
+
+            <!-- 장르 선택 박스 -->
+            <div class="genre-grid border-top border-bottom py-3 mt-2">
+                <!-- 영화 -->
+                <div class="genre-column">
+                    <h6 class="fw-bold text-center mb-3">🎬 영화</h6>
+                    <div id="movieGenres" class="d-flex flex-wrap gap-2 justify-content-center genre-container">
+                        <div class="form-check">
+                            <input class="form-check-input genre-checkbox" type="checkbox" id="movie-1"
+                                   data-type="movie"
+                                   data-genre-id="10752"
+                                   value="전쟁" disabled>
+                            <label class="form-check-label" for="movie-1">전쟁</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input genre-checkbox" type="checkbox" id="movie-2"
+                                   data-type="movie"
+                                   data-genre-id="878"
+                                   value="SF" disabled>
+                            <label class="form-check-label" for="movie-2">SF</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input genre-checkbox" type="checkbox" id="movie-3"
+                                   data-type="movie"
+                                   data-genre-id="18"
+                                   value="드라마" disabled>
+                            <label class="form-check-label" for="movie-3">드라마</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input genre-checkbox" type="checkbox" id="movie-4"
+                                   data-type="movie"
+                                   data-genre-id="27"
+                                   value="공포" disabled>
+                            <label class="form-check-label" for="movie-4">공포</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input genre-checkbox" type="checkbox" id="movie-5"
+                                   data-type="movie"
+                                   data-genre-id="35"
+                                   value="코미디" disabled>
+                            <label class="form-check-label" for="movie-5">코미디</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input genre-checkbox" type="checkbox" id="movie-6"
+                                   data-type="movie"
+                                   data-genre-id="10749"
+                                   value="로맨스" disabled>
+                            <label class="form-check-label" for="movie-6">로맨스</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input genre-checkbox" type="checkbox" id="movie-7"
+                                   data-type="movie"
+                                   data-genre-id="16"
+                                   value="애니메이션" disabled>
+                            <label class="form-check-label" for="movie-7">애니메이션</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input genre-checkbox" type="checkbox" id="movie-8"
+                                   data-type="movie"
+                                   data-genre-id="14"
+                                   value="판타지" disabled>
+                            <label class="form-check-label" for="movie-8">판타지</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input genre-checkbox" type="checkbox" id="movie-9"
+                                   data-type="movie"
+                                   data-genre-id="80"
+                                   value="범죄" disabled>
+                            <label class="form-check-label" for="movie-9">범죄</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input genre-checkbox" type="checkbox" id="movie-10"
+                                   data-type="movie"
+                                   data-genre-id="53"
+                                   value="스릴러" disabled>
+                            <label class="form-check-label" for="movie-10">스릴러</label>
+                        </div>
+                    </div>
+                    <div class="text-center mt-1">
+                        <button type="button" id="toggleMovieGenresBtn" class="btn btn-link btn-sm p-0">더보기 ▼
+                        </button>
+                    </div>
+                </div>
+
+                <div class="genre-column">
+                    <h6 class="fw-bold text-center mb-3">📺 TV</h6>
+                    <div id="TvGenres" class="d-flex flex-wrap gap-2 justify-content-center genre-container">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-1" data-type="tv"
+                                   autocomplete="off" data-genre-id="10759"
+                                   disabled value="액션&어드벤처"/>
+                            <label class="form-check-label" for="tv-1">액션&어드벤처</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-2" data-type="tv"
+                                   autocomplete="off" data-genre-id="16"
+                                   disabled value="애니메이션"/>
+                            <label class="form-check-label" for="tv-2">애니메이션</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-3" data-type="tv"
+                                   autocomplete="off" data-genre-id="80"
+                                   disabled value="범죄"/>
+                            <label class="form-check-label" for="tv-3">범죄</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-4" data-type="tv"
+                                   autocomplete="off" data-genre-id="99"
+                                   disabled value="다큐멘터리"/>
+                            <label class="form-check-label" for="tv-4">다큐멘터리</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-5" data-type="tv"
+                                   autocomplete="off" data-genre-id="18"
+                                   disabled value="드라마"/>
+                            <label class="form-check-label" for="tv-5">드라마</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-6" data-type="tv"
+                                   autocomplete="off" data-genre-id="10751"
+                                   disabled value="가족"/>
+                            <label class="form-check-label" for="tv-6">가족</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-7" data-type="tv"
+                                   autocomplete="off" data-genre-id="10762"
+                                   disabled value="키즈/어린이"/>
+                            <label class="form-check-label" for="tv-7">키즈/어린이</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-8" data-type="tv"
+                                   autocomplete="off" data-genre-id="9648"
+                                   disabled value="미스테리"/>
+                            <label class="form-check-label" for="tv-8">미스테리</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-9" data-type="tv"
+                                   autocomplete="off" data-genre-id="10763"
+                                   disabled value="뉴스"/>
+                            <label class="form-check-label" for="tv-9">뉴스</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-10" data-type="tv"
+                                   autocomplete="off" data-genre-id="10764"
+                                   disabled value="리얼리티"/>
+                            <label class="form-check-label" for="tv-10">리얼리티</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-11" data-type="tv"
+                                   autocomplete="off" data-genre-id="10765"
+                                   disabled value="SF&판타지"/>
+                            <label class="form-check-label" for="tv-11">SF&amp;판타지</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-12" data-type="tv"
+                                   autocomplete="off" data-genre-id="10766"
+                                   disabled value="연속극"/>
+                            <label class="form-check-label" for="tv-12">연속극</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-13" data-type="tv"
+                                   autocomplete="off" data-genre-id="10767"
+                                   disabled value="토크쇼"/>
+                            <label class="form-check-label" for="tv-13">토크쇼</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-14" data-type="tv"
+                                   autocomplete="off" data-genre-id="10768"
+                                   disabled value="전쟁&정치"/>
+                            <label class="form-check-label" for="tv-14">전쟁&amp;정치</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input genre-checkbox" id="tv-15" data-type="tv"
+                                   autocomplete="off" data-genre-id="37"
+                                   disabled value="서부극"/>
+                            <label class="form-check-label" for="tv-15">서부극</label>
+                        </div>
+                    </div>
+                    <div class="text-center mt-1">
+                        <button type="button" id="toggleTvGenresBtn" class="btn btn-link btn-sm p-0">더보기 ▼
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <section id="selform">
+        <div class="preference-wow-box">
+            <div class="d-flex justify-content-between" style="padding-left: 11px; padding-right: 11px;">
+                <div class="bookmark">북마크</div>
+                <div class="bookmark"><i class="fa-regular fa-bookmark"></i></div>
+            </div>
+            <div class="swiper mySwiper1 mt-2" style="border-top: 2px solid #102B70; border-bottom: 2px solid #102B70;">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" th:if="${#lists.size(favoriteSlider)} > 0"
+                         th:each="item: ${favoriteSlider}" th:data-contents-id="${item.id}"
+                         th:data-contents-type="${item.type}" style="height: 337px;">
+                        <a th:href="|/${item.type}/${item.id}|" style="display: inline-block;">
+                            <img src="#" th:alt="${item.originalTitle}"
+                                 th:src="${item.posterPath != null} ? 'https://image.tmdb.org/t/p/w500/' + ${item.posterPath} : '/images/no-image.png'"/>
+                        </a>
+                        <div class="delform">
+                            <div class="my-movie-title limit-text" th:text="${item.title}">범죄도시</div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-around">
+                            <div class="my-movie-date" th:text="${item.releaseDate}">20xx.xx.xx</div>
+                            <div class="star-rating"
+                                 th:attr="data-current-rating=${item.voteAverage}, data-vote-count=${item.voteCount}">
+                                <span class="star" data-index="1">★</span>
+                                <span class="star" data-index="2">★</span>
+                                <span class="star" data-index="3">★</span>
+                                <span class="star" data-index="4">★</span>
+                                <span class="star" data-index="5">★</span>
+                            </div>
+                            <button type="button" class="delete-button"><i class="fa-solid fa-trash"></i>️</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-scrollbar"></div>
+            </div>
+        </div>
+    </section>
+
+</main>
+<div id="imageSelectModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h5>프로필 이미지 선택</h5>
+        <div class="image-list">
+            <img src="/images/profile_female1.png" class="avatar" data-src="/images/profile_female1.png">
+            <img src="/images/profile_female2.png" class="avatar" data-src="/images/profile_female2.png">
+            <img src="/images/profile_female3.png" class="avatar" data-src="/images/profile_female3.png">
+            <img src="/images/profile_male1.png" class="avatar" data-src="/images/profile_male1.png">
+            <img src="/images/profile_male2.png" class="avatar" data-src="/images/profile_male2.png">
+            <img src="/images/profile_male3.png" class="avatar" data-src="/images/profile_male3.png">
+        </div>
+        <button class="btn btn-primary mt-3" id="selectDoneBtn">선택 완료</button>
+    </div>
+</div>
+<footer th:replace="~{/layout/footer :: footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="js/swiper.js"></script>
+<script th:inline="javascript">
+    $(function () {
+        function setUserGenres() {
+            const preferGenreMovieList = /*[[${preferGenreMovieList}]]*/ [];
+            const preferGenreTvList = /*[[${preferGenreTvList}]]*/ [];
+            const movieGenres = $("#movieGenres input");
+            const tvGenres = $("#TvGenres input");
+
+            for (let i = 0; i < preferGenreMovieList.length; i++) {
+                for (let j = 0; j < movieGenres.length; j++) {
+                    if (preferGenreMovieList[i] == $(movieGenres[j]).data("genre-id")) {
+                        $(movieGenres[j]).prop('checked', true);
+                    }
+                }
+            }
+            for (let i = 0; i < preferGenreTvList.length; i++) {
+                for (let j = 0; j < tvGenres.length; j++) {
+                    if (preferGenreTvList[i] == $(tvGenres[j]).data("genre-id")) {
+                        $(tvGenres[j]).prop('checked', true);
+                    }
+                }
+            }
+            updateSelectedGenres();
+        }
+
+        $('#profileEditBtn').on('click', function () {
+            $('#email, #birthDate, #name').removeAttr('readonly').first().focus();
+            $('#profileEditBtn').addClass('d-none');
+            $('#profileSaveBtn, #profileCancelBtn').removeClass('d-none');
+        });
+
+        // 프로필 저장 버튼 클릭
+        $('#profileSaveBtn').on('click', function () {
+            // 여기서 ajax로 서버 저장 처리 가능
+            $('input').attr('readonly', true);
+            $('#profileEditBtn').removeClass('d-none');
+            $('#profileSaveBtn, #profileCancelBtn').addClass('d-none');
+        });
+
+        // 프로필 취소 버튼 클릭
+        $('#profileCancelBtn').on('click', function () {
+            // 취소 시 기존 값으로 되돌리기 (필요 시 ajax 호출해서 최신값 재설정)
+            // 여기서는 임시로 그냥 readonly 처리 및 버튼 원복만
+            $('input').attr('readonly', true);
+            $('#profileEditBtn').removeClass('d-none');
+            $('#profileSaveBtn, #profileCancelBtn').addClass('d-none');
+        });
+        $(function () {
+            let originalValues = {};
+
+            $('#profileEditBtn').on('click', function () {
+                // originalValues.userId = $('#userId').val();
+                originalValues.email = $('#email').val();
+                originalValues.birthDate = $('#birthDate').val();
+                originalValues.name = $('#name').val();
+
+                $('#email, #birthDate, #name').removeAttr('readonly').first().focus();
+
+                $('#profileEditBtn').addClass('d-none');
+                $('#profileSaveBtn, #profileCancelBtn').removeClass('d-none');
+            });
+
+            $('#profileCancelBtn').on('click', function () {
+                // $('#userId').val(originalValues.userId);
+                $('#email').val(originalValues.email);
+                $('#birthDate').val(originalValues.birthDate);
+                $('#name').val(originalValues.name);
+
+                $('#email, #birthDate, #name').attr('readonly', true);
+
+                $('#profileEditBtn').removeClass('d-none');
+                $('#profileSaveBtn, #profileCancelBtn').addClass('d-none');
+            });
+
+            $('#profileSaveBtn').on('click', function () {
+                // ajax 저장 처리 등 필요한 작업 수행 후
+
+                $('#userId, #email, #birthDate, #name').attr('readonly', true);
+
+                $('#profileEditBtn').removeClass('d-none');
+                $('#profileSaveBtn, #profileCancelBtn').addClass('d-none');
+            });
+        });
+
+        document.getElementById('deleteAccountBtn').addEventListener('click', function () {
+            const confirmed = confirm('정말로 회원 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.');
+
+            if (confirmed) {
+                $.ajax({
+                    url: "/auth/deleteUser",
+                    type: "DELETE",
+                    success: function () {
+                        alert('회원이 성공적으로 탈퇴되었습니다.');
+                        location.href="/auth/logoutProcess"
+                    }
+                })
+            } else {
+                // 사용자가 취소 눌렀을 때
+                alert('탈퇴가 취소되었습니다.');
+            }
+        });
+
+// 장르 선택 수정 버튼 클릭
+        $('#editBtn').on('click', function () {
+            $('.genre-checkbox').prop('disabled', false);
+            $('#editBtn').addClass('d-none');
+            $('#saveBtn, #cancelBtn').removeClass('d-none');
+
+            // 수정 버튼 클릭시 컨테이너 펼치기
+            $('#movieGenres').addClass('expanded');
+            $('#toggleMovieGenresBtn').html('접기 ▲');
+            $('#TvGenres').addClass('expanded');
+            $('#toggleTvGenresBtn').html('접기 ▲');
+
+
+        });
+
+        // 장르 선택 저장 버튼 클릭
+        $('#saveBtn').on('click', function () {
+            $('.genre-checkbox').prop('disabled', true);
+            updateSelectedGenres();
+            $('#editBtn').removeClass('d-none');
+            $('#saveBtn, #cancelBtn').addClass('d-none');
+
+            // 저장시 컨테이너 초기화
+            $('#movieGenres').removeClass('expanded');
+            $('#toggleMovieGenresBtn').html('더보기 ▼');
+
+            $('#TvGenres').removeClass('expanded');
+            $('#toggleTvGenresBtn').html('더보기 ▼');
+        });
+
+        // 저장된 선호 장르 데이터 예시 (서버에서 받아온 데이터로 대체하세요)
+        const savedGenres = [];
+
+// 저장된 장르 체크박스 상태 복원 함수
+        function restoreSavedGenres() {
+            // 모든 체크박스 초기화
+            $('.genre-checkbox').prop('checked', false);
+
+            // 저장된 장르에 해당하는 체크박스만 체크 처리
+            savedGenres.forEach(item => {
+                $(`.genre-checkbox[data-type="${item.type}"][value="${item.genre}"]`).prop('checked', true);
+            });
+
+            // 체크박스 비활성화 처리
+            $('.genre-checkbox').prop('disabled', true);
+
+            // 선택된 장르 박스 업데이트
+            updateSelectedGenres();
+        }
+
+// 수정 버튼 클릭
+        $('#editBtn').on('click', function () {
+            $('.genre-checkbox').prop('disabled', false);
+            $('#editBtn').addClass('d-none');
+            $('#saveBtn, #cancelBtn').removeClass('d-none');
+
+            // 컨테이너 펼치기
+            $('#movieGenres').addClass('expanded');
+            $('#toggleMovieGenresBtn').html('접기 ▲');
+            $('#TvGenres').addClass('expanded');
+            $('#toggleTvGenresBtn').html('접기 ▲');
+        });
+
+// 저장 버튼 클릭
+        $('#saveBtn').on('click', function () {
+            $('.genre-checkbox').prop('disabled', true);
+
+            // 저장된 상태 갱신 (실제 서버와 연동 시 여기서 데이터 전송)
+            // 예시로 savedGenres 배열 업데이트
+            savedGenres.length = 0; // 초기화
+            $('.genre-checkbox:checked').each(function () {
+                savedGenres.push({
+                    type: $(this).data('type'),
+                    genre: $(this).val()
+                });
+            });
+
+            updateSelectedGenres();
+            updatePreferGenres();
+
+            $('#editBtn').removeClass('d-none');
+            $('#saveBtn, #cancelBtn').addClass('d-none');
+
+            // 컨테이너 접기
+            $('#movieGenres').removeClass('expanded');
+            $('#toggleMovieGenresBtn').html('더보기 ▼');
+            $('#TvGenres').removeClass('expanded');
+            $('#toggleTvGenresBtn').html('더보기 ▼');
+        });
+
+// 취소 버튼 클릭
+        $('#cancelBtn').on('click', function () {
+            // 저장된 상태로 복원
+            restoreSavedGenres();
+
+            $('#editBtn').removeClass('d-none');
+            $('#saveBtn, #cancelBtn').addClass('d-none');
+
+            // 컨테이너 접기
+            $('#movieGenres').removeClass('expanded');
+            $('#toggleMovieGenresBtn').html('더보기 ▼');
+            $('#TvGenres').removeClass('expanded');
+            $('#toggleTvGenresBtn').html('더보기 ▼');
+            setUserGenres();
+        });
+
+// 체크박스 변경시 선택된 장르 업데이트 (편집 중일 때만)
+        $('.genre-checkbox').on('change', function () {
+            if (!$('#saveBtn').hasClass('d-none')) {
+                updateSelectedGenres();
+            }
+        });
+
+// 영화 장르 더보기 버튼 클릭
+        $('#toggleMovieGenresBtn').on('click', function () {
+            const container = $('#movieGenres');
+            if (container.hasClass('expanded')) {
+                container.removeClass('expanded');
+                $(this).html('더보기 ▼');
+            } else {
+                container.addClass('expanded');
+                $(this).html('접기 ▲');
+            }
+        });
+
+// TV 장르 더보기 버튼 클릭
+        $('#toggleTvGenresBtn').on('click', function () {
+            const container = $('#TvGenres');
+            if (container.hasClass('expanded')) {
+                container.removeClass('expanded');
+                $(this).html('더보기 ▼');
+            } else {
+                container.addClass('expanded');
+                $(this).html('접기 ▲');
+            }
+        });
+
+// 선택된 장르 박스 업데이트 함수
+        function updateSelectedGenres() {
+            const selected = [];
+            $('.genre-checkbox:checked').each(function () {
+                // TV : 이모지와 장르명 강조
+                const typeEmoji = $(this).data('type') === 'movie' ? '🎬' : '📺';
+                selected.push(`<span>${typeEmoji} <strong>${$(this).val()}</strong></span>`);
+            });
+
+            if (selected.length > 0) {
+                // 아이템 사이에 구분점으로 ' · ' 넣기
+                $('#selectedGenresBox').html(selected.join(' <span style="color:#999;">·</span> '));
+            } else {
+                $('#selectedGenresBox').text('선택된 장르가 없습니다.');
+            }
+        }
+
+// 초기 로딩 시 저장된 장르 복원
+        $(document).ready(function () {
+            // restoreSavedGenres();
+            setUserGenres();
+        });
+
+        function updateSelectedGenres() {
+            const selected = [];
+            $('.genre-checkbox:checked').each(function () {
+                const type = $(this).data('type');  // 영화 or TV
+                const genre = $(this).val();
+                let emoji = '';
+                if (type === 'movie') {
+                    emoji = '🎬';
+                } else if (type === 'tv') {
+                    emoji = '📺';
+                }
+                selected.push(
+                    `<span style="font-weight:700; font-size:1.1em;">${emoji}</span>` +
+                    `<span style="font-weight:400; font-size:0.9em; color:#666;"> ${genre}</span>`
+                );
+            });
+            if (selected.length > 0) {
+                // 쉼표 대신 ' · ' 넣고 각 아이템에 좌우 여백 약간 줌
+                $('#selectedGenresBox').html(
+                    selected.map(item => `<span style="margin: 0 6px;">${item}</span>`).join('·')
+                );
+            } else {
+                $('#selectedGenresBox').text('선택된 장르가 없습니다.');
+            }
+        }
+
+
+        // // 북마크 내용 삭제 버튼
+        // $('.delete-button').on('click', function () {
+        //     $(this).closest('.swiper-slide').remove();
+        //     swiper1.update();
+        //
+        //     // 스크롤바 업데이트
+        //     hideScrollbarIfNeeded(swiper1);
+        // });
+
+    });
+
+    // 북마크 사용자 최대 갯수 표시
+    const swiper1 = new Swiper(".mySwiper1", {
+        slidesPerView: 3,
+        spaceBetween: 10,
+        freeMode: true,
+        mousewheel: true,
+        watchOverflow: true,
+        scrollbar: {
+            el: ".mySwiper1 .swiper-scrollbar",
+            hide: false,
+            draggable: true,
+        },
+        on: {
+            init: function () {
+                hideScrollbarIfNeeded(this);
+            },
+            resize: function () {
+                hideScrollbarIfNeeded(this);
+            },
+        }
+    });
+
+    // 북마크 내용물 업데이트 후 스크롤 변화 (3개 이하면 스크롤 안됨)
+    function hideScrollbarIfNeeded(swiper) {
+        const scrollbar = document.querySelector(".mySwiper1 .swiper-scrollbar");
+        const wrapper = swiper.wrapperEl;
+        const wrapperWidth = wrapper.scrollWidth;
+        const containerWidth = swiper.el.clientWidth;
+
+        if (wrapperWidth <= containerWidth) {
+            scrollbar.style.display = "none";
+        } else {
+            scrollbar.style.display = "block";
+        }
+    }
+
+    let selectedImage = '';
+
+    // 모달 열기
+    document.getElementById('changeImgbtn').addEventListener('click', function () {
+        document.getElementById('imageSelectModal').style.display = 'flex';
+    });
+
+    // 이미지 선택
+    document.querySelectorAll('.avatar').forEach(img => {
+        img.addEventListener('click', function () {
+            selectedImage = this.getAttribute('data-src');
+            document.querySelectorAll('.avatar').forEach(i => i.classList.remove('selected'));
+            this.classList.add('selected');
+        });
+    });
+
+    // 선택 완료 버튼
+    document.getElementById('selectDoneBtn').addEventListener('click', function () {
+        if (selectedImage) {
+            document.getElementById('fileImg').src = selectedImage;
+        }
+        document.getElementById('imageSelectModal').style.display = 'none';
+
+
+        // 서버에 선택한 이미지 저장 (ajax + PUT)
+        $.ajax({
+            url: 'imgUpdate',   // 서버에서 받는 URL로 바꿔주세요
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({profileImg: selectedImage}),
+            success: function (res) {
+                alert('프로필 이미지가 변경되었습니다.');
+
+                $('#headerProfileImg').attr('src', selectedImage);
+            },
+            error: function (err) {
+                console.error('저장 실패:', err);
+                alert('변경에 실패했습니다.');
+            }
+        });
+    });
+
+    function updatePreferGenres() {
+        const genreMap = {};
+
+        // 체크된 체크박스를 순회하며 장르 분류
+        $('.genre-checkbox:checked').each(function () {
+            const genreId = $(this).data('genre-id');
+            const genreType = $(this).data('type');
+
+            if (!genreMap[genreType]) {
+                genreMap[genreType] = [];
+            }
+            genreMap[genreType].push(genreId);
+        });
+
+        // genreMap을 배열 형태로 변환
+        const data = Object.entries(genreMap).map(([type, genreIds]) => ({
+            type,
+            genreIds
+        }));
+
+        if (data.length === 0) {
+            alert("선호 장르를 선택해주세요.");
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/profile/genres',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (response) {
+                alert('선호 장르가 저장되었습니다.');
+                // 저장 후 버튼 상태 전환 등 처리
+                $('#editBtn').removeClass('d-none');
+                $('#saveBtn, #cancelBtn').addClass('d-none');
+                $('.genre-checkbox').prop('disabled', true);
+            },
+            error: function () {
+                alert('저장 중 오류가 발생했습니다.');
+            }
+        });
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $(".delete-button").on("click", function () {
+            const $slide = $(this).closest('.swiper-slide');
+            const contentId = $slide.data('contents-id');
+            const contentsType = $slide.data('contents-type');
+
+            if (confirm(`선택 항목을 삭제하시겠습니까?`)) {
+                // 서버에 삭제 요청
+                $.ajax({
+                    url: '/bookmark',
+                    type: 'DELETE',
+                    data: {type: contentsType, contentId: contentId},
+                    success: () => {
+                        $slide.remove();
+                    },
+                    error: () => alert('북마크 취소 실패')
+                });
+            }
+        });
+    });
+</script>
+
+<!-- 수정된 회원정보 데이터 ajax -->
+<script>
+    $('#profileSaveBtn').on('click', function () {
+        const data = {
+            userId: $('#userId').val(),
+            email: $('#email').val(),
+            birthDate: $('#birthDate').val(),
+            name: $('#name').val()
+        };
+
+
+        $.ajax({
+            url: '/userUpdate',   // ← 여기에 실제 URL
+            type: 'PUT',                 // 또는 POST도 가능
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (res) {
+                alert('회원정보 수정 되었습니다');
+                location.reload(); // 새로고침 할지 말지는 상황에 따라
+            },
+            error: function (xhr, status, error) {
+                console.error('에러 발생:', status, error);
+                alert('회원정보 수정 실패');
+            }
+        });
+    });
+</script>
+<script src="/js/star2.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/search.css"/>
+    <style>
+        .star-rating1 {
+            display: flex;
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            background: none;
+            user-select: none;
+            vertical-align: middle;
+            pointer-events: none;
+            align-items: center;
+        }
+
+        .star1 {
+            display: inline-block;
+            position: relative;
+            color: #ccc;
+            cursor: pointer;
+            margin-bottom: 1px;
+        }
+
+        .star1.full::before,
+        .star1.half::before {
+            content: '★';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .star1.full::before {
+            color: orange;
+        / 가득찬 별 * /
+        }
+
+        .star1.half::before {
+            background: linear-gradient(to right, orange 50%, #ccc 50%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Header -->
+<header th:replace="~{/layout/header :: headerNavbar}"></header>
+
+<!-- Main Search Box -->
+<div class="container my-4">
+    <div class="movie-detail" id="search-type" th:data-search-type="${contentsList.get(0).type}">
+        <div class="input-group my-5" style="max-width: 1100px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);">
+            <input type="text" class="form-control" id="form-control"
+                   style=" border-top: 2px solid #2B3A67; border-bottom: 2px solid #2B3A67; border-left: 2px solid #2B3A67;"
+                   placeholder="영화, TV프로그램, 인물 검색...">
+            <button type="button" class="btn" id="btn-search"
+                    style="color: #0B1D51; background-color: #F4D35E; border: 2px solid #2B3A67;">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+        <div class="container d-flex justify-content-center"
+             style="border-top: 2px solid #9999CC; border-bottom: 2px solid #9999CC;">
+            <div class="d-flex flex-wrap gap-4">
+
+                <!-- 장르 카테고리-->
+                <div class="movie-detail1">
+                    <div class="p-3 rounded text-center" style="max-width: 300px;" id="genre-box">
+                        <h5 class="text-center mb-4 py-1">장르</h5>
+                        <!-- Tv -->
+                        <div class="filter-group genres flex-wrap gap-2 justify-content-start"
+                             id="genreFilters-tv" data-type="tv" style="display: flex;">
+                            <input type="checkbox" class="btn-check" id="genre-action&adventure-tv" data-type="tv"
+                                   data-genre-id="10759" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill" for="genre-action&adventure-tv">액션&어드벤처</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-animation-tv" data-type="tv"
+                                   data-genre-id="16" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-animation-tv">애니메이션</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-comedy-tv" data-type="tv"
+                                   data-genre-id="80" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill" for="genre-comedy-tv">범죄</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-documentary-tv" data-type="tv"
+                                   data-genre-id="99" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-documentary-tv">다큐멘터리</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-drama-tv" data-type="tv"
+                                   data-genre-id="18" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill" for="genre-drama-tv">드라마</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-family-tv" data-type="tv"
+                                   data-genre-id="10751" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill" for="genre-family-tv">가족</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-kids-tv" data-type="tv"
+                                   data-genre-id="10762" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-kids-tv">키즈/어린이</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-mystery-tv" data-type="tv"
+                                   data-genre-id="9648" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-mystery-tv">미스테리</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-news-tv" data-type="tv"
+                                   data-genre-id="10763" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill" for="genre-news-tv">뉴스</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-reality-tv" data-type="tv"
+                                   data-genre-id="10764" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-reality-tv">리얼리티</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-sf&fantasy-tv" data-type="tv"
+                                   data-genre-id="10765" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-sf&fantasy-tv">SF&판타지</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-soap-tv" data-type="tv"
+                                   data-genre-id="10766" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill" for="genre-soap-tv">연속극</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-talk-tv" data-type="tv"
+                                   data-genre-id="10767" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill" for="genre-talk-tv">토크쇼</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-war&politics-tv" data-type="tv"
+                                   data-genre-id="10768" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-war&politics-tv">전쟁&정치</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-western-tv" data-type="tv"
+                                   data-genre-id="37" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-western-tv">서부극</label>
+                        </div>
+
+                        <!-- movie -->
+                        <div class="filter-group genres flex-wrap gap-2 justify-content-start"
+                             id="genreFilters-movie" data-type="movie" style="display: flex;">
+                            <input type="checkbox" class="btn-check" id="genre-action-movie" data-type="movie"
+                                   data-genre-id="28" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-action-movie">액션</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-adventure-movie" data-type="movie"
+                                   data-genre-id="12" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-adventure-movie">어드벤처</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-animation-movie" data-type="movie"
+                                   data-genre-id="16" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-animation-movie">애니메이션</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-comedy-movie" data-type="movie"
+                                   data-genre-id="35" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-comedy-movie">코미디</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-crime-movie" data-type="movie"
+                                   data-genre-id="80" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-crime-movie">범죄</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-documentary-movie" data-type="movie"
+                                   data-genre-id="99" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-documentary-movie">다큐멘터리</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-drama-movie" data-type="movie"
+                                   data-genre-id="18" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-drama-movie">드라마</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-family-movie" data-type="movie"
+                                   data-genre-id="10751" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-family-movie">가족</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-fantasy-movie" data-type="movie"
+                                   data-genre-id="14" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-fantasy-movie">판타지</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-history-movie" data-type="movie"
+                                   data-genre-id="36" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-history-movie">역사</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-horror-movie" data-type="movie"
+                                   data-genre-id="27" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-horror-movie">공포</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-music-movie" data-type="movie"
+                                   data-genre-id="10402" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-music-movie">음악</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-mystery-movie" data-type="movie"
+                                   data-genre-id="9648" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-mystery-movie">미스터리</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-romance-movie" data-type="movie"
+                                   data-genre-id="10749" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-romance-movie">로맨스</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-sf-movie" data-type="movie"
+                                   data-genre-id="878" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill" for="genre-sf-movie">SF</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-tv-movie" data-type="movie"
+                                   data-genre-id="10770" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill" for="genre-tv-movie">TV
+                                영화</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-thriller-movie" data-type="movie"
+                                   data-genre-id="53" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-thriller-movie">스릴러</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-war-movie" data-type="movie"
+                                   data-genre-id="10752" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill" for="genre-war-movie">전쟁</label>
+
+                            <input type="checkbox" class="btn-check" id="genre-western-movie" data-type="movie"
+                                   data-genre-id="37" autocomplete="off"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="genre-western-movie">서부극</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!--국가 카테고리-->
+                <div class="movie-detail1">
+                    <div class="p-3 rounded text-center" style="max-width: 300px;" id="nation">
+                        <h5 class="text-center mb-4 py-1">국가</h5>
+                        <div class="filter-group countries d-flex flex-wrap gap-2 justify-content-start"
+                             id="countryFilters">
+                            <input type="checkbox" class="btn-check" id="country-usa" data-nation="US"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill" for="country-usa">미국(US)</label>
+
+                            <input type="checkbox" class="btn-check" id="country-korea" data-nation="KR"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="country-korea">대한민국(KR)</label>
+
+                            <input type="checkbox" class="btn-check" id="country-japan" data-nation="JP"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="country-japan">일본(JP)</label>
+
+                            <input type="checkbox" class="btn-check" id="country-china" data-nation="CN"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="country-china">중국(CN)</label>
+
+                            <input type="checkbox" class="btn-check" id="country-france" data-nation="FR"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="country-france">프랑스(FR)</label>
+
+                            <input type="checkbox" class="btn-check" id="country-uk" data-nation="GB"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill" for="country-uk">영국(GB)</label>
+
+                            <input type="checkbox" class="btn-check" id="country-germany" data-nation="DE"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="country-germany">독일(DE)</label>
+
+                            <input type="checkbox" class="btn-check" id="country-india" data-nation="IN"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="country-india">인도(IN)</label>
+
+                            <input type="checkbox" class="btn-check" id="country-italy" data-nation="IT"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="country-italy">이탈리아(IT)</label>
+
+                            <input type="checkbox" class="btn-check" id="country-canada" data-nation="CA"/>
+                            <label class="btn btn-outline-primary btn-sm rounded-pill"
+                                   for="country-canada">캐나다(CA)</label>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    //국가만 단일선택 할수있도록 해놨습니다!!
+                    const countryCheckboxes = document.querySelectorAll('#countryFilters .btn-check');
+
+                    countryCheckboxes.forEach(box => {
+                        box.addEventListener('change', () => {
+                            if (box.checked) {
+                                countryCheckboxes.forEach(other => {
+                                    if (other !== box) {
+                                        other.checked = false;
+                                    }
+                                });
+                            }
+                        });
+                    });
+                </script>
+
+                <div class="d-flex flex-wrap gap-4">
+
+                    <div class="movie-detail1">
+                        <div class="p-3 rounded text-center" style="max-width: 300px;">
+                            <h5 class="text-center mb-4 py-1">정렬</h5>
+                            <select class="form-select form-select-sm" id="sortOrder">
+                                <option value="sort-none" data-array="noneSort" selected>정렬 방식</option>
+                                <option value="ratingDesc" data-array="voteDesc">평점 높은순</option>
+                                <option value="ratingAsc" data-array="voteAsc">평점 낮은순</option>
+                                <option value="titleAsc" data-array="titleAsc">제목 (A~Z)</option>
+                                <option value="titleDesc" data-array="titleDesc">제목 (Z~A)</option>
+                                <option value="releaseDesc" data-array="dateDesc">날짜 최신순</option>
+                                <option value="releaseAsc" data-array="dateAsc">날짜 과거순</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="movie-detail1">
+                        <div class="p-3 rounded text-start" style="width: 155px;">
+                            <h5 class="text-center mb-4 py-1">날짜</h5>
+                            <input type="date" id="startDate">
+                            <label for="startDate">부터</label>
+                            <br>
+                            <br>
+                            <input type="date" id="endDate">
+                            <label for="endDate">까지</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="movie-grid" id="movieGrid"></div>
+<div class="container text-center my-4">
+    <nav>
+        <ul class="pagination"></ul>
+    </nav>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let cardsData = [[${contentsList}]];
+    let mainKeyword = [[${keyword}]]
+    /*]]>*/
+
+    const searchType = $(".movie-detail").data("search-type");
+    let formRating = 0;
+    let currentPage = 1;
+    const maxCardLength = 20;
+    let totalPages = 500;
+    const maxVisible = 5;
+    let isSearched = false;
+
+    function getData() {
+        const checkedInputs = document.querySelectorAll('#genre-box input:checked');
+        let selectedGenres = [];
+        const selectedSort = $("#sortOrder option:selected").data("array");
+        const inputVal = mainKeyword != null ? mainKeyword : $("#form-control").val();
+        const startDate = $("#startDate").val();
+        const endDate = $("#endDate").val();
+        const selectedNation = $("#countryFilters input:checked").data("nation");
+
+        checkedInputs.forEach(input => {
+            selectedGenres.push(input.dataset.genreId);
+        });
+
+        return {
+            keyword: inputVal,
+            sort: selectedSort,
+            country: selectedNation,
+            genre: selectedGenres.join(','),
+            type: searchType,
+            startDate: startDate,
+            endDate: endDate,
+            pageNum: currentPage
+        };
+    }
+
+    $(document).ready(function () {
+        // 카드 클릭시 상세 페이지 이동
+        $(document).on("click", "#movieGrid img", function () {
+            const contentsId = $(this).closest(".movie-card").data("contents-id");
+            const contentsType = $(this).closest(".movie-card").data("contents-type");
+            location.href = "/" + contentsType + "/" + contentsId;
+        });
+
+        // 검색 버튼 클릭 시
+        $("#btn-search").on("click", function () {
+            const inputVal = $("#form-control").val();
+
+            if (!inputVal) {
+                alert('검색어를 입력해주세요!');
+                return; // 함수 종료해서 이후 코드 실행 안 함
+            }
+
+            currentPage = 1;
+            loadPageAndRender(getData());
+            isSearched = true;
+        });
+
+        if (mainKeyword != null) {
+            loadPageAndRender(getData());
+            $("#form-control").val(mainKeyword);
+
+            $.ajax({
+                url: "/deleteSearchKeyword",
+                type: "GET",
+                success: function () {
+
+                }
+            })
+        }
+    });
+</script>
+
+<script>
+    // 카드 렌더링
+    function renderCards(page) {
+        const movieGrid = document.getElementById("movieGrid");
+        movieGrid.innerHTML = "";
+        const pageCards = cardsData;
+
+        pageCards.forEach((card) => {
+            const cardWrapper = document.createElement("div");
+            cardWrapper.style.display = "flex";
+            cardWrapper.style.flexDirection = "column";
+
+            const cardDiv = document.createElement("div");
+            cardDiv.classList.add("movie-card");
+            cardDiv.dataset.contentsId = card.id;
+            cardDiv.dataset.contentsType = card.type;
+
+            cardDiv.innerHTML = `
+            <img src="${card.poster_path != null ? 'https://image.tmdb.org/t/p/w500/' + card.poster_path : '/images/no-image.png'}" alt="${card.originalTitle}">
+        `;
+
+            const infoDiv = document.createElement("div");
+            infoDiv.classList.add("movie-info");
+            infoDiv.innerHTML = `
+            <h6>${card.title}</h6>
+            <small>
+                ${card.type === 'movie'
+                    ? `개봉일: ${card.releaseDate ? card.releaseDate : '미정'}`
+                    : `방영일: ${card.releaseDate ? card.releaseDate : '미정'}`
+                }
+            </small>
+            <small class="d-flex align-items-center">평점:
+                <span style="color:#6c757d; font-size:1rem;">
+                    <span class="star-rating1" data-current-rating="${card.vote_average}">
+                        <span class="star1" data-index="1">★</span>
+                        <span class="star1" data-index="2">★</span>
+                        <span class="star1" data-index="3">★</span>
+                        <span class="star1" data-index="4">★</span>
+                        <span class="star1" data-index="5">★</span>
+                    </span>
+                </span>
+            </small>
+        `;
+            cardWrapper.appendChild(cardDiv);
+            cardWrapper.appendChild(infoDiv);
+            movieGrid.appendChild(cardWrapper);
+        });
+
+        // loadStar(); // 별점 렌더링
+    }
+
+    // 페이지네이션 렌더링
+    function renderPagination(page) {
+        const pagination = document.querySelector(".pagination");
+        pagination.innerHTML = "";
+
+        const prevLi = document.createElement("li");
+        prevLi.className = `page-item ${page === 1 ? "disabled" : ""}`;
+        prevLi.innerHTML = `<a class="page-link" href="#">&lt;</a>`;
+        prevLi.addEventListener("click", e => {
+            e.preventDefault();
+            if (page > 1) {
+                currentPage--;
+                if (!isSearched) defaultSearch();
+                else loadPageAndRender(getData());
+            }
+        });
+        pagination.appendChild(prevLi);
+
+        const startPage = Math.floor((page - 1) / maxVisible) * maxVisible + 1;
+        const endPage = Math.min(startPage + maxVisible - 1, totalPages);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const li = document.createElement("li");
+            li.className = `page-item ${i === page ? "active" : ""}`;
+            li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+            li.addEventListener("click", e => {
+                e.preventDefault();
+                if (i !== currentPage) {
+                    currentPage = i;
+                    if (!isSearched) defaultSearch();
+                    else loadPageAndRender(getData());
+                }
+            });
+            pagination.appendChild(li);
+        }
+
+        const nextLi = document.createElement("li");
+        nextLi.className = `page-item ${page === totalPages ? "disabled" : ""}`;
+        nextLi.innerHTML = `<a class="page-link" href="#">&gt;</a>`;
+        nextLi.addEventListener("click", e => {
+            e.preventDefault();
+            if (page < totalPages) {
+                currentPage++;
+                if (!isSearched) defaultSearch();
+                else loadPageAndRender(getData());
+            }
+        });
+        pagination.appendChild(nextLi);
+    }
+
+    function loadPageAndRender(data) {
+        $.ajax({
+            url: "/detailSearch/" + searchType + "/" + currentPage,
+            type: "GET",
+            dataType: "json",
+            data: data,
+            success: function (resp) {
+                cardsData = getPageItems(currentPage, resp);
+                totalPages = resp.length % maxCardLength == 0
+                    ? resp.length / maxCardLength : Math.trunc(resp.length / maxCardLength) + 1;
+                renderCards(currentPage);
+                renderPagination(currentPage);
+                loadStar();
+            },
+            error: function () {
+                console.error("페이지 데이터 불러오기 실패");
+            }
+        });
+        renderCards(currentPage);
+        renderPagination(currentPage);
+        loadStar();
+    }
+
+    function getPageItems(page, list) {
+        const {start, end} = getPageIndices(page, maxCardLength);
+        return list.slice(start, end);
+    }
+
+    function getPageIndices(page, itemsPerPage) {
+        const start = (page - 1) * itemsPerPage;  // 시작 인덱스
+        const end = start + itemsPerPage;          // 끝 인덱스 + 1 (slice 메서드에서 사용)
+        return {start, end};
+    }
+
+    function defaultSearch() {
+        $.ajax({
+            url: "/searchDefault/" + searchType + "/" + currentPage,
+            type: "GET",
+            dataType: "json",
+            success: function (resp) {
+                cardsData = resp;
+                renderCards(currentPage);
+                renderPagination(currentPage);
+                loadStar();
+            },
+            error: function () {
+                console.error("페이지 데이터 불러오기 실패");
+            }
+        });
+        renderCards(currentPage);
+        renderPagination(currentPage);
+        loadStar();
+    }
+
+    // 초기 실행
+    renderCards(currentPage);
+    renderPagination(currentPage);
+</script>
+<!-- 년도 선택 select 박스 -->
+<!--<script>-->
+<!--    const yearSelect = document.getElementById("yearSelect");-->
+
+<!--    for (let year = 2025; year >= 1990; year&#45;&#45;) {-->
+<!--        const option = document.createElement("option");-->
+<!--        option.value = year;-->
+<!--        option.textContent = `${year}년`;-->
+<!--        yearSelect.appendChild(option);-->
+<!--    }-->
+<!--</script>-->
+
+<!-- type 에 따른 장르선택 박스 표시 -->
+<script>
+    $(document).ready(function () {
+        const type = $("#search-type").data("search-type");
+
+        if (type == "movie") $("#genreFilters-tv").hide();
+        else $("#genreFilters-movie").hide();
+    });
+</script>
+
+<script>
+    // 별점 관련
+    function createStarRatingFontAwesome(rating) {
+        const starsDiv = document.createElement('span');
+        starsDiv.className = 'fa-star-rating';
+
+        const fullStars = Math.floor(rating);
+        const halfStar = (rating % 1) >= 0.5 ? 1 : 0;
+        const emptyStars = 5 - fullStars - halfStar;
+
+        for (let i = 0; i < fullStars; i++) {
+            const star = document.createElement('i');
+            star.className = 'fa-solid fa-star';
+            starsDiv.appendChild(star);
+        }
+
+        if (halfStar) {
+            const star = document.createElement('i');
+            star.className = 'fa-solid fa-star-half-stroke';
+            starsDiv.appendChild(star);
+        }
+
+        for (let i = 0; i < emptyStars; i++) {
+            const star = document.createElement('i');
+            star.className = 'fa-regular fa-star';
+            starsDiv.appendChild(star);
+        }
+
+        return starsDiv;
+    }
+
+    function setRating(rating, stars) {
+        stars.forEach((star, index) => {
+            const icon = star.querySelector('i');
+            const starValue = index + 1;
+
+            if (!icon) return;
+
+            icon.className = '';
+
+            if (rating >= starValue) {
+                icon.classList.add('fa-solid', 'fa-star');
+                icon.style.color = 'orange';
+            } else if (rating >= starValue - 0.5) {
+                icon.classList.add('fa-solid', 'fa-star-half-stroke');
+                icon.style.color = 'orange';
+            } else {
+                icon.classList.add('fa-regular', 'fa-star');
+                icon.style.color = '#ccc';
+            }
+        });
+    }
+
+    function initStarRating(starRating) {
+        const stars = starRating.querySelectorAll('.star');
+        let currentRating = 0;
+
+        setRating(currentRating, stars);
+
+        function getHoverRating(e, star) {
+            const rect = star.getBoundingClientRect();
+            const offsetX = e.clientX - rect.left;
+            return parseInt(star.dataset.index) - (offsetX < rect.width / 2 ? 0.5 : 0);
+        }
+
+        stars.forEach(star => {
+            star.addEventListener('mousemove', e => {
+                const hoverRating = getHoverRating(e, star);
+                setRating(hoverRating, stars);
+            });
+
+            star.addEventListener('mouseleave', () => {
+                setRating(currentRating, stars);
+            });
+
+            star.addEventListener('click', e => {
+                currentRating = getHoverRating(e, star);
+                formRating = currentRating;
+                setRating(currentRating, stars);
+            });
+        });
+    }
+
+    // 초기 별점 세팅 (선택적)
+    if (document.querySelector('#current-rating')) {
+        initStarRating(document.querySelector('#current-rating'));
+    }
+</script>
+
+<script src="/js/star3.js" defer></script>
+</body>
+</html>
