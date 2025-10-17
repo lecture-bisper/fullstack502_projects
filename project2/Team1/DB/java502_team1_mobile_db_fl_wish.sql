@@ -1,0 +1,56 @@
+-- MySQL dump 10.13  Distrib 8.0.42, for Win64 (x86_64)
+--
+-- Host: 58.239.58.243    Database: java502_team1_mobile_db
+-- ------------------------------------------------------
+-- Server version	8.0.27
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `fl_wish`
+--
+
+DROP TABLE IF EXISTS `fl_wish`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `fl_wish` (
+  `fl_id` bigint NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_fl_wish_user_flight` (`user_id`,`fl_id`),
+  KEY `FK3ijnpsv7y0nbb4ng144w78ofp` (`fl_id`),
+  CONSTRAINT `FK3ijnpsv7y0nbb4ng144w78ofp` FOREIGN KEY (`fl_id`) REFERENCES `flight` (`id`),
+  CONSTRAINT `FKj2rjveogm77so930r73h8plnw` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fl_wish`
+--
+
+LOCK TABLES `fl_wish` WRITE;
+/*!40000 ALTER TABLE `fl_wish` DISABLE KEYS */;
+INSERT INTO `fl_wish` VALUES (172,2,1),(534,1,1),(172,4,2),(534,3,2),(172,6,4),(534,5,4),(234,13,5),(255,14,5),(535,7,5),(538,11,5),(645,12,5),(172,17,6),(174,16,6),(534,15,6),(177,20,9),(535,19,9),(172,10,13),(534,8,13),(535,9,13),(174,30,14),(534,21,14),(174,32,15),(534,31,15),(533,33,17),(179,35,18),(533,34,18),(174,37,21),(537,36,21),(173,38,23),(533,39,23);
+/*!40000 ALTER TABLE `fl_wish` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-08-25 10:33:13
