@@ -1,0 +1,113 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.5'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'bitc.full502'
+version = '0.0.1-SNAPSHOT'
+description = 'projectBQ'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Springboot Validator
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // QR Generator
+    implementation 'com.google.zxing:core:3.5.3'
+    // QR Converter to IMG
+    implementation 'com.google.zxing:javase:3.5.3'
+
+    // jwt token Generator&Parsing
+    implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
+    // jwt token Implement
+    implementation 'io.jsonwebtoken:jjwt-impl:0.13.0'
+    // jwt token Serialization&Deserialization
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.13.0'
+    // Jackson dateType Formater
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+
+// Required: Verify frontend file name
+def frontendDir = "$projectDir/src/main/web_bq"
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["$projectDir/src/main/resources"]
+        }
+    }
+}
+
+processResources {
+    dependsOn("copyReactBuildFiles")
+}
+
+tasks.register('installReact', Exec) {
+    workingDir("$frontendDir")
+    inputs.dir("$frontendDir")
+    group(BasePlugin.BUILD_GROUP)
+
+    if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")) {
+        commandLine("npm.cmd", "audit", "fix")
+        commandLine("npm.cmd", "install")
+    } else {
+        commandLine("npm", "audit", "fix")
+        commandLine("npm", "install")
+    }
+}
+
+tasks.register('buildReact', Exec) {
+    dependsOn("installReact")
+    workingDir("$frontendDir")
+    inputs.dir("$frontendDir")
+    group(BasePlugin.BUILD_GROUP)
+
+    if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")) {
+        commandLine("npm.cmd", "run-script", "build")
+    } else {
+        commandLine("npm", "run-script", "build")
+    }
+}
+
+tasks.register('copyReactBuildFiles', Copy) {
+    dependsOn("buildReact")
+    from("$frontendDir/dist")
+    into("$projectDir/src/main/resources/static")
+}
+
+if (project.hasProperty("withReactBuild")) {
+    tasks.bootJar {
+        dependsOn("copyReactBuildFiles")
+    }
+}
