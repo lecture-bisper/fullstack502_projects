@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!-- 전체 콘텐츠 영역 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--            상단 navbar-->
+            <LinearLayout
+                android:id="@+id/top_controls"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="top|start"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp">
+                <!-- 메뉴버튼 -->
+                <ImageButton
+                    android:id="@+id/menu_btn"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/hamburger" />
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="57dp"
+                    android:layout_marginLeft="110dp"
+                    android:src="@drawable/bq"
+                    app:layout_anchor="@+id/top_controls"
+                    app:layout_anchorGravity="center"
+                    app:tint="@color/blue" />
+            </LinearLayout>
+            <!--메인 콘텐츠 영역-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/blue"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <!--메인 콘텐츠 마이페이지 박스-->
+                <LinearLayout
+                    android:id="@+id/itemDetailBox"
+                    android:layout_width="350dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_white_rounded"
+                    android:clipToOutline="true"
+                    android:elevation="8dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="비품 정보"
+                        android:textColor="@color/blue2"
+                        android:textSize="41sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical"
+                        android:layout_marginHorizontal="60dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="품명"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/item_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="3dp"
+                            android:background="@drawable/bg_edittext_rounded2"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:enabled="false"
+                            android:paddingLeft="10dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        android:layout_marginHorizontal="60dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="제품코드"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            >
+                            <EditText
+                                android:id="@+id/item_code"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:background="@drawable/bg_edittext_rounded2"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                android:enabled="false"
+                                android:paddingLeft="10dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        android:layout_marginHorizontal="60dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="제조사"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/item_manufacturer"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="3dp"
+                            android:background="@drawable/bg_edittext_rounded2"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:enabled="false"
+                            android:paddingLeft="10dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        android:layout_marginHorizontal="60dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="종류"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp">
+                            <EditText
+                                android:id="@+id/item_categoryId"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:background="@drawable/bg_edittext_rounded2"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                android:enabled="false"
+                                android:paddingLeft="10dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        android:layout_marginHorizontal="60dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="가격"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            >
+                            <EditText
+                                android:id="@+id/item_price"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:background="@drawable/bg_edittext_rounded2"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                android:enabled="false"
+                                android:paddingLeft="10dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        android:layout_marginHorizontal="60dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="수량"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/item_total"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="3dp"
+                            android:background="@drawable/bg_edittext_rounded2"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:enabled="false"
+                            android:paddingLeft="10dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginTop="5dp">
+
+                            <LinearLayout
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="A창고"
+                                    android:textStyle="bold" />
+                                <EditText
+                                    android:id="@+id/item_a_warehouse"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginTop="3dp"
+                                    android:background="@drawable/bg_edittext_rounded2"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    android:enabled="false"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:layout_marginHorizontal="24dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="B창고"
+                                    android:textStyle="bold" />
+                                <EditText
+                                    android:id="@+id/item_b_warehouse"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginTop="3dp"
+                                    android:background="@drawable/bg_edittext_rounded2"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    android:enabled="false"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="C창고"
+                                    android:textStyle="bold" />
+                                <EditText
+                                    android:id="@+id/item_c_warehouse"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginTop="3dp"
+                                    android:background="@drawable/bg_edittext_rounded2"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    android:enabled="false"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/stock_out_btn"
+                        android:layout_width="190dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_blue2_rounded"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="출고"
+                            android:textColor="@color/white"
+                            android:textSize="24sp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <!-- 네비게이션 드로어 메뉴 -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/drawer_menu" />
+</androidx.drawerlayout.widget.DrawerLayout>
