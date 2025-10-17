@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBg_je"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal">
+
+    <!-- 로그인 박스 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFFDF9"
+        android:padding="24dp"
+        android:elevation="4dp"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="로그인"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
+            android:textColor="#000" />
+
+        <EditText
+            android:id="@+id/et_users_id"
+            android:hint="아이디"
+            android:background="#E0E0E0"
+            android:padding="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/et_pass"
+            android:hint="비밀번호"
+            android:inputType="textPassword"
+            android:background="#E0E0E0"
+            android:padding="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FF0000"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"/>
+
+
+        <Button
+            android:id="@+id/btn_login"
+            android:text="LOGIN"
+            android:textColor="#fff"
+            android:backgroundTint="@color/jeju_primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/tv_signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="회원가입"
+                android:textSize="12sp"
+                android:textColor="#000"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tv_find_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="아이디 / 비밀번호 찾기"
+                android:textSize="12sp"
+                android:textColor="#000" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
