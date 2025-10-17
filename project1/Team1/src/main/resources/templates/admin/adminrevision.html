@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 수정</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendard.css">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="/js/script.js"></script>
+</head>
+
+<body class="pretendard">
+
+<div th:replace="layout/header :: header"></div>
+
+
+<!-- 상품 수정 및 등록 form -->
+<form th:action="@{/admin/product/edit}" th:object="${product}" method="post" enctype="multipart/form-data" id="productForm">
+
+    <input type="hidden" th:field="*{productId}"/>
+
+    <div class="big_box d-flex gap-4">
+
+        <!-- 좌측: 이미지 업로드 섹션 -->
+        <div class="left">
+
+            <div class="file_up_con">
+                <div class="product_ad_title">
+                    <h2>등록 상품 이미지</h2>
+
+                    <!-- 각 파일 업로드 버튼 -->
+                    <div class="d-flex gap-2 mb-2">
+                        <button type="button" class="product_ad_btn" onclick="document.getElementById('file1').click()">
+                            파일 업로드 1
+                        </button>
+                        <button type="button" class="product_ad_btn" onclick="document.getElementById('file2').click()">
+                            파일 업로드 2
+                        </button>
+                        <button type="button" class="product_ad_btn" onclick="document.getElementById('file3').click()">
+                            파일 업로드 3
+                        </button>
+                        <button type="button" class="product_ad_btn" onclick="document.getElementById('file4').click()">
+                            파일 업로드 4
+                        </button>
+                    </div>
+
+                    <!-- 숨겨진 업로드 input -->
+                    <input type="file" name="productImage1" id="file1" style="display:none;" onchange="updateFileName(1)">
+                    <input type="file" name="productImage2" id="file2" style="display:none;" onchange="updateFileName(2)">
+                    <input type="file" name="productImage3" id="file3" style="display:none;" onchange="updateFileName(3)">
+                    <input type="file" name="productImage4" id="file4" style="display:none;" onchange="updateFileName(4)">
+
+                    <!-- 삭제 여부 hidden input -->
+                    <input type="hidden" name="deleteImage1" id="deleteImage1" value="false"/>
+                    <input type="hidden" name="deleteImage2" id="deleteImage2" value="false"/>
+                    <input type="hidden" name="deleteImage3" id="deleteImage3" value="false"/>
+                    <input type="hidden" name="deleteImage4" id="deleteImage4" value="false"/>
+                </div>
+
+                <!-- 파일명 표시 및 삭제 버튼 -->
+                <div class="product_ad_img_list">
+                    <div>
+                        <input type="text" id="fileName1" th:value="*{productImage1}" readonly/>
+                        <button type="button" onclick="clearFile(1)">삭제</button>
+                    </div>
+                    <div>
+                        <input type="text" id="fileName2" th:value="*{productImage2}" readonly/>
+                        <button type="button" onclick="clearFile(2)">삭제</button>
+                    </div>
+                    <div>
+                        <input type="text" id="fileName3" th:value="*{productImage3}" readonly/>
+                        <button type="button" onclick="clearFile(3)">삭제</button>
+                    </div>
+                    <div>
+                        <input type="text" id="fileName4" th:value="*{productImage4}" readonly/>
+                        <button type="button" onclick="clearFile(4)">삭제</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 우측: 썸네일 및 상품 기본 정보 -->
+        <div class="right">
+
+            <!-- 썸네일 업로드 -->
+            <div class="thumb_img mb-3">
+                <img th:if="${product.productThumnail != null}" th:src="@{${product.productThumnail}}" alt="썸네일 이미지" style="max-width: 200px; max-height: 200px;"/>
+                <div class="thumb_btn_box mt-2">
+                    <button type="button" class="thumb_img_regi" onclick="document.getElementById('thumbnail').click()">
+                        파일 업로드
+                    </button>
+                    <button type="button" onclick="clearThumbnail()">삭제</button>
+                </div>
+                <input type="file" id="thumbnail" name="productThumnail" style="display:none;" onchange="updateThumbnailName()"/>
+                <input type="hidden" name="deleteThumbnail" id="deleteThumbnail" value="false"/>
+            </div>
+
+            <!-- 상품명 -->
+            <div class="product_ad_input mb-3">
+                <p>상품명</p>
+                <input type="text" th:field="*{productName}" placeholder="상품명"/>
+            </div>
+
+            <!-- 가격 -->
+            <div class="product_ad_input mb-3">
+                <p>가격</p>
+                <input type="text" th:field="*{productPrice}" placeholder="0"/>
+            </div>
+
+            <!-- 브랜드 -->
+            <div class="product_ad_select mb-3">
+                <p>브랜드</p>
+                <select th:field="*{productBrand}">
+                    <option value="brand1" th:selected="${product.productBrand == 'brand1'}">테켓</option>
+                    <option value="brand2" th:selected="${product.productBrand == 'brand2'}">디젤</option>
+                    <option value="brand3" th:selected="${product.productBrand == 'brand3'}">스컬프터</option>
+                </select>
+            </div>
+
+            <!-- 카테고리 -->
+            <div class="product_ad_select mb-3">
+                <p>카테고리</p>
+                <select th:field="*{productCode}">
+                    <option value="outer" th:selected="${product.productCode == 'outer'}">OUTER</option>
+                    <option value="top" th:selected="${product.productCode == 'top'}">TOP</option>
+                    <option value="bottom" th:selected="${product.productCode == 'bottom'}">BOTTOM</option>
+                    <option value="shoes" th:selected="${product.productCode == 'shoes'}">SHOES</option>
+                </select>
+            </div>
+
+            <!----------------------------------- 정환 수정 ----------------------------------->
+            <div class="cs_input mb-3" th:if="${colorList != null and #lists.size(colorList) > 0}">
+                <p>컬러 옵션</p>
+                <div class="input_chk_box">
+                    <label th:each="colorName : ${colorList}">
+                        <input type="checkbox" name="productColor" th:value="${colorName}" checked/>
+                        <span th:text="${colorName}"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="cs_input mb-3" th:if="${sizeList != null and #lists.size(sizeList) > 0}">
+                <p>사이즈 옵션</p>
+                <div class="input_chk_box">
+                    <label th:each="sizeName : ${sizeList}">
+                        <input type="checkbox" name="productSize" th:value="${sizeName}" checked/>
+                        <span th:text="${sizeName}"></span>
+                    </label>
+                </div>
+            </div>
+            <!----------------------------------- 정환 수정 ----------------------------------->
+
+            <button type="submit" class="btn btn-primary thumb_submit">상품 수정</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    // 파일명 업데이트 함수
+    function updateFileName(num) {
+        const fileInput = document.getElementById("file" + num);
+        const fileNameInput = document.getElementById("fileName" + num);
+        if (fileInput.files.length > 0) {
+            fileNameInput.value = fileInput.files[0].name;
+            document.getElementById("deleteImage" + num).value = "false";
+        }
+    }
+
+    // 파일 삭제 함수
+    function clearFile(num) {
+        document.getElementById("file" + num).value = "";
+        document.getElementById("fileName" + num).value = "";
+        document.getElementById("deleteImage" + num).value = "true";
+    }
+
+    // 썸네일 삭제 함수
+    function clearThumbnail() {
+        document.getElementById("thumbnail").value = "";
+        document.getElementById("deleteThumbnail").value = "true";
+        alert("썸네일 삭제됨");
+    }
+
+    // 썸네일 파일명 표시 (필요시 사용)
+    function updateThumbnailName() {
+        // 필요하면 썸네일 파일명 표시 추가 가능
+    }
+
+    function clearThumbnail() {
+        // 이미지 src 빈 문자열로 변경 (이미지 태그는 유지)
+        $('.thumb_img img').attr('src', '');
+
+        // 파일 input 값 초기화
+        $('#thumbnail').val('');
+
+        // 히든 필드 값 변경 (필요 시)
+        $('#deleteThumbnail').val('true');
+
+        // AJAX 요청해서 서버에 썸네일 삭제 요청
+        const productId = $('input[name="productId"]').val();
+
+        $.ajax({
+            url: '/admin/product/deleteThumbnail',
+            method: 'POST',
+            data: { productId: productId },
+            success: function() {
+            },
+            error: function() {
+            }
+        });
+
+        $('#thumbnail').on('change', function(event) {
+            const input = this;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if ($('.thumb_img img').length) {
+                        $('.thumb_img img').attr('src', e.target.result);
+                    } else {
+                        $('<img>', {
+                            src: e.target.result,
+                        }).prependTo('.thumb_img');
+                    }
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        });
+    }
+</script>
+
+<div th:replace="layout/footer :: footer"></div>
+
+</body>
+</html>

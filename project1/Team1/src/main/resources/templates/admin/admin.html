@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 페이지</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendard.css">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="/js/script.js"></script>
+</head>
+<body class="pretendard">
+
+<div th:replace="layout/header :: header"></div>
+\
+  <div class="center_box color_white">
+    <h2 class="admin_title">관리자 계정(admin123)</h2>
+    <div class="admin_category">
+      <a th:href="@{/admin/product/add}" class="contents"><span></span>상품 등록</a>
+      <a th:href="@{/admin/product/revision}" class="contents"><span></span>상품 수정 & 삭제</a>
+      <a th:href="@{/admin/boardlist}" class="contents"><span></span>룩북 게시물 관리</a>
+      <a th:href="@{/admin/options}" class="contents"><span></span>Color, Size 추가</a>
+    </div>
+  </div>
+
+<div th:replace="layout/footer :: footer"></div>
+
+</body>
+</html>

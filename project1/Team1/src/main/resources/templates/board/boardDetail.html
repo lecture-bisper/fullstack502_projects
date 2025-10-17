@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>board</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendard.css">
+
+
+    <style>
+
+        .comment-box {
+            background: #fff;
+            padding: 20px;
+            max-width: 500px;
+            margin: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .comment-form {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .comm-textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            resize: none;
+        }
+
+        .comm-button {
+            padding: 8px 16px;
+            margin-right: 5px;
+            cursor: pointer;
+            background-color: #313131;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+
+        .comm-button:hover {
+            background-color: #696969;
+        }
+
+        .cancel-btn {
+            background-color: #ccc;
+            color: black;
+        }
+
+        .cancel-btn:hover {
+            background-color: #bbb;
+        }
+
+        #comment-list {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        #comment-list li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+    </style>
+
+
+</head>
+
+<body class="pretendard">
+
+<div th:replace="layout/header :: header"></div>
+
+<div class="container mt-5 text-center">
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+        <!-- 게시글 카드 -->
+        <div class="card overflow-y-scroll" style="width: 500px; height: 500px;">
+            <div style="display: flex; flex-direction: column;">
+                <h4 class="mt-3 mb-2" th:text="${board.customer.customerId} + '님의 POST'" style="color: black;">ID</h4>
+                <img th:src="@{${board.boardUploadPhoto}}" class="card-img-top mx-auto" alt="이미지 넣기"
+                     style="width: 300px; height: 300px; object-fit: cover">
+                <div class="card-body mx-auto" style="width: 300px; height: auto;">
+                    <p class="card-text" th:text="${board.boardPost}">게시글 내용</p>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: end; align-content: center; margin-top: 10px; margin-right: 35px; background-color: white">
+                <div id="like-button" class="position-relative" style="height: 70px; min-width: 70px;"
+                     th:attr="data-board-idx=${board.boardIdx}">
+                    <img id="heart-line" th:src="@{/img/svg/heart-line.svg}" style="width: 35px; height: 35px;">
+                    <span id="like-count"
+                          class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-secondary"
+                          th:text="'+' + ${board.boardHeartCount}"></span>
+                </div>
+                <div class="btn d-flex position-relative" type="button"
+                     data-bs-toggle="collapse" style="height: 40px; min-width: 40px;"
+                     data-bs-target="#comment-list" aria-expanded="false"
+                     aria-controls="comment-list">
+                    <img src="/img/svg/comment.svg" alt="">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-secondary"
+                          th:text="'+' + ${board.commentList != null ? #lists.size(board.commentList) : 0}"></span>
+                </div>
+            </div>
+        </div>
+        <!-- 댓글 영역 -->
+        <div class="mb-5" style="width: 500px; height: 500px; position: relative;">
+            <div class="comment-box mb-3">
+                <h4 style="color: black;">comment</h4>
+                <button id="write-comment-btn" class="comm-button">comment</button>
+                <form th:action="@{'/board/' + ${board.boardIdx} + '/comment'}" method="post" class="comment-form"
+                      style="display: none;">
+                    <textarea id="postContent" class="comm-textarea comment-input" name="comment"
+                              placeholder="comment..." style="color: black;" required></textarea>
+                    <small id="charCount" class="text-muted" style="color: black;">0 / 500자</small>
+                    <input type="hidden" name="boardIdx" th:value="${board.boardIdx}"/>
+                    <br>
+                    <button type="submit" class="comm-button">등록</button>
+                    <button type="button" class="cancel-btn comm-button" id="cancel-comment">닫기</button>
+                </form>
+                <!-- 댓글 리스트 -->
+                <ul id="comment-list" class="collapse text-start"
+                    style="padding: 0; margin-top: 20px; overflow-y: auto; height: 100%; max-height: 300px;">
+                    <li th:each="comm : ${board.commentList}" style="color: black;" class="mb-1">
+                        <strong th:text="${comm.customer.customerId}" style="color: black;">작성자</strong> :
+                        <span th:text="${comm.boardComment}" style="color: black;">댓글 내용</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script th:inline="javascript">
+    $(document).ready(function () {
+
+        // 댓글 작성 영역 열기
+        $('#write-comment-btn').click(function () {
+            $('.comment-form').show();
+            $(this).hide();
+        });
+
+        $('#cancel-comment').click(function () {
+            $('.comment-input').val('');
+            $('.comment-form').slideUp();
+            $('#write-comment-btn').show();
+        });
+
+        // 글자수 제한 표시
+        const maxChars = 500;
+        $('#postContent').on('input', function () {
+            const contentLength = $(this).val().length;
+            $('#charCount').text(`${contentLength} / ${maxChars}자`);
+            if (contentLength > maxChars) {
+                alert('500자를 초과할 수 없습니다.');
+                $(this).val($(this).val().substring(0, maxChars));
+                $('#charCount').text(`${maxChars} / ${maxChars}자`);
+            }
+        });
+
+        // 좋아요 초기 상태 설정 (서버에서 내려준 liked 값 활용)
+        const heartIcon = document.getElementById('heart-line');
+        const boardIdx = $('#like-button').data('board-idx');
+        let liked = /*[[${liked}]]*/ false;
+
+        // 초기 아이콘 설정
+        heartIcon.src = liked ? '/img/svg/heart.svg' : '/img/svg/heart-line.svg';
+
+        // 좋아요 클릭 이벤트
+        heartIcon.addEventListener('click', function () {
+            const isLoggedIn = /*[[${session.customerIdx != null}]]*/ false;
+            if (!isLoggedIn) {
+                alert("로그인 후 이용 가능합니다.");
+                window.location.href = "/login";
+                return;
+            }
+
+            // UI 즉시 반영
+            liked = !liked;
+            heartIcon.src = liked ? '/img/svg/heart.svg' : '/img/svg/heart-line.svg';
+
+            // Ajax로 서버에 좋아요 요청
+            $.ajax({
+                type: 'POST',
+                url: '/board/' + boardIdx + '/like',
+                success: function (newLikeCount) {
+                    $('#like-count').text('+' + newLikeCount);
+                },
+                error: function () {
+                    alert('좋아요 처리 중 오류가 발생했습니다.');
+                    // 실패 시 이전 상태로 롤백
+                    liked = !liked;
+                    heartIcon.src = liked ? '/img/svg/heart.svg' : '/img/svg/heart-line.svg';
+                }
+            });
+        });
+    });
+</script>
+
+
+<div th:replace="layout/footer :: footer"></div>
+
+</body>
+</html>

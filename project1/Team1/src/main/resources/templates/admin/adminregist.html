@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품 등록</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendard.css">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="/js/script.js"></script>
+</head>
+<body class="pretendard">
+
+<div th:replace="layout/header :: header"></div>
+
+<div class="back_bg"></div>
+<div class="box_bg"></div>
+<form th:action="@{/adminRegist}" method="post" enctype="multipart/form-data">
+  <div class="big_box">
+    <div class="left">
+      <div class="file_up_con">
+        <div class="product_ad_title">
+          <h2>등록 상품 이미지</h2>
+
+
+
+
+        </div>
+        <div class="product_ad_img_list">
+          <div>
+            <input type="text" id="fileName1" name="uploadImageDelete" value="" readonly>
+            <input type="file" id="fileUpload1" name="productImage1" style= "display: none;" onchange="updateFileName(1)">
+            <button type="button" class="product_ad_btn" onclick="document.getElementById('fileUpload1').click();">파일 업로드</button>
+          </div>
+          <div>
+            <input type="text" id="fileName2" name="uploadImageDelete" value="" readonly>
+            <input type="file" id="fileUpload2" name="productImage2" style= "display: none;" onchange="updateFileName(2)">
+            <button type="button" class="product_ad_btn" onclick="document.getElementById('fileUpload2').click();">파일 업로드</button>
+          </div>
+          <div>
+            <input type="text" id="fileName3" name="uploadImageDelete" value="" readonly>
+            <input type="file" id="fileUpload3" name="productImage3" style= "display: none;" onchange="updateFileName(3)">
+            <button type="button" class="product_ad_btn" onclick="document.getElementById('fileUpload3').click();">파일 업로드</button>
+          </div>
+          <div>
+            <input type="text" id="fileName4" name="uploadImageDelete" value="" readonly>
+            <input type="file" id="fileUpload4" name="productImage4" style= "display: none;" onchange="updateFileName(4)">
+            <button type="button" class="product_ad_btn" onclick="document.getElementById('fileUpload4').click();">파일 업로드</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="right color_white">
+      <div class="thumb_img">
+        <img src="" alt="">
+        <input type="file" id="thumbnail" name="uploadThumbnail" style="display: none;">
+        <button type="button" class="thumb_img_regi" onclick="document.getElementById('thumbnail').click();">파일 업로드</button>
+      </div>
+      <div class="product_ad_input">
+        <p>상품명</p>
+        <input type="text" name="productName" value="" placeholder="상품명">
+      </div>
+      <div class="product_ad_input">
+        <p>가격</p>
+        <input type="text" name="productPrice" value="" placeholder="0">
+      </div>
+      <div class="product_ad_select">
+        <p>브랜드</p>
+        <select name="productBrand">
+          <option value="">테켓</option>
+          <option value="">디젤</option>
+          <option value="">스컬프터</option>
+        </select>
+      </div>
+      <div class="product_ad_select">
+        <p>카테고리</p>
+        <select name = "productCode">
+          <option value="">OUTER</option>
+          <option value="">TOP</option>
+          <option value="">BOTTOM</option>
+          <option value="">SHOES</option>
+        </select>
+      </div>
+      <div class="cs_line"></div>
+      <div class="cs_input"
+           th:if="${#lists.size(colorList)>0}">
+        <p>컬러 옵션</p>
+        <div class="input_chk_box">
+          <label th:each="item : ${colorList}">
+            <input type="checkbox" name="productColor" value="" th:value="${item.colorIdx}">
+            <span th:text="${item.colorName}"></span>
+          </label>
+        </div>
+      </div>
+      <div class="cs_line"></div>
+      <div class="cs_input"
+           th:if="${#lists.size(sizeList)>0}">
+        <p>사이즈 옵션</p>
+        <div class="input_chk_box">
+          <label th:each="item : ${sizeList}">
+            <input type="checkbox" name="productSize" value="" th:value="${item.sizeIdx}">
+            <span th:text="${item.sizeName}"></span>
+          </label>
+        </div>
+      </div>
+      <button type="submit" class="thumb_submit">상품 등록</button>
+    </div>
+  </div>
+</form>
+
+<div th:replace="layout/footer :: footer"></div>
+
+<script>
+  // 파일명 업데이트 함수
+  function updateFileName(num) {
+    const fileInput = document.getElementById("fileUpload" + num);
+    const fileNameInput = document.getElementById("fileName" + num);
+    if (fileInput.files.length > 0) {
+      fileNameInput.value = fileInput.files[0].name;
+      document.getElementById("deleteImage" + num).value = "false";
+    }
+  }
+
+  // 파일 삭제 함수
+  function clearFile(num) {
+    document.getElementById("file" + num).value = "";
+    document.getElementById("fileName" + num).value = "";
+    document.getElementById("deleteImage" + num).value = "true";
+  }
+
+  // 썸네일 삭제 함수
+  function clearThumbnail() {
+    document.getElementById("thumbnail").value = "";
+    document.getElementById("deleteThumbnail").value = "true";
+    alert("썸네일 삭제됨");
+  }
+
+  $('#thumbnail').on('change', function(event) {
+    const input = this;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        if ($('.thumb_img img').length) {
+          $('.thumb_img img').attr('src', e.target.result);
+        } else {
+          $('<img>', {
+            src: e.target.result,
+          }).prependTo('.thumb_img');
+        }
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  });
+</script>
+</body>
+</html>

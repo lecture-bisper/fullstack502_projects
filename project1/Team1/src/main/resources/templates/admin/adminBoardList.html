@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>룩북 관리자 게시판</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendard.css">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+
+
+    <style>
+        .card {
+            width: 200px;
+            height: 320px;
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            height: 110px;
+        }
+        .card-text {
+            max-width: 150px;
+            flex-grow: 1;
+        }
+        .deleteBtn {
+            margin-top: 8px;
+            align-self: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div th:replace="layout/header :: header"></div>
+
+<div class="container mt-5">
+
+    <!-- 🔙 뒤로가기 버튼 -->
+    <div class="mb-4 text-start">
+        <button type="button" class="btn btn-secondary" onclick="location.href='/admin'">← 뒤로가기</button>
+    </div>
+
+    <!-- 📝 게시글 카드 영역 -->
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" th:each="board : ${boards}">
+            <div class="card h-100 text-center align-items-center">
+                <p class="mt-3" th:text="${board.customer != null ? board.customer.customerId + '님의 포스트' : '알 수 없는 사용자님의 포스트'}">
+                    000님의 포스트
+                </p>
+
+                <a th:href="@{'/board/detail/' + ${board.boardIdx}}">
+                    <img th:src="${board.boardUploadPhoto}" class="card-img-top"
+                         style="width: 150px; height: 150px; object-fit: cover;" alt="게시글 이미지">
+                </a>
+
+                <div class="card-body">
+                    <span class="card-text text-truncate" th:text="${board.boardPost}">게시글 내용</span>
+                    <button class="btn btn-danger btn-sm deleteBtn mt-2" th:data-id="${board.boardIdx}">삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- 🧾 삭제 스크립트 -->
+<script>
+    $(document).ready(function () {
+        $(".deleteBtn").click(function () {
+            const boardIdx = $(this).data("id");
+            if (confirm("정말 삭제하시겠습니까?")) {
+                $.ajax({
+                    url: "/admin/boardlist/delete/" + boardIdx,
+                    type: "POST",
+                    success: function (response) {
+                        if (response === "success") {
+                            alert("삭제되었습니다.");
+                            location.reload();
+                        } else {
+                            alert("삭제에 실패했습니다.");
+                        }
+                    },
+                    error: function () {
+                        alert("서버 오류가 발생했습니다.");
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<div th:replace="layout/footer :: footer"></div>
+
+</body>
+
+</html>

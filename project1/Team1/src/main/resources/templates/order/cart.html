@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>장바구니</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+          crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendard.css">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+          integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="/js/script.js"></script>
+</head>
+
+<body class="pretendard">
+
+<div th:replace="layout/header :: header"></div>
+
+<div class="center_box no_mar">
+
+  <div class="semi_title">
+    <p><span th:text="${session.customerId}">아이디</span> 님의 장바구니</p>
+  </div>
+
+  <!-- 전체선택 체크박스 -->
+  <label class="cart_all_chk_top d-flex align-items-center gap-2">
+    <input type="checkbox" id="checkAll">
+    <p class="m-0">전체선택</p>
+  </label>
+
+  <!-- 주문 폼 -->
+  <form id="orderForm" th:action="@{/order/submit}" method="get">
+    <div class="cart_box">
+      <div th:each="cart : ${cartList}" class="cart_contents">
+        <!-- 1) 체크박스 -->
+        <input type="checkbox"
+               class="cart_chk"
+               th:data-cart-idx="${cart.cartIdx}"
+               th:data-product-id="${cart.product.productId}" />
+
+        <a th:href="@{'/productDetail?id=' + ${cart.product.productId}}" class="cart_img">
+          <img th:src="${cart.product.productThumnail}" alt="">
+        </a>
+
+        <!-- 2) 화면 표시용 -->
+        <div class="cart_txt">
+          <p class="cart-name"  th:text="${cart.product.productName}">상품명</p>
+          <p class="cart-brand" th:text="${cart.product.productBrand}">브랜드</p>
+          <p class="cart-price" th:text="${#numbers.formatInteger(cart.product.productPrice,3,'COMMA')} + '원'">가격</p>
+          <p><span>Size:</span>  <span class="cart-size"  th:text="${cart.cartSize}">M</span></p>
+          <p><span>Color:</span> <span class="cart-color" th:text="${cart.cartColor}">White</span></p>
+        </div>
+
+        <!-- 3) 서버로 보낼 hidden 필드들 (항상 삽입) -->
+        <input type="hidden" name="productIds"        th:value="${cart.product.productId}" />
+        <input type="hidden" name="orderDetailSize"   th:value="${cart.cartSize}" />
+        <input type="hidden" name="orderDetailColor"  th:value="${cart.cartColor}" />
+        <input type="hidden" name="productCounts"     value="1" />
+      </div>
+    </div>
+
+
+    <!-- 주문 / 삭제 버튼 -->
+    <button type="submit" id="goOrderBtn" class="me-2">선택 상품 주문</button>
+    <div class="cart_btn">
+      <button type="button" class="cart_delete_btn">선택 상품 삭제</button>
+      <button type="button" class="cart_all_delete_btn">전체 상품 삭제</button>
+    </div>
+  </form>
+
+  <script>
+    // 전체 선택
+    $('#checkAll').on('change', function() {
+      $('.cart_chk').prop('checked', this.checked);
+    });
+
+    // 선택 삭제
+    $('.cart_delete_btn').click(function() {
+      const picked = $('.cart_chk:checked');
+      if (!picked.length) return alert('선택된 항목이 없습니다.');
+      picked.each(function() {
+        $.post('/cart/delete', { cartIdx: $(this).data('cart-idx') }, () => location.reload());
+      });
+    });
+
+    // 전체 삭제
+    $('.cart_all_delete_btn').click(function() {
+      if (confirm('전체 삭제하시겠습니까?')) {
+        $.post('/cart/deleteAll', () => location.reload());
+      }
+    });
+
+    // 다건 주문 처리
+    $('#goOrderBtn').click(function(e) {
+      e.preventDefault();
+
+      // 체크 안 된 항목의 hidden 필드 전부 제거
+      $('.cart_contents').each(function() {
+        if (!$(this).find('.cart_chk').is(':checked')) {
+          $(this).find('input[type=hidden]').remove();
+        }
+      });
+
+      if (!$('.cart_chk:checked').length) {
+        return alert('선택된 상품이 없습니다.');
+      }
+
+      this.form.submit();
+    });
+  </script>
+
+</div>
+<div th:replace="layout/footer :: footer"></div>
+</body>
+</html>

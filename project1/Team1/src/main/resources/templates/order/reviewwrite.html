@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>리뷰 작성</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendard.css">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="/js/script.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('.review_write .star_con .star_box .star').click(function () {
+        const value = parseInt($(this).data('value'));
+
+        $('.review_write .star_con .star_box .star').each(function () {
+          $(this).removeClass('active').text('☆');
+        });
+
+        $('.review_write .star_con .star_box .star').each(function (index) {
+          if (index < value) {
+            $(this).addClass('active').text('★');
+          }
+        });
+
+        $('.ratingInput').val(value);
+
+        console.log($('.ratingInput').val());
+      });
+    });
+  </script>
+</head>
+<body class="pretendard">
+
+<div th:replace="layout/header :: header"></div>
+
+  <div class="back_bg"></div>
+  <div class="center_box no_mar">
+    <div class="box_bg"></div>
+    <div class="semi_title">
+      <p><span th:text="${orderDetail.productId}">상품명 에베베</span> 리뷰 작성</p>
+    </div>
+    <div class="review_write">
+      <form action="" method="post">
+        <div class="img_regi">
+          <img src="" alt="">
+          <button type="button" class="review_img_btn">사진 업로드</button>
+        </div>
+        <div class="star_con">
+          <p>평점 :&nbsp;</p>
+          <div class="star_box">
+            <span class="star" data-value="1">☆</span>
+            <span class="star" data-value="2">☆</span>
+            <span class="star" data-value="3">☆</span>
+            <span class="star" data-value="4">☆</span>
+            <span class="star" data-value="5">☆</span>
+          </div>
+        </div>
+        <input type="hidden" name="star" value="" class="ratingInput">
+        <textarea name="" placeholder="리뷰를 작성해주세요."></textarea>
+        <button type="submit" class="review_submit_btn">작성 완료</button>
+      </form>
+    </div>
+</div>
+
+    <div th:replace="layout/footer :: footer"></div>
+
+</body>
+</html>

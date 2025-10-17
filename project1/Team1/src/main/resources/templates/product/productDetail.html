@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>productDetail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendard.css">
+
+    <script>
+        $(document).ready(function () {
+            $("#copyBtn").on("click", function () {
+                // 현재 페이지 URL 가져오기
+                let currentUrl = window.location.href;
+
+                // 임시 input 요소 생성해서 URL 넣고 선택
+                const tempInput = $("<input>");
+                $("body").append(tempInput);
+                tempInput.val(currentUrl).select();
+
+                // 복사 실행
+                document.execCommand("copy");
+
+                // 임시 input 삭제
+                tempInput.remove();
+
+                // 알림 보여주기
+                $("#copyAlert").fadeIn().delay(1000).fadeOut();
+            });
+        });
+    </script>
+
+</head>
+
+<body class="pretendard">
+
+<div th:replace="layout/header :: header"></div>
+
+<div class="d-flex flex-row justify-content-center mt-5">
+    <div class="container-fluid overflow-y-scroll mt-4" style="max-height: 100vh;">
+        <h2 class="text-center mb-5 montserrat montserrat_pro"
+            style="font-size: 40px; filter: drop-shadow(0 0 1.5px #ffffff);">DETAIL</h2>
+        <div th:each="img : ${imageList}" class="text-center">
+            <img th:src="@{${img}}" alt="상품이미지" class="img-fluid mb-4" style="width: 300px;">
+            <hr>
+        </div>
+
+        <p class="mt-4 mb-4 text-center">이 상품의 연관상품</p>
+        <div class="d-flex flex-row gap-3"
+             style="overflow-x: auto; flex-wrap: nowrap; white-space: nowrap;">
+            <a th:each="related : ${relatedList}"
+               th:href="@{'/productDetail?id=' + ${related.productId}}"
+               class="text-decoration-none"
+               style="width: 100px; flex: 0 0 auto;">
+                <img th:src="@{${related.productThumnail}}" alt="연관 상품"
+                     style="width: 100px; height: 100px; object-fit: cover;" class="rounded shadow-sm mb-5">
+            </a>
+        </div>
+        <hr>
+    </div>
+    <div class="container overflow-y-hidden" style="max-height: 100vh;">
+        <div class="d-flex flex-column align-items-center gap-3">
+            <p id="copyAlert" style="display:none; color:#ff8117;">URL이 복사되었어요! 💙</p>
+            <div class="d-flex flex-row align-items-center gap-3">
+                <p th:text="${product.productName} + ' / ' + ${product.productPrice} + '원'">상품명 / 가격</p>
+                <button type="submit" class="btn d-flex justify-content-center align-items-center"
+                        style="height: 60px; width: 60px;" id="copyBtn"><img src="/img/svg/share.svg" alt="공유"
+                                                                             style="height: 45px; width: 45px;">
+                </button>
+            </div>
+
+            <!-- 대표 이미지 -->
+            <img th:src="@{${product.productThumnail}}" alt="상품 이미지"
+                 style="width:300px; height:300px; object-fit:cover;" class="mb-5">
+
+        </div>
+
+        <!-- 옵션 선택 -->
+        <div class="d-flex flex-column align-items-center gap-3">
+            <select id="colorSelect" class="form-select" style="width: 200px;">
+                <option selected disabled>색상 선택</option>
+                <option th:each="color : ${colorList}" th:value="${#strings.trim(color)}"
+                        th:text="${#strings.trim(color)}"></option>
+            </select>
+
+            <select id="sizeSelect" class="form-select" style="width: 200px;">
+                <option selected disabled>사이즈 선택</option>
+                <option th:each="size : ${sizeList}" th:value="${#strings.trim(size)}"
+                        th:text="${#strings.trim(size)}"></option>
+            </select>
+        </div>
+
+        <!-- 찜, 장바구니, 바로구매 기능 -->
+        <div class="d-flex justify-content-center" style="height: 100%;">
+            <div id="product-detail" th:data-product-id="${product.productId}"
+                 th:data-login-id="${loginId}" class="d-flex flex-column align-items-center">
+                <div class="d-flex flex-row gap-4 mt-4">
+                    <!-- 찜 버튼 -->
+                    <button th:attr="data-product-id=${product.productId}"
+                            type="button" id="btn-wish" class="btn d-flex justify-content-center align-items-center"
+                            style="height: 50px; width: 50px;" data-wished="false">
+                        <img id="wishIcon" src="/img/svg/wish-non.svg" alt="찜" style="height: 50px; width: 50px;">
+                    </button>
+
+                    <!-- 장바구니 -->
+                    <button th:attr="data-product-id=${product.productId}"
+                            type="button" id="btn-cart" class="btn d-flex justify-content-center align-items-center"
+                            style="height: 50px; width: 50px;">
+                        <img src="/img/svg/cart.svg" alt="장바구니" style="height: 55px; width: 55px;">
+                    </button>
+
+                    <!-- 바로구매 -->
+                    <button type="button" id="buyNowBtn" class="btn d-flex justify-content-center align-items-center"
+                            style="height: 50px; width: 50px;"
+                            th:attr="data-product-id=${product.productId}">
+                        <img src="/img/svg/won.svg" alt="바로구매" style="height: 35px; width: 35px;">
+                    </button>
+                </div>
+            </div>
+        </div>
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                const productId = $('#product-detail').data('productId');
+                const userId = $('#product-detail').data('customerId');
+                const isLoggedIn = $('#product-detail').data('login');
+
+                // 찜 버튼
+                let wishClicked = false;
+
+                $('#btn-wish').off('click').on('click', function () {
+                    if (wishClicked) return;
+                    wishClicked = true;
+
+                    const productId = $(this).data('product-id');
+                    const cartColor = $('#colorSelect').val();
+                    const cartSize = $('#sizeSelect').val();
+
+                    if (!cartColor || !cartSize) {
+                        alert("옵션을 선택해 주세요.");
+                        wishClicked = false;
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '/wish/add',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({productId: productId}),
+                        success: function (res) {
+                            alert(res); // 찜 완료
+                        },
+                        error: function (xhr) {
+                            if (xhr.status === 401) {
+                                alert('로그인이 필요합니다.');
+                                window.location.href = '/login';
+                            } else if (xhr.status === 409) {
+                                alert('이미 찜한 상품입니다.');
+                            } else {
+                                alert('찜 실패');
+                            }
+                        },
+                        complete: function () {
+                            wishClicked = false;
+                        }
+                    });
+                });
+
+                // 장바구니 버튼
+                $('#btn-cart').click(function () {
+                    const productId = $(this).data('product-id');
+                    const cartColor = $('#colorSelect').val();
+                    const cartSize = $('#sizeSelect').val();
+
+                    if (!cartColor || !cartSize) {
+                        alert('옵션을 선택해 주세요.');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '/cart/add',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            productId: productId,
+                            cartColor: cartColor,
+                            cartSize: cartSize
+                        }),
+                        success: function () {
+                            alert('장바구니에 담겼습니다!');
+                        },
+                        error: function () {
+                            alert('장바구니 담기 실패');
+                        }
+                    });
+                });
+
+                $('#buyNowBtn').on('click', function () {
+                    const pid = $(this).data('product-id');
+                    const co = $('#colorSelect').val();
+                    const sz = $('#sizeSelect').val();
+
+                    if (!co || !sz) {
+                        alert('옵션을 모두 선택해주세요.');
+                        return;
+                    }
+
+                    sessionStorage.setItem('orderColor', co);
+                    sessionStorage.setItem('orderSize', sz);
+
+                    // 이 한 줄만 남깁니다.
+                    window.location.href = `/order/submit/${pid}`;
+                });
+
+            });
+        </script>
+    </div>
+</div>
+
+<div th:replace="layout/footer :: footer"></div>
+
+</body>
+
+</html>

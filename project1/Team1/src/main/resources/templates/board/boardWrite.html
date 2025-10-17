@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>boardWrite</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+          crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendard.css">
+
+  <style>
+    #preview {
+      width: 300px;
+      height: 300px;
+      border: 1px solid #ccc;
+      object-fit: cover;
+      display: block;
+      margin-top: 20px;
+    }
+  </style>
+
+</head>
+
+<body class="pretendard">
+
+<div th:replace="layout/header :: header"></div>
+
+<div class="container mt-5 d-flex justify-content-center">
+  <form action="/boardWrite" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+      <!-- 이미지 선택하고 파일 넣으면 자동으로 미리보기 사진 떠요! -->
+      <!-- 기본사진은 룩북게시판 아이콘으로 연결했습니다!-->
+      <img id="preview" src="/img/picture/lookbook.png" alt="preview" class="rounded shadow container mb-3">
+      <!-- 자동으로 1:1 비율로 맞춰집니다. 건드리면 안돼요! -->
+      <canvas id="canvas" width="300" height="300" style="display:none;"></canvas>
+      <label>내용</label>
+      <textarea name="boardPost" id="postContent" class="form-control postContent" rows="5" required></textarea>
+      <small id="charCount" style="color: white;">0 / 500자</small>
+    </div>
+    <script>
+
+      $(document).ready(function () {
+
+        const maxChars = 500;
+
+        $('#postContent').on('input', function () {
+          const content = $(this).val();
+          const contentLength = content.length;
+
+          $('#charCount').text(`${contentLength} / ${maxChars}자`);
+
+          if (contentLength > maxChars) {
+            alert('500자를 초과할 수 없습니다.');
+            // 초과된 부분 제거
+            $(this).val(content.substring(0, maxChars));
+            $('#charCount').text(`${maxChars} / ${maxChars}자`);
+          }
+        });
+      });
+    </script>
+    <div class="mb-3">
+      <label for="imageInput" class="form-label">이미지 선택</label>
+      <input type="file" name="imageFile" accept="image/*" class="form-control" id="imageInput" required>
+    </div>
+    <!-- db에 submit하는 부분-->
+    <button type="submit" class="btn btn-light">작성</button>
+    <!--  작성하고 boardList로 redirect  -->
+  </form>
+</div>
+
+<script>
+  const input = document.getElementById('imageInput');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const preview = document.getElementById('preview');
+
+  input.addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const img = new Image();
+      img.onload = function () {
+        // 캔버스 사이즈: 정사각형
+        const canvasSize = canvas.width;
+
+        // 이미지가 정사각형 틀을 채우도록 비율 유지하면서 확대
+        const scale = Math.max(canvasSize / img.width, canvasSize / img.height);
+        const scaledWidth = img.width * scale;
+        const scaledHeight = img.height * scale;
+
+        const offsetX = (canvasSize - scaledWidth) / 2;
+        const offsetY = (canvasSize - scaledHeight) / 2;
+
+        ctx.clearRect(0, 0, canvasSize, canvasSize);
+        ctx.drawImage(img, offsetX, offsetY, scaledWidth, scaledHeight);
+
+        // 미리보기 이미지로 적용
+        preview.src = canvas.toDataURL('image/jpeg');
+      };
+      img.src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+  });
+</script>
+
+<div th:replace="layout/footer :: footer"></div>
+
+</body>
+
+</html>

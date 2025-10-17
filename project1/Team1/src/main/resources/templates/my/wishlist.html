@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>찜 목록</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+          crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendard.css">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+          integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="/js/script.js"></script>
+</head>
+<body class="pretendard">
+
+<div th:replace="layout/header :: header"></div>
+
+<div class="center_box no_mar">
+
+  <div class="semi_title">
+    <p><span th:text="${session.customerId}">로그인 ID</span> 님의 찜 목록</p>
+  </div>
+
+  <div class="wish">
+    <!-- 찜 목록이 비어 있을 경우 -->
+    <div th:if="${#lists.isEmpty(wishlist)}" class="no_wish">
+      찜한 상품이 없습니다.
+    </div>
+
+    <!-- 찜 상품 목록 출력 -->
+    <div class="wish_box">
+      <div th:each="wish : ${wishlist}" class="wish_contents">
+
+        <!-- ✅ 상품 상세로 이동하는 링크 수정 -->
+        <a th:href="@{'/productDetail?id=' + ${wish.product.productId}}">
+          <img th:src="${wish.product.productThumnail != null ? wish.product.productThumnail : '/img/default.png'}" alt="상품 이미지">
+        </a>
+
+        <div class="wish_txt">
+          <h2 th:text="${wish.product.productName}">상품명</h2>
+          <p>브랜드 :&nbsp;<span th:text="${wish.product.productBrand}"></span></p>
+          <p>가격 :&nbsp;<span th:text="${#numbers.formatInteger(wish.product.productPrice, 3, 'COMMA')}"></span>원</p>
+
+          <!-- form 제거하고 단독 버튼으로 변경 -->
+          <button class="wish_del_btn" type="button" th:attr="data-product-id=${wish.product.productId}">
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).on('click', '.wish_del_btn', function(e) {
+    e.preventDefault();
+    const productId = $(this).data('product-id');
+    const card = $(this).closest('.wish_contents');
+
+    $.ajax({
+      url: '/wishlist/remove',
+      type: 'POST',
+      data: { productId: productId },
+      success: function() {
+        card.remove();
+        if ($('.wish .wish_contents').length === 0) {
+          $('.wish').html('<div class="no_wish">찜한 상품이 없습니다.</div>');
+        }
+      },
+      error: function() {
+        console.error("찜 삭제 실패");
+      }
+    });
+  });
+</script>
+
+<div th:replace="layout/footer :: footer"></div>
+
+</body>
+</html>
+

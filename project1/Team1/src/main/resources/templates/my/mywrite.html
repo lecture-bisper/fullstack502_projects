@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내가 쓴 글</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendard.css">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="/js/script.js"></script>
+</head>
+<body class="pretendard">
+
+<div th:replace="layout/header :: header"></div>
+
+
+<div class="back_bg"></div>
+<div class="center_box no_mar height100">
+    <div class="box_bg"></div>
+    <div class="semi_title mb20">
+        <p><span th:text="${customer.customerId} + '님의 포스트'"></span></p>
+        <p th:text="'게시글 수: ' + ${#lists.size(boards)}"></p>
+    </div>
+    <div class="post_m_box my_scroll_box">
+        <div class="post_m_contents">
+            <div th:each="board : ${boards}" class="position-relative">
+                <a th:href="@{'/board/detail/' + ${board.boardIdx}}" class="contents">
+                    <img th:src="${board.boardUploadPhoto}" alt="게시글 이미지" class="img-thumbnail">
+                </a>
+                <a th:href="@{'/board/delete/' + ${board.boardIdx}}" class="post_m_delete">
+                    <span></span>
+                    <span></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="semi_title mt-5 mb20">
+        <p><span th:text="${customer.customerId} + '님의 댓글'"></span></p>
+    </div>
+    <div class="reply_m_box my_scroll_box">
+        <div class="reply_m_contents">
+            <div th:each="comment : ${comments}" class="contents">
+                <p><strong th:text="${customer.customerId}">유저ID</strong></p>
+                <p th:text="${comment.boardComment}">댓글 내용</p>
+                <a th:href="@{'/comment/delete/' + ${comment.boardCommIdx}}"
+                   class="reply_delete_btn">
+                    <span></span>
+                    <span></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="layout/footer :: footer"></div>
+
+</body>
+</html>

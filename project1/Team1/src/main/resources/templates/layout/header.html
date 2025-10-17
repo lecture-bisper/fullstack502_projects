@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>header</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/pretendard.css">
+
+
+
+
+</head>
+
+<body class="pretendard">
+<header th:fragment="header">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <style>
+
+        * {
+            color: white;
+        }
+
+        .menu-close {
+            text-align: right;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: rgb(255, 255, 255);
+        }
+
+        #mobile-menu-icon,
+        .search {
+            cursor: pointer;
+        }
+
+        #category,
+        #brandbar {
+            text-align: right;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: rgb(255, 255, 255);
+        }
+
+        .montserrat_pro {
+            color: orangered;
+        }
+
+        .side_menu_list1, .side_menu_list2 {
+            position: absolute;
+            z-index: 1000;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: max-content;
+        }
+
+        .side_menu_list1 a, .side_menu_list2 a {
+            text-align: center;
+            width: 100%;
+        }
+
+        #searchMenu {
+            display: none;
+            position: fixed;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+            z-index: 2000;
+            transition: 0.3s ease;
+        }
+
+        #searchMenu.open {
+            display: block;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 350px;
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 2rem;
+            z-index: 2000;
+            transition: 0.3s ease;
+        }
+
+        .mobile-menu.open {
+            display: block;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 1rem 0;
+            color: rgb(255, 255, 255);
+        }
+
+        .card, .card-body, .card-text, .card-title{
+            color: black;
+            background-color: white;
+            text-align: center;
+        }
+
+        .card h1 {
+            color: black;
+        }
+
+        option {
+            color: black;
+        }
+
+        .search-container input {
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+            width: 80%;
+            margin-left: auto;
+        }
+
+        .side_menu_list2 img {
+            width: 100%; /* 이미지가 너무 크면 줄이기 */
+            max-width: 200px;
+        }
+
+    </style>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("mobileMenu");
+            menu.classList.toggle("open");
+        }
+
+        function toggleSearch() {
+            const search = document.getElementById("searchMenu");
+            search.classList.toggle("open");
+        }
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".side_menu_btn1").on("click", function () {
+                if ($(".side_menu_list2").hasClass("show")) {
+                    $(".side_menu_list2").removeClass("show");
+                }
+            });
+            $(".side_menu_btn2").on("click", function () {
+                if ($(".side_menu_list1").hasClass("show")) {
+                    $(".side_menu_list1").removeClass("show");
+                }
+            });
+            // 검색창에서 Enter 입력 시 productList.html 로 이동
+            $('#searchInput').on('keypress', function (e) {
+                if (e.which === 13) {
+                    const query = $('#searchInput').val().trim();
+                    if (query !== "") {
+                        window.location.href = `/product/list?search=${encodeURIComponent(query)}`;
+                    }
+                }
+            });
+        });
+    </script>
+    <!-- faq 시작 -->
+    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal" style="position: fixed; bottom: 30px; right: 30px; z-index: 2000;">
+        FAQ
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content" style="background-color: #000; opacity: 80%;">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">자주묻는 질문</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h2 class="fs-5">Q. 배송 문의</h2>
+                    <p class="align-items-center d-inline-flex gap-1"><button class="btn btn-secondary mb-3" data-bs-toggle="collapse"
+                                                                              type="button" data-bs-target="#collapseExample" aria-expanded="false"
+                                                                              aria-controls="collapseExample" title="Popover title"
+                                                                              data-bs-content="Popover body content is set in this attribute.">Answer</button> ← 여기를 클릭하세요</p>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body text-start">
+                            -배송업체 : 한진택배 <br>
+                            (배송기간 : 평균적으로 출고일로 부터 1~2일 소요되며, 파업또는 물량이 많을경우 약간더 소요될 수 있습니다.)<br><br>
+                            -배송비 : 3,000원/ 제주 및 도서 산간 지역 추가 요금 발생<br>
+                            -10만원 이상 구매시 무료배송<br><br>
+                            -출고기간 : 영업일 기준 평균 1-3일<br>
+                            거래처 상황에 따라 갑작스러운 품절 및 입고지연이 발생할 수 있으면, 이런 경우 개별 안내 드리고 있습니다.<br><br>
+                            거래처 입고지연 및 공장 사정으로 지연기간이 7일이상 지연되는 경우 부분배송 도와드리고 있습니다.<br>
+                            (부분 배송을 원치 않으시는 경우 Q&A를 통해 문의글 작성해주셔야합니다)<br><br>
+                            -따로 주문해주시는 경우 재고 프로그램상 자동으로 합포가 되는 경우 확인이 어려워 해당내용에 대해 게시판으로 글 작성해주시면 중복된 배송비 환불 또는 나눠서 배송 도와드리고 있는 점 참고 부탁드립니다.<br><br><br>
+                            < 배송전 변경, 취소 ><br><br><br>
+                            송장이 출력이 되지 않은 주문건에 한해 주문취소/변경 가능합니다.<br>
+                            배송 전 취소를 원하시는 경우 오전 11시 전까지 Q&A 게시판 또는 취소요청이 되어있어야 가능합니다.<br>
+                            그 이후에 취소접수 하신건에 관해서는 이미 송장이 나와 상품 발송진행 또는 출고완료된 상품으로 취소가 불가하여 배송 후 교환/반품과 동일한 방법으로 처리 가능합니다.<br><br><br>
+                            < 송장번호 확인 ><br><br><br>
+                            송장번호 확인은 업무(누락,실수 등 확인 후) 마무리 후 6시에 일괄처리 되고 있습니다.<br>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="modal-body">
+                    <h2 class="fs-5">Q. 결제 문의</h2>
+                    <p class="align-items-center d-inline-flex gap-1"><button class="btn btn-secondary mb-3" data-bs-toggle="collapse" type="button" data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2" title="Popover title" data-bs-content="Popover body content is set in this attribute.">Answer</button> ← 여기를 클릭하세요</p>
+                    <div class="collapse" id="collapseExample2">
+                        <div class="card card-body text-start">
+                            < 휴대폰 결제 ><br><br><br>
+                            1. 결제한 당월에 취소,반품 처리가 완료되는 경우 휴대폰 이용요금에 부과될 예정이었던 결제 금액이 취소 처리됩니다.<br><br>
+                            2. 결제한 당월이 아닌(ex. 1월에 구매 2월에 취소 또는 반품) 익월에 처리가 완료되는 경우  결제 금액이 이미 휴대폰 이용 요금에 청구되어 핸드폰 결제 취소처리가 불가하며, 전액 예치금 환불 또는 휴대전화 결제 수수료(4.5%)를 제외하고 계좌 환불 처리해 드립니다.<br><br>
+                            3. 결제한 당월이라고 하더라고 부분취소의 경우 핸드폰 결제 시스템상 전액취소만 가능해 구매한 상품금앤만 입금 후 전체취소, 예치금 환불 또는 휴대폰 결제 수수료(4.5%)를 제외하고 계좌환불 처리 도와드립니다.<br><br>
+                            *수수료는 휴대폰결제 대행사에서 부과하는 수수료로 당사 자체의 수수료와는 무관한점 알려드립니다<br><br>
+                            *배송지연으로 인하여 익월로 넘어가는 상황에도 위 사항과 동일하게 적용되오니 구매전 참고 부탁드립니다.<br><br>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="modal-body">
+                    <h2 class="fs-5">Q. 교환/환불 문의</h2>
+                    <p class="align-items-center d-inline-flex gap-1"><button class="btn btn-secondary mb-3" data-bs-toggle="collapse" type="button" data-bs-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample3" title="Popover title" data-bs-content="Popover body content is set in this attribute.">Answer</button> ← 여기를 클릭하세요</p>
+                    <div class="collapse" id="collapseExample3">
+                        <div class="card card-body text-start">
+                            < 반품, 교환 안내 ><br><br><br>
+                            -교환 및 반품 시 상품을 수령하신 날(포함)로부터 7일이내 Q&A 게시판 또는 사이트로 교환 및 반품접수해주셔야합니다.
+                            반품접수시 반품할 상품을 정확히 남겨주셔야 됩니다.<br>
+                            (유선상담으로는 실수가 있을수 있는 부분이니 참고부탁드립니다)<br><br>
+                            -교환 및 반품에 관한 내용 일체 유선상담 진행 불가하며 게시판으로 문의 부탁드립니다.<br>
+                            -사전 접수없이 일방적으로 발송한 상품은 반송처리됩니다.<br><br>
+                            -반품 불가한 사유에서 반품시 택배비 입금 부탁드리고 있으며 택배비가 입금되지 않는 경우 1년보관 후 폐기처리됩니다.<br><br>
+                            -불량상품의 경우 같은상품으로 교환만 가능하며, 반품 시 단순 변심 사유로 간주되어 상품수거를 위한 배송비만(초기배송비 X) 로웨어에서 부담하고있습니다.<br><br>
+                            -교환 또는 반품시 제품에 포장되어있던 바코드가 부착되어있는 폴리백을 동봉해주셔야하며 동봉이 안될시 착용으로 간주하여 반품,교환이 불가합니다.<br>
+                            -부분배송의 경우 반품시 따로 포장하시는 경우 배송비과 이중으로 부과될수 있습니다.<br><br><br>
+                            < 불량사유에 해당하지 않는 경우 ><br><br><br>
+                            -대량 생산시 발생할수 있는 미미한 마감처리(실밥, 박음질, 본드자국, 초크자국 등) 부자재 변경<br><br>
+                            -악세사리 제작 과정상 원석 디자인의 경우 제작시 개체마다 색상이 다를 수 있습니다.<br><br>
+                            -사이즈 측정 방법에 따른 표기된 사이즈와의 1~3cm 오차<br><br>
+                            -린넨 또는 슬럽이 들어간 원단에 희미한 줄 또는 잡사<br><br>
+                            -모니터와 해상도 차이로 인한 색감차이<br><br>
+                            -데님워싱,니트,나염 등 생산과정에서 사람이 직접하는 작업의 경우 약간의 차이가 발생할 수 있습니다.<br><br>
+                            -제작된 지 얼마 되지 않아 새 상품 냄새및 섬유질 특유의 냄새(폴리원단 등)<br><br>
+                            -세탁으로 인한 파손(이염이 있을수 있으니 단독 손세탁 혹은 드라이크리닝 권장합니다 )<br><br>
+                            -데님 등 착용자에 따라 이염이 있을수 있습니다.<br><br>
+                            -데님 제품의 경우 워싱에 따라 제작 과정중 주머니에 돌,가루 등이 있을수 있습니다.<br><br>
+                            -제품 원단에 따라 제작 차수마다 약간의 색 차이가 있을수 있습니다.<br><br>
+                            -의도적인 훼손 또는 시착시 훼손으로 인한 상품의 가치가 떨어진경우<br><br>
+                            -착용중 발생한 파손(단추 등 힘으로 세게 뜯어 떨어지는 경우 등)<br><br><br>
+                            < 교환 및 반품 불가 ><br><br><br>
+                            -이너웨어, 수영복, 이너(슬리브리스등), 악세사리, 잡화(신발,벨트) 1회의 시착만으로도 상품 가치가 떨어져 재판매가 불가능한 상품은 개봉 후 교환 및 반품이 불가한 점 참고하시어 신중한 구매 부탁드립니다.<br><br>
+                            -화이트,아이보리 등 밝은 계열의 제품, 니트,가죽,핸드메이드 등 손상이 쉬운 제품류는 교환/반품이 어려운 점 참고하시어 신중한 구매 부탁드립니다.<br><br>
+                            -착용흔적 및 훼손이 있는경우, 섬유탈취제, 향수, 체취, 집 냄새등이 나는 경우 단순히 시착만 해보신 경우에도 보관상의 문제로 간주하여 교환 및 반품이 불가합니다.<br><br>
+                            -교환 또는 반품시 제품에 포장되어있던 바코드가 부착되어있는 폴리백을 동봉해주셔야하며 동봉이 안될시 착용으로 간주하여 반품,교환이 불가합니다.<br><br>
+                            -불량 상품인 경우라도 착용을 하신 경우 추가적인 파손이 있으면 반품이 불가합니다.<br><br><br>
+                            < 환불 안내 ><br><br><br>
+                            *수거 확인된 영업일로부터 3일 이내 처리 완료됩니다.*
+                            로웨어 측에서 환불처리 완료 후에도 초기 결제수단 영업사마다 환불까지 영업일기준 1-5일 소요됩니다.(무통장 입금 제외)<br>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="modal-body">
+                    <h2 class="fs-5">Q. 고객센터</h2>
+                    <p class="align-items-center d-inline-flex gap-1"><button class="btn btn-secondary mb-3" data-bs-toggle="collapse" type="button" data-bs-target="#collapseExample4" aria-expanded="false" aria-controls="collapseExample4" title="Popover title" data-bs-content="Popover body content is set in this attribute.">Answer</button> ← 여기를 클릭하세요</p>
+                    <div class="collapse" id="collapseExample4">
+                        <div class="card card-body text-start">
+                            고객센터 051-000-0000<br>
+                            운영시간 09:00~18:00 (주말 및 공휴일 제외)<br>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- faq 끝 -->
+    <!-- background 시작-->
+    <img src="/img/picture/bg.jpg" alt=" " style="position: fixed; top: 0; left: 0; min-width: 100%; min-height: 100%; object-fit: cover; z-index: -2;">
+    <div
+            style="position: fixed; top: 0; left: 0; min-width: 100%; min-height: 100%; object-fit: cover; z-index: -1; background: #000; opacity: 50%;">
+    </div>
+    <!-- background 끝-->
+    <!-- header 시작 -->
+    <nav class="d-flex navbar position-static top-0" style="z-index: 999;">
+        <div class="container-fluid">
+            <div style="display: flex; flex-direction: row;">
+                <div class="navbar-brand ms-2">
+                    <img src="/img/svg/list.svg" width="28" height="28" class="d-inline-block" alt="" onclick="toggleMenu()" id="mobile-menu-icon">
+                </div>
+                <a th:href="@{/}" class="navbar-brand">
+                    <img src="/img/picture/logo.png" height="30" class="d-inline-block" alt="">
+                </a>
+            </div>
+            <div style="display: flex; flex-direction: row;" class="align-items-center">
+                <a th:href="@{/boardList}" class="navbar-brand">
+                    <img src="/img/picture/lookbook.png" width="40" height="40" class="d-inline-block pb-1" alt="">
+                </a>
+                <a th:href="@{/mypage}" class="navbar-brand">
+                    <img src="/img/svg/mypage.svg" width="33" height="33" class="d-inline-block pb-1" alt="">
+                </a>
+                <a th:href="@{/order/cart}" class="navbar-brand">
+                    <img src="/img/svg/cart.svg" width="40" height="40" class="d-inline-block pb-1" alt="">
+                </a>
+                <div class="navbar-brand search">
+                    <img src="/img/svg/search.svg" width="35" height="35" class="d-inline-block pb-1" alt="" onclick="toggleSearch()" id="search">
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="menu-close" onclick="toggleMenu()"><strong>✕</strong>
+        </div>
+        <ul class="nav nav-tabs flex-row justify-content-around gap-3">
+            <li class="nav-item">
+                <p class="d-inline-flex gap-1">
+                    <button class="nav-link btn side_menu_btn1 mb-3" aria-current="page" id="category"
+                            data-bs-toggle="collapse" data-bs-target="#collapseExample5" aria-expanded="false"
+                            aria-controls="collapseExample5">PRODUCT</button>
+                </p>
+                <!-- PRODUCT 아래 드롭다운 -->
+                <div class="collapse side_menu_list1" id="collapseExample5" style="position: absolute; z-index: 1000;">
+                    <a href="/productList" class="mb-4 mt-5 category-link" data-category="all" ><h1 class="montserrat montserrat_pro" style="font-weight: 900; text-align: center">ALL</h1></a>
+                    <a href="/productCategoryList?productCategory=outer" class="mb-4 category-link" data-category="outer"><h1 class="montserrat montserrat_pro" style="font-weight: 900; text-align: center">OUTER</h1></a>
+                    <a href="/productCategoryList?productCategory=top" class="mb-4 category-link" data-category="top"><h1 class="montserrat montserrat_pro" style="font-weight: 900; text-align: center">TOP</h1></a>
+                    <a href="/productCategoryList?productCategory=bottom" class="mb-4 category-link" data-category="bottom"><h1 class="montserrat montserrat_pro" style="font-weight: 900; text-align: center">BOTTOM</h1></a>
+                    <a href="/productCategoryList?productCategory=shoes" class="mb-4 category-link" data-category="shoes"><h1 class="montserrat montserrat_pro" style="font-weight: 900; text-align: center">SHOES</h1></a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <p class="d-inline-flex gap-1">
+                    <button class="nav-link btn side_menu_btn2 mb-3" aria-current="page" id="brandbar"
+                            data-bs-toggle="collapse" data-bs-target="#collapseExample6" aria-expanded="false"
+                            aria-controls="collapseExample6">BRAND</button>
+                </p>
+                <div class="collapse side_menu_list2" id="collapseExample6" style="position: absolute; z-index: 1000;">
+                    <a href="/productBrandList?productBrand=tecket" class="mb-5 brand-link mt-5">
+                        <img src="/img/brand/tecket.svg" alt=" ">
+                    </a>
+                    <a href="/productBrandList?productBrand=sculptor" class="mb-5 brand-link">
+                        <img src="/img/brand/sculptor.jpg" alt=" ">
+                    </a>
+                    <a href="/productBrandList?productBrand=diesel" class="mb-5 brand-link">
+                        <img src="/img/brand/diesel.png" alt=" ">
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- header 끝 -->
+    <!-- 검색창 시작 -->
+    <div id="searchMenu">
+        <div class="menu-close" onclick="toggleSearch()"><strong>✕</strong>
+        </div>
+        <div class="search-container text-center mt-5">
+            <input type="text" id="searchInput" placeholder="상품명을 입력하세요" style="color: black;"/>
+        </div>
+    </div>
+    <!-- 검색창 끝 -->
+</header>
+
+</body>
+</html>

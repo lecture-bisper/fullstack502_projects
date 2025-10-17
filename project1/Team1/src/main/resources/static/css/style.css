@@ -1,0 +1,460 @@
+@charset "utf-8";
+
+* {margin: 0; padding: 0; box-sizing: border-box;}
+li {list-style: none;}
+a {text-decoration: none; color: inherit;}
+img {max-width: 100%; vertical-align: top;}
+button {cursor: pointer; font-size: 13px;}
+label {cursor: pointer;}
+p {margin-bottom: 0;}
+body h2 {line-height: normal;}
+
+.pretendard {font-family: 'Pretendard', sans-serif;}
+.montserrat {font-family: 'Montserrat', sans-serif;}
+.montserrat_pro {color: orangered; font-weight: 900; text-align: center;}
+
+.color_white {color : #fff;}
+
+
+
+
+/* common */
+.center_box {position: relative; max-width: 360px; width: 100%; height: 100vh; margin: 0 auto; padding: 40px 10px;}
+
+.no_mar {padding: 0 10px 40px;}
+
+.semi_title {display: inline-block; padding: 5px 30px; background-color: #fff; color: #000; border-radius: 5px; margin-bottom: 50px; margin-top: 20px;}
+.semi_title p {display: inline-block; font-size: 12px; color: #000;}
+.semi_title span {font-weight: 700; color: #000;}
+
+.semi_title.mb20 {margin-bottom: 20px;}
+
+.back_bg {position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: url(../img/picture/bg.jpg) no-repeat center/cover; z-index: -10;}
+
+.box_bg {position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 100%; background-color: #fff; z-index: -5; opacity: 0.7;}
+
+.height100 {height: 100% !important;}
+
+
+
+
+
+/* join */
+.login_title {margin-bottom: 20px;}
+.join_box {margin-top: 15px;}
+.join_box > p {margin-bottom: 5px;}
+.join_box .join_input {display: flex; justify-content: space-between; align-items: center;}
+.join_box .join_input input {width: 100%; height: 35px; padding: 0 10px; font-size: 14px; color: #000;}
+.join_box .join_input.flex_input input {width: 75%;}
+.email_input {display: flex; justify-content: space-between; align-items: center;}
+.email_input input {width: 100%; height: 35px; padding: 0 10px; font-size: 14px; color: #000;}
+.email_input span {font-size: 20px;}
+.email_input select {width: 160px; height: 35px; padding: 0 10px;}
+.join_box .join_input button {display: flex; justify-content: center; align-items: center; width: 80px; height: 35px; border-radius: 5px; background-color: #fff; color: #000; border: none;}
+.rep {margin-top: 10px;}
+.rep p:first-child {color: #ff4d4d;}
+.rep p:last-child {color: #57ef57;}
+.pw_chk {margin-top: 10px;}
+.pw_chk p:first-child {color: #ff4d4d;}
+.pw_chk p:last-child {color: #57ef57;}
+.s_btn {display: flex; justify-content: center; align-items: center; width: 80px; height: 35px; border-radius: 5px; background-color: #fff; color: #000; border: none; margin: 30px auto;}
+
+
+
+
+
+/* login */
+.login_title {margin-bottom: 20px;}
+.input_box {margin-bottom: 15px;}
+.input_box p {margin-bottom: 5px;}
+.input_box input {width: 100%; height: 35px; padding: 0 10px; color: #000;}
+.bot_box {display: flex; justify-content: space-between; align-items: center; margin-top: 40px;}
+.bot_box button {display: flex; justify-content: center; align-items: center; width: 80px; height: 40px; border-radius: 5px; background-color: orangered; color: #fff; border: none; margin: 0;}
+.pass_link {display: block; font-size: 12px; color: #fff; margin-top: 50px; text-align: center;}
+
+
+
+
+
+/* password */
+.input_box {margin-bottom: 15px;}
+.input_box p {margin-bottom: 5px;}
+.input_box input {width: 100%; height: 35px; padding: 0 10px; border: none;}
+.bot_box.center {justify-content: center;}
+
+.pw_find {margin-top: 40px; text-align: center;}
+.pw_find p:first-child {color: red; font-weight: 700;}
+.pw_find p:last-child {font-weight: 700; color: greenyellow;}
+
+
+
+
+
+/* order */
+.my_title {text-align: center; margin-bottom: 40px; font-size: 24px;}
+.order_title {text-align: center; margin: 40px 0 20px;}
+.order_contents {border-bottom: 1px solid #fff; padding: 20px 0; display: flex; align-items: center; gap: 20px;}
+.order_contents:first-child {border-top: 1px solid #fff;}
+.order_contents .cart_img {width: 100px; height: 100px; border-radius: 10px; border: 1px solid #000;}
+.order_contents p {font-size: 14px; margin-bottom: 5px;}
+.order_contents p:last-child {margin-bottom: 0;}
+.point_use div {display: flex; align-items: center; width: 100%;}
+.point_use div p {font-size: 14px; width: 110px;}
+.point_use div input {width: calc(100% - 110px); height: 35px; padding: 0 10px; text-align: right; color: #000;}
+.point_use label {display: flex; align-items: center; width: 100%; margin: 10px 0;}
+.point_use label p {width: 110px;}
+.point_use label span {font-size: 14px; margin-left: 5px;}
+.coupon_use {display: block; margin-top: 30px;}
+.pay_box {display: flex; justify-content: space-between; align-items: center; width: 100%; height: 60px; background-color: #555; padding: 0 20px; margin-bottom: 10px; color: #fff;}
+.pay_box input {height: 100%; border: none; background-color: #555; color: #fff; font-size: 16px; text-align: right; outline: none;}
+.total_pay {width: 100%; text-align: right; margin-top: 30px; font-size: 24px;}
+.total_pay h2 {font-size: 24px; margin-bottom: 10px;}
+.total_pay input {font-size: 24px; margin-right: 5px; text-align: right; border: none; outline: none; background-color: transparent;}
+.kakaopay {display: flex; justify-content: center; align-items: center; width: 100px; height: 100px; border-radius: 10px; background-color: #fde500; margin: 0 auto; cursor: pointer; color: #000; position: relative; border: none; font-weight: 400;}
+.kakaopay p {display: none;}
+.kakaopay.selected {border: 5px solid #fde500; background: #000; color: #fff; font-weight: 700}
+.kakaopay.selected p {position: absolute; bottom: -75px; left: 50%; transform: translateX(-50%); color: #fff; font-weight: 700; text-align: center; display: block; width: 300px;}
+
+.b_btn {display: flex; justify-content: center; align-items: center; text-align: center; width: 200px; height: 50px; border-radius: 10px; border: 1px solid #000; background-color: #ff4500; margin: 100px auto 50px; color: #fff;}
+
+
+
+
+/* order_success */
+.order_success {width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center;}
+.order_success h2 {margin-bottom: 40px; font-size: 24px; font-weight: 700;}
+.order_success a {display: block; width: 80px; height: 40px; border-radius: 10px; background-color: #000; color: #fff; line-height: 44px; margin-top: 25px;}
+
+
+
+
+
+/* mypage */
+.my_info {position: relative; padding: 60px 0 40px; display: flex; align-items: center; gap: 20px;}
+.my_info > a {position: absolute; top: 20px; right: 20px; font-size: 14px; font-weight: 500;}
+.my_info > a::after {content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 1px; background-color: #fff;}
+.my_info img {width: 100px; height: 100px; border-radius: 10px; background-color: #000;}
+.my_info .right h2 {font-size: 18px; margin-bottom: 10px;}
+.my_info .right .my_id {display: flex; align-items: center;}
+.my_info .right .bot {display: flex; gap: 10px;}
+.my_info .right .bot p {width: 100px; height: 50px; border-radius: 5px; background-color: #fff; color: #000; font-size: 12px; text-align: center; display: flex; justify-content: center; align-items: center; flex-direction: column;}
+.my_info .right .bot p i {font-style: normal;}
+.my_info .right .bot p span {color: #000;}
+
+.my_cate {display: flex; flex-direction: column; gap: 10px; width: 100%;}
+.my_cate .contents {position: relative; width: 100%; height: 60px; border: 1px solid #fff; line-height: 60px; text-align: center;}
+.my_cate .contents span {position: absolute; top: 50%; left: 30px; transform: translateY(-50%) rotate(45deg); width: 16px; height: 16px; background-color: #fff;}
+
+.my_cate .contents.my_logout {border: none; background: #ff4500;}
+
+
+
+
+
+/* my_revision */
+.profile_img {display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 15px; margin-bottom: 40px;}
+.profile_img img {width: 120px; height: 120px; border-radius: 15px; background-color: #000;}
+.profile_img button {border: none; background-color: transparent; position: relative;}
+.profile_img button::after {content: ''; position: absolute; bottom: -3px; left: 0; width: 100%; height: 1px; background-color: #000;}
+
+.profile_box {display: flex; align-items: center; font-size: 20px;}
+.profile_box h2 {font-size: 20px; margin-bottom: 0; font-weight: 700;}
+
+.profile_btn_box {display: flex; justify-content: space-between; align-items: center; width: 100%; margin: 60px auto;}
+.profile_btn_box button {width: 120px; height: 40px; border-radius: 5px; background-color: #fff; color: #000; border: none;}
+.profile_btn_box button:last-child {background: #ff4500; color: #fff;}
+
+
+
+
+
+/* wish_list */
+.no_wish {width: 100%; height: 50px; border: 1px solid #000; border-radius: 10px; line-height: 50px; text-align: center; background-color: #fff; font-size: 14px; font-weight: 700; color: #000;}
+
+.wish_contents {position: relative; width: 100%; padding: 20px 0; border-bottom: 1px solid #fff; display: flex; align-items: center; gap: 10px;}
+.wish_contents:first-child {border-top: 1px solid #fff;}
+.wish_contents a {display: flex; justify-content: center; align-items: center; width: 100px; height: 100px; border-radius: 5px; overflow: hidden;}
+.wish_contents a img {width: 100%; height: 100%; object-fit: cover;}
+
+.wish_contents .wish_del_btn {position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #000;}
+.wish_contents .wish_del_btn span:first-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 20px; height: 2px; border-radius: 2px; background-color: #000;}
+.wish_contents .wish_del_btn span:last-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 20px; height: 2px; border-radius: 2px; background-color: #000;}
+
+.wish_contents .wish_txt {width: calc(100% - 160px);}
+.wish_contents .wish_txt h2 {font-size: 14px; font-weight: 700; white-space: nowrap; word-break: break-all; text-overflow: ellipsis; overflow: hidden; margin-bottom: 10px;}
+.wish_contents .wish_txt p {font-size: 14px;}
+
+
+
+
+
+/* order_list */
+.order_list {width: 360px; margin: 0 auto;}
+.order_list .contents {position: relative; border-top: 1px solid #fff; padding: 0 0 20px; display: flex; align-items: center; gap: 20px;}
+.order_list .contents:first-child {border-top: 1px solid #000;}
+.order_list .contents .img_box {display: flex; justify-content: center; align-items: center; width: 100px; height: 100px; border-radius: 10px; border: 1px solid #000; overflow: hidden;}
+.order_list .contents .img_box img {width: 100%; height: 100%; object-fit: cover;}
+.order_list .contents .right {width: 130px;}
+.order_list .contents .right p {font-size: 12px; word-break: keep-all;}
+.order_list .contents .right div {display: flex;}
+
+.order_list .contents .r_go_btn {position: absolute; top: 20px; right: 0; width: 75px; height: 30px; border-radius: 5px; background-color: #fff; color: #000; font-size: 12px; text-align: center; border: none; font-weight: 700;}
+
+.order_list .contents .order_con {align-items: center;}
+
+
+
+
+
+/* history */
+.his_contents .contents {position: relative; border-bottom: 1px solid #fff; padding: 20px 0; display: flex; align-items: center; gap: 20px;}
+.his_contents .contents:first-child {border-top: 1px solid #fff;}
+.his_contents .contents .img_box {display: flex; justify-content: center; align-items: center; width: 100px; height: 100px; border-radius: 10px; border: 1px solid #000; overflow: hidden;}
+.his_contents .contents .img_box img {width: 100%; height: 100%; object-fit: cover;}
+.his_contents .contents .right {display: flex; flex-direction: column; gap: 20px;}
+.his_contents .contents .right p {font-size: 12px; word-break: keep-all;}
+
+.his_contents .contents .del_btn {position: absolute; top: 20px; right: 5px; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #000; background-color: #fff;}
+.his_contents .contents .del_btn span:first-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 2px; height: 20px; border-radius: 2px; background-color: #000;}
+.his_contents .contents .del_btn span:last-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 2px; height: 20px; border-radius: 2px; background-color: #000;}
+
+
+
+
+
+/* my_write */
+.my_scroll_box {width: 100%; border: 2px solid #fff; border-radius: 5px; padding: 30px 20px; overflow-y: scroll;}
+
+.post_m_box {height: 200px;}
+.post_m_contents {display: flex; flex-direction: row; flex-wrap: wrap; width: 100%; gap: 30px}
+.post_m_contents .contents {position: relative; width: 125px; height: 125px; border-radius: 5px; background-color: #000; display: flex; justify-content: center; align-items: center;}
+.post_m_contents .contents img {width: 115px; height: 115px; border-radius: 10px; background-color: #fff; object-fit: cover}
+.post_m_contents .post_m_delete {position: absolute; top: -10px; right: -10px; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #000; background-color: #fff;}
+.post_m_contents .post_m_delete span:first-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 20px; height: 2px; border-radius: 2px; background-color: #000;}
+.post_m_contents .post_m_delete span:last-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 20px; height: 2px; border-radius: 2px; background-color: #000;}
+
+.read_link {position: relative; display: block; margin: 50px auto; text-align: center;}
+.read_link::after {content: ''; position: absolute; bottom: -3px; left: 50%; transform: translateX(-50%); width: 75px; height: 1px; background-color: #000;}
+
+
+.review_m_box {height: 166px;}
+.review_m_contents .contents {position: relative; display: flex; align-items: center; width: 100%; padding: 10px 15px; border: 1px solid #000; border-radius: 10px; margin: 20px auto 0; gap: 10px;}
+.review_m_contents .contents:first-child {margin-top: 0;}
+.review_m_contents .contents .review_delete_btn {position: absolute; top: -10px; right: -10px; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #000; background-color: #fff;}
+.review_m_contents .contents .review_delete_btn span:first-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 20px; height: 2px; border-radius: 2px; background-color: #000;}
+.review_m_contents .contents .review_delete_btn span:last-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 20px; height: 2px; border-radius: 2px; background-color: #000;}
+.review_m_contents .contents > img {width: 80px; height: 80px; border-radius: 5px; background-color: #000;}
+.review_m_contents .contents .left {width: calc(100% - 90px);}
+.review_m_contents .contents .left .top {margin-bottom: 5px;}
+.review_m_contents .contents .left .top > p {width: calc(100% - 125px); font-size: 16px; font-weight: 500;}
+.review_m_contents .contents .left .top .star_con {display: flex; align-items: center; gap: 5px; width: 120px;}
+.review_m_contents .contents .left .top .star_con .star_box {display: flex; gap: 2px;}
+.review_m_contents .contents .left .top .star_con .star_box .star {font-size: 20px;}
+.review_m_contents .contents .left .top .star_con .star_box .star.active {color: gold;}
+.review_m_contents .contents .left .top .star_con > span {font-size: 14px; font-weight: 700; position: relative; top: -1px;}
+.review_m_contents .contents .left > p {font-size: 14px; word-break: keep-all; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+
+.reply_m_box {height: 180px;}
+.reply_m_contents .contents {position: relative; display: block; width: 100%; padding: 20px 15px; border: 1px solid #fff; border-radius: 10px; margin: 20px auto 0;}
+.reply_m_contents .contents:first-child {margin-top: 0;}
+.reply_m_contents .reply_delete_btn {position: absolute; top: -10px; right: -10px; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #000; background-color: #fff;}
+.reply_m_contents .reply_delete_btn span:first-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 20px; height: 2px; border-radius: 2px; background-color: #000;}
+.reply_m_contents .reply_delete_btn span:last-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 20px; height: 2px; border-radius: 2px; background-color: #000;}
+.reply_m_contents .contents p:first-child {font-weight: 700; margin-bottom: 10px; font-size: 14px;}
+.reply_m_contents .contents p:last-child {font-size: 14px; word-break: keep-all; text-overflow: ellipsis; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
+
+
+
+
+
+/* admin */
+.admin_title {font-size: 18px; text-align: right; margin-bottom: 50px;}
+.admin_category {display: flex; flex-direction: column; gap: 10px; width: 100%;}
+.admin_category .contents {position: relative; width: 100%; height: 60px; border: 1px solid #fff; line-height: 60px; text-align: center;}
+.admin_category .contents span {position: absolute; top: 50%; left: 30px; transform: translateY(-50%) rotate(45deg); width: 16px; height: 16px; background-color: #fff;}
+
+
+
+
+
+/* adminRegist */
+.big_box {width: 100%; display: flex;}
+.big_box > div {width: 50%; height: 100vh;}
+.big_box .right {overflow-y: scroll; padding-bottom: 50px;}
+
+.big_box .left .file_up_con .product_ad_title {display: flex; justify-content: space-between; align-items: center; padding: 20px 10px 0 10px; margin-bottom: 30px;}
+.big_box .left .file_up_con .product_ad_title h2 {font-size: 14px; font-weight: 700; background-color: #fff; color: #000; padding: 5px 25px; border-radius: 5px;}
+.big_box .left .file_up_con .product_ad_title button {width: 80px; height: 40px; font-weight: 500; background-color: #fff; color: #000; border: 1px solid #000; border-radius: 5px;}
+
+
+.big_box .left .file_up_con .product_ad_img_list {margin: 0 auto; padding: 0 10px;}
+.big_box .left .file_up_con .product_ad_img_list div {display: flex; justify-content: space-between; align-items: center; margin-top: 10px;}
+.big_box .left .file_up_con .product_ad_img_list div input {width: calc(100% - 110px); height: 35px; padding: 0 10px; color: #000;}
+.big_box .left .file_up_con .product_ad_img_list div button {width: 100px; height: 35px; border: none; background: #fff; color: #000}
+
+.big_box .right .thumb_img {width: 200px; margin: 50px auto 30px;}
+.big_box .right .thumb_img img {display: block; width: 200px; height: 200px; background-color: #000; object-fit: cover;}
+.big_box .right .thumb_img button {display: block; width: 80px; height: 40px; font-weight: 500; background-color: #fff; color: #000; border: 1px solid #000; border-radius: 5px; margin: 10px auto;}
+.big_box .right .thumb_img .thumb_btn_box {display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px;}
+.big_box .right .thumb_img .thumb_btn_box button {margin: 0;}
+
+.big_box .right .product_ad_input {max-width: 300px; width: 100%; margin: 0 auto 15px;}
+.big_box .right .product_ad_input p {font-size: 14px; margin-bottom: 5px;}
+.big_box .right .product_ad_input input {width: 100%; height: 35px; padding: 0 10px; color: #000;}
+.big_box .right .product_ad_select {max-width: 300px; width: 100%; margin: 0 auto 15px;}
+.big_box .right .product_ad_select p {font-size: 14px; margin-bottom: 5px;}
+.big_box .right .product_ad_select select {width: 100%; height: 35px; padding: 0 5px; color: #000}
+
+.big_box .right .cs_input {max-width: 300px; width: 100%; margin: 0 auto 15px;}
+.big_box .right .cs_input p {font-size: 14px; margin-bottom: 5px;}
+.big_box .right .cs_input .input_chk_box {display: flex; flex-wrap: wrap;}
+.big_box .right .cs_input .input_chk_box label {width: 33.33%; margin-bottom: 5px; display: flex; align-items: center; gap: 4px;}
+.big_box .right .cs_input .input_chk_box label span {font-size: 14px;}
+.big_box .right .thumb_submit {display: block; width: 120px; height: 40px; border-radius: 5px; background-color: #ff4500; color: #fff; border: none; margin-left: auto; margin-right: 20px;}
+
+.cs_line {width: 300px; height: 1px; background: #fff; margin: 10px auto;}
+
+
+
+
+
+/* admin_product_revision */
+.ad_rev_box {padding: 80px 0; max-width: 1100px; width: 100%; margin: 0 auto; position: relative; height: 100vh;}
+.ad_rev_box > h2 {font-size: 36px; text-align: center; margin-bottom: 80px;}
+.ad_rev_box .ad_rev_select {display: block; width: 120px; height: 30px; border: 1px solid #000; padding: 0 5px; margin-left: auto; color: #000;}
+.ad_rev_box .inner {max-width: 1000px; width: 100%; margin: 0 auto;}
+
+.ad_rev_box .contents_box {display: flex; flex-direction: row; flex-wrap: wrap; gap: 40px; width: 100%; margin-top: 40px;}
+.ad_rev_box .contents_box .contents {position: relative; width: 220px;}
+.ad_rev_box .contents_box .contents img {width: 220px; height: 200px; object-fit: cover; background-color: #fc1;}
+.ad_rev_box .contents_box .contents .bot {width: 100%;}
+.ad_rev_box .contents_box .contents .bot .txt {margin: 15px auto 10px;}
+.ad_rev_box .contents_box .contents .bot .txt p {font-size: 14px; text-align: center; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+.ad_rev_box .contents_box .contents .bot .txt p:first-child {margin-bottom: 5px; font-weight: 700;}
+.ad_rev_box .contents_box .contents .bot .ad_rev_btn {display: block; width: 60px; height: 30px; background-color: #fff; border: none; border-radius: 5px; color: #000; margin: 0 auto;}
+.ad_rev_box .contents_box .contents .ad_rev_del {position: absolute; top: -20px; right: -20px; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #000; background-color: #fff; cursor: pointer;}
+.ad_rev_box .contents_box .contents .ad_rev_del span:first-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 30px; height: 2px; border-radius: 2px; background-color: #000;}
+.ad_rev_box .contents_box .contents .ad_rev_del span:last-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 30px; height: 2px; border-radius: 2px; background-color: #000;}
+
+
+
+
+
+/* cart */
+.cart_all_chk_top {display: flex; justify-content: right; align-items: center; gap: 10px; margin-bottom: 25px;}
+.cart_all_chk_top p {font-size: 14px; position: relative; top: 1px;}
+.cart_all_chk_top input {width: 18px; height: 18px;}
+
+.cart_box {height: 500px; overflow-y: scroll;}
+.cart_box::-webkit-scrollbar {
+    display: none;
+}
+
+.cart_box .cart_contents {position: relative; border-bottom: 1px solid #fff; padding: 20px 0; display: flex; align-items: center; gap: 20px;}
+.cart_box .cart_contents:first-child {border-top: 1px solid #fff;}
+.cart_box .cart_contents .cart_img {display: flex; justify-content: center; align-items: center; width: 100px; height: 100px; border-radius: 10px; overflow: hidden;}
+.cart_box .cart_contents .cart_img img {width: 100%; height: 100%; object-fit: cover;}
+.cart_box .cart_contents .cart_txt {width: calc(100% - 158px);}
+.cart_box .cart_contents .cart_txt p {font-size: 12px; word-break: keep-all; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+.cart_box .cart_contents .cart_txt p:nth-child(2) {margin: 2px 0;}
+.cart_box .cart_contents input {width: 18px; height: 18px; cursor: pointer;}
+
+.cart_btn {display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 40px;}
+.cart_btn button {width: 120px; height: 35px; border-radius: 5px; border: none; background-color: #fff; color: #000;}
+
+#goOrderBtn {display: block; width: 120px; height: 35px; border-radius: 5px; border: none; background-color: #ff4500; color: #fff; margin-top: 20px; margin-left: auto;}
+
+
+
+
+
+/* review_write */
+.review_write .img_regi {width: 200px; margin: 0 auto;}
+.review_write .img_regi img {width: 200px; height: 200px; border-radius: 10px; background-color: #000;}
+.review_write .img_regi .review_img_btn {display: block; width: 80px; height: 35px; border-radius: 5px; border: 1px solid #000; background-color: #fff; margin: 15px auto 0;}
+
+.review_write .star_con {display: flex; justify-content: center; align-items: center; margin: 20px auto;}
+.review_write .star_con p {font-size: 14px; position: relative; top: -1px;}
+.review_write .star_con .star_box {display: flex; gap: 5px;}
+.review_write .star_con .star_box .star {font-size: 20px; cursor: pointer; transition: color 0.2s;}
+.review_write .star_con .star_box .star.active {color: gold;}
+
+.review_write textarea {width: 100%; height: 200px; appearance: none; outline: none; border: 1px solid #000; border-radius: 10px; padding: 20px 10px; font-size: 14px; resize: none;}
+
+.review_write .review_submit_btn {display: block; width: 120px; height: 40px; border-radius: 5px; border: none; background-color: #000; color: #fff; margin: 30px auto 0;}
+
+
+
+
+
+/* cs_plus */
+.cs_box {max-width: 800px; width: 100%; height: 100vh; display: flex; margin: 0 auto; border-bottom: 2px solid #000;}
+.cs_box > div {position: relative; width: 50%; height: 100%; padding: 0 15px 20px;}
+.cs_box > div.left {border-right: 1px solid #000;}
+.cs_box > div.right {border-left: 1px solid #000;}
+
+.cs_box > div .cs_inner {height: calc(100% - 220px); overflow-y: scroll;}
+
+.cs_bot_box {position: relative; max-width: 800px; width: 100%; padding: 40px 0; margin: 0 auto; display: flex; justify-content: center; align-items: center;}
+.cs_bot_box button {display: block; width: 120px; height: 40px; border: none; border-radius: 5px; background-color: #000; color: #fff; margin: 0 auto;}
+
+.cs_fixed_box {position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: calc(100% - 30px);}
+.cs_fixed_box h2 {margin-top: 40px;}
+.cs_fixed_box .cs_input_add {display: flex; align-items: center; gap: 15px}
+.cs_fixed_box .cs_input_add input {width: calc(100% - 75px); height: 40px; border: 1px solid #000; border-radius: 5px; padding: 0 10px;}
+.cs_fixed_box .cs_input_add button {width: 60px; height: 40px; border: 1px solid #000; border-radius: 5px; background-color: #fff;}
+.cs_fixed_box p {font-size: 12px; font-weight: 700; margin-top: 5px; padding: 0 5px;}
+
+.cs_inner {margin-top: 220px;}
+.cs_inner .cs_input_display {display: flex; flex-direction: row; flex-wrap: wrap; gap: 19px;}
+.cs_inner .cs_input_display .contents {display: flex; gap: 10px; align-items: center; width: 175px; margin-bottom: 10px;}
+.cs_inner .cs_input_display .contents input {width: 125px; height: 40px; outline: none; border: none; background-color: transparent; font-size: 20px; white-space: nowrap; word-break: keep-all; text-overflow: ellipsis; overflow: hidden; text-align: right;}
+.cs_inner .cs_input_display .contents .cs_delete_btn {position: relative; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #000; background-color: #fff; cursor: pointer;}
+.cs_inner .cs_input_display .contents .cs_delete_btn span:first-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 25px; height: 2px; border-radius: 2px; background-color: #000;}
+.cs_inner .cs_input_display .contents .cs_delete_btn span:last-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 25px; height: 2px; border-radius: 2px; background-color: #000;}
+
+
+
+
+
+/* board_list_rev */
+#board_list_contents {position: relative;}
+#board_list_contents .del_btn {position: absolute; top: -17.5px; right: -17.5px; width: 35px; height: 35px; border-radius: 50%; border: 2px solid #000; background-color: #fff;}
+#board_list_contents .del_btn span:first-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 25px; height: 2px; background-color: #000; border-radius: 2px;}
+#board_list_contents .del_btn span:last-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 25px; height: 2px; background-color: #000; border-radius: 2px;}
+
+
+
+
+/* csplus */
+.my_title {text-align: center; margin-bottom: 40px;}
+
+.back_bg {position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: url(../img/bg.jpg) no-repeat center/cover; z-index: -10;}
+
+.box_bg {position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 100%; background-color: #fff; z-index: -5; opacity: 0.7;}
+
+.cs_box {max-width: 800px; width: 100%; height: 100vh; display: flex; margin: 0 auto; border-bottom: 2px solid #fff;}
+.cs_box > div {position: relative; width: 50%; height: 100%; padding: 0 15px 20px;}
+.cs_box > div.left {border-right: 1px solid #fff;}
+.cs_box > div.right {border-left: 1px solid #fff;}
+
+.cs_box > div .cs_inner {height: calc(100% - 220px); overflow-y: scroll;}
+
+.cs_bot_box {position: relative; max-width: 800px; width: 100%; padding: 40px 0; margin: 0 auto; display: flex; justify-content: center; align-items: center;}
+.cs_bot_box button {display: block; width: 120px; height: 40px; border: none; border-radius: 5px; background-color: #fff; color: #000; margin: 0 auto;}
+
+.cs_fixed_box {position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: calc(100% - 30px);}
+.cs_fixed_box h2 {margin-top: 40px;}
+.cs_fixed_box .cs_input_add {display: flex; align-items: center; gap: 15px}
+.cs_fixed_box .cs_input_add input {width: calc(100% - 75px); height: 40px; border: 1px solid #000; border-radius: 5px; padding: 0 10px; color: #000;}
+.cs_fixed_box .cs_input_add button {width: 60px; height: 40px; border: 1px solid #000; border-radius: 5px; background-color: #fff; color: #000;}
+.cs_fixed_box p {font-size: 12px; font-weight: 700; margin-top: 5px; padding: 0 5px;}
+
+.cs_inner {margin-top: 220px;}
+.cs_inner .cs_input_display {display: flex; flex-direction: row; flex-wrap: wrap; gap: 19px;}
+.cs_inner .cs_input_display .contents {display: flex; gap: 10px; align-items: center; width: 175px; margin-bottom: 10px;}
+.cs_inner .cs_input_display .contents input {width: 125px; height: 40px; outline: none; border: none; background-color: transparent; font-size: 20px; white-space: nowrap; word-break: keep-all; text-overflow: ellipsis; overflow: hidden; text-align: right;}
+.cs_inner .cs_input_display .contents .cs_delete_btn {position: relative; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #000; background-color: #fff; cursor: pointer;}
+.cs_inner .cs_input_display .contents .cs_delete_btn span:first-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 25px; height: 2px; border-radius: 2px; background-color: #000;}
+.cs_inner .cs_input_display .contents .cs_delete_btn span:last-child {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 25px; height: 2px; border-radius: 2px; background-color: #000;}
+
