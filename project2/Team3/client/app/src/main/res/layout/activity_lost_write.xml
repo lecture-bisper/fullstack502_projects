@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/trust_blue_background"
+    android:id="@+id/main"
+    android:theme="@style/ThemeOverlay.Pretendard">
+
+    <!--상단 고정 뒤로가기 바 가져오기-->
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/inc_top_bar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!--  전체 스크롤뷰-->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toTopOf="@id/incRegistBar">
+
+        <!--    전체 스크롤 뷰 이하 전체 화면-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/full_layout_margin"
+            android:orientation="vertical">
+
+            <!--        이미지 등록 / 등록한 이미지 노출 -->
+            <!--        framelayout :  자식(Children)으로 추가된 여러 뷰(View) 위젯들 중 하나를 Layout의 전면에 표시할 때 사용하는 클래스 , view기준 마지막 선 표시-->
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/trust_blue_surface"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true"
+                android:layout_marginBottom="16dp">
+            <FrameLayout
+                android:id="@+id/image_regist_slot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center">
+                <!--            clickable : 클릭가능
+                                focusable : 키보드 같은걸로 접근 가능
+                               foreground 이하를 넣어서 클릭 가능한 것처럼 보이게 만듬 -->
+
+                <!--            등록된 이미지 표시되는 곳-->
+                <ImageView
+                    android:id="@+id/iv_registed"
+                    android:layout_width="@dimen/image_width"
+                    android:layout_height="@dimen/image_height"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter" />
+
+                <!--            이미지 등록 전 + 기호와 등록 안내 영역-->
+                <LinearLayout
+                    android:id="@+id/image_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:visibility="visible"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/image_register"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@android:drawable/ic_menu_camera" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/regist_image"
+                        android:textColor="@color/gray_1" />
+                </LinearLayout>
+            </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/trust_blue_surface"
+                android:layout_marginBottom="@dimen/under_element_margin"
+                app:cardCornerRadius="4dp">
+            <!--        카테고리 셀렉트박스-->
+            <Spinner
+                android:id="@+id/select_category"
+                style="@style/bteween_element_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:entries="@array/category_array"
+                android:popupBackground="@color/trust_blue_surface"
+                android:textColor="@color/trust_blue_text"/>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!--        분실물 명+입력박스-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/lost_item_name"
+                    android:textSize="@dimen/text_size_detail"
+                    android:textColor="@color/trust_blue_text"/>
+
+                <com.google.android.material.textfield.TextInputLayout style="@style/OutlinedTextBox"
+                    app:boxBackgroundColor="@color/trust_blue_surface">
+>
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tv_lost_product_name"
+                        style="@style/OutlinedTextBoxInner" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+            <!--분실자-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="vertical">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lost_person"
+                    android:textSize="@dimen/text_size_detail"
+                    android:textColor="@color/trust_blue_text"/>
+
+                <com.google.android.material.textfield.TextInputLayout style="@style/OutlinedTextBox"
+                    app:boxBackgroundColor="@color/trust_blue_surface">
+
+                    <com.google.android.material.textfield.TextInputEditText style="@style/OutlinedTextBoxInner"
+                        android:id="@+id/lost_person_name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!--            분실일자-->
+            <!--            이거 나중에 activity에서 다이얼로그 등록해서 사용해야됨-->
+            <!--            다이얼로그는 메모장 저장해둠-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lost_date"
+                    android:textSize="@dimen/text_size_detail"
+                    android:textColor="@color/trust_blue_text"/>
+
+                <com.google.android.material.textfield.TextInputLayout style="@style/OutlinedTextBox"
+                    app:boxBackgroundColor="@color/trust_blue_surface">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/lost_date"
+                        style="@style/OutlinedTextBoxInner"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!--        주소,상세주소,내용-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/under_element_margin"
+                    android:text="@string/lost_addr"
+                    android:textSize="@dimen/text_size_detail"
+                    android:textColor="@color/trust_blue_text"/>
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/map_fragment"
+                    android:name="com.naver.maps.map.MapFragment"
+                    android:layout_width="@dimen/image_width"
+                    android:layout_height="@dimen/image_height"
+                    android:layout_marginBottom="@dimen/under_element_margin" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilAddress"
+                    style="@style/OutlinedTextBox"
+                    app:boxBackgroundColor="@color/trust_blue_surface"
+                    app:endIconDrawable="@android:drawable/ic_menu_search"
+                    app:endIconMode="custom"
+                    app:endIconTint="@color/gray_1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etAddress"
+                        style="@style/OutlinedTextBoxInner"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout style="@style/OutlinedTextBox"
+                    app:boxBackgroundColor="@color/trust_blue_surface"
+                    app:hintTextColor="@color/trust_blue_secondary"
+                    android:hint="상세주소"
+                    android:textColorHint="@color/gray_1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/detailAddress"
+                        style="@style/OutlinedTextBoxInner"
+                        android:inputType="textMultiLine" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--            내용-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/content"
+                    android:textSize="@dimen/text_size_detail" android:textColor="@color/trust_blue_text"/>
+
+                <com.google.android.material.textfield.TextInputLayout style="@style/OutlinedTextBox"
+                    app:boxBackgroundColor="@color/trust_blue_surface">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/comments"
+                        style="@style/OutlinedTextBoxInner"
+                        android:inputType="textMultiLine" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+
+            <!--        전체 스크롤뷰 이하 전체 화면-->
+        </LinearLayout>
+        <!--        전체 스크롤 뷰-->
+    </androidx.core.widget.NestedScrollView>
+    <include
+        android:id="@+id/incRegistBar"
+        layout="@layout/inc_regist_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

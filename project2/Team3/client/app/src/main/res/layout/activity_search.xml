@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/trust_blue_background"
+    android:theme="@style/ThemeOverlay.Pretendard">
+
+    <!-- 메인 콘텐츠 -->
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- 상단 바 포함 검색바 -->
+        <include
+            android:id="@+id/topBar"
+            layout="@layout/inc_top_bar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/border"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp">
+
+            <ImageButton
+                android:id="@+id/menu_btn"
+                android:layout_width="40dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/hamburger" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilAddress"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                app:endIconDrawable="@android:drawable/ic_menu_search"
+                app:endIconMode="custom"
+                app:endIconTint="@color/gray_1"
+                app:boxStrokeColor="@color/trust_blue_background"
+                app:hintTextColor="@color/trust_blue_secondary"
+                android:hint="검색어를 입력하세요"
+                android:textColorHint="@color/gray_1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:textCursorDrawable="@color/trust_blue_accent"
+                    android:singleLine="true"
+                    android:textColor="@color/trust_blue_text" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
+
+            <!-- 달력 버튼 -->
+            <ImageButton
+                android:id="@+id/btn_select_date_range"
+                android:layout_width="43dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_calendar"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:contentDescription="날짜 선택"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <!-- 선택된 날짜 TextView -->
+            <TextView
+                android:id="@+id/tv_selected_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="선택된 날짜 없음"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:textColor="@color/trust_blue_text"
+                app:layout_constraintStart_toEndOf="@id/btn_select_date_range"
+                app:layout_constraintEnd_toStartOf="@id/btn_reset"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <!-- 초기화 버튼 -->
+            <ImageButton
+                android:id="@+id/btn_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:src="@drawable/reset"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="초기화 버튼"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginHorizontal="4dp"
+
+            android:background="#33000000" />
+
+        <!-- 카테고리 선택 (가로 스크롤) -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_category0"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginEnd="4dp"
+                    android:checkable="true"
+                    android:tag="0"
+                    android:text="전자기기"
+                    android:backgroundTint="@color/category_button_bg"
+                    android:textColor="@color/category_button_text"
+                    app:cornerRadius="24dp"
+                    app:strokeColor="@color/trust_blue_primary"
+                    app:strokeWidth="2dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_category1"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginEnd="4dp"
+                    android:checkable="true"
+                    android:tag="1"
+                    android:text="지갑/가방"
+                    android:backgroundTint="@color/category_button_bg"
+                    android:textColor="@color/category_button_text"
+                    app:cornerRadius="24dp"
+                    app:strokeColor="@color/trust_blue_primary"
+                    app:strokeWidth="2dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_category2"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginEnd="4dp"
+                    android:checkable="true"
+                    android:tag="2"
+                    android:text="신분증/카드"
+                    android:backgroundTint="@color/category_button_bg"
+                    android:textColor="@color/category_button_text"
+                    app:cornerRadius="24dp"
+                    app:strokeColor="@color/trust_blue_primary"
+                    app:strokeWidth="2dp"  />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_category3"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="80dp"
+                    android:layout_height="45dp"
+                    android:layout_marginRight="4dp"
+                    android:checkable="true"
+                    android:tag="3"
+                    android:text="열쇠"
+                    android:backgroundTint="@color/category_button_bg"
+                    android:textColor="@color/category_button_text"
+                    app:cornerRadius="24dp"
+                    app:strokeColor="@color/trust_blue_primary"
+                    app:strokeWidth="2dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_category4"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginRight="4dp"
+                    android:checkable="true"
+                    android:tag="4"
+                    android:text="의류/악세서리"
+                    android:backgroundTint="@color/category_button_bg"
+                    android:textColor="@color/category_button_text"
+                    app:cornerRadius="24dp"
+                    app:strokeColor="@color/trust_blue_primary"
+                    app:strokeWidth="2dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_category5"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginRight="4dp"
+                    android:checkable="true"
+                    android:tag="5"
+                    android:text="문서/서류"
+                    android:backgroundTint="@color/category_button_bg"
+                    android:textColor="@color/category_button_text"
+                    app:cornerRadius="24dp"
+                    app:strokeColor="@color/trust_blue_primary"
+                    app:strokeWidth="2dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_category6"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginRight="4dp"
+                    android:checkable="true"
+                    android:tag="6"
+                    android:text="귀중품"
+                    android:backgroundTint="@color/category_button_bg"
+                    android:textColor="@color/category_button_text"
+                    app:cornerRadius="24dp"
+                    app:strokeColor="@color/trust_blue_primary"
+                    app:strokeWidth="2dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_category7"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:checkable="true"
+                    android:tag="7"
+                    android:text="기타"
+                    android:backgroundTint="@color/category_button_bg"
+                    android:textColor="@color/category_button_text"
+                    app:cornerRadius="24dp"
+                    app:strokeColor="@color/trust_blue_primary"
+                    app:strokeWidth="2dp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="4dp"
+            android:background="#33000000" />
+
+        <!-- 분실물/습득물 선택 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_lost"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="40dp"
+                android:checkable="true"
+                android:tag="LOST"
+                android:text="@string/lost_item"
+                android:backgroundTint="@color/lost_button_bg"
+                android:textColor="@color/category_button_text"
+                app:cornerRadius="24dp"
+                app:strokeColor="@color/lost_red"
+                app:strokeWidth="2dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_found"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:checkable="true"
+                android:tag="FOUND"
+                android:text="@string/found_item"
+                android:backgroundTint="@color/found_button_bg"
+                android:textColor="@color/category_button_text"
+                app:cornerRadius="24dp"
+                app:strokeColor="@color/found_blue"
+                app:strokeWidth="2dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="4dp"
+            android:background="#33000000" />
+
+        <!-- RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <!-- Drawer 메뉴 -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/drawer_menu" />
+</androidx.drawerlayout.widget.DrawerLayout>

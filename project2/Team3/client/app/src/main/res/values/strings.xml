@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">줍다</string>
+    <string name="search_bar">검색어 입력</string>
+    <string name="lost_item">분실물</string>
+    <string name="found_item">습득물</string>
+    <!--    <string name="lost_item_name">분실물명</string>-->
+    <!--    <string name="found_item_name">습득물명</string>-->
+    <!--    <string name="lost_date">분실일자</string>-->
+    <!--    <string name="found_date">습득일자</string>-->
+    <!--    <string name="lost_addr">분실한 장소(주소)</string>-->
+    <!--    <string name="found_addr">습득한 장소(주소)</string>-->
+    <!--    <string name="addr_detail">상세주소</string>-->
+    <!--    <stirng name="content">내용</stirng>-->
+    <!--    <string name="cancel">취소</string>-->
+    <!--    <string name="lost_item">분실물</string>-->
+    <!--    <string name="found_item">습득물</string>-->
+    <string name="lost_item_name">분실물명</string>
+    <string name="found_item_name">습득물명</string>
+    <string name="lost_date">분실일자</string>
+    <string name="found_date">습득일자</string>
+    <string name="lost_addr">분실한 장소(주소)</string>
+    <string name="found_addr">습득한 장소(주소)</string>
+    <string name="addr_detail">상세주소</string>
+    <!--    <stirng name="content">내용</stirng>-->
+    <string name="content">내용</string>
+    <string name="regist_image">이미지 등록하기</string>
+    <string name="lost_person">분실자</string>
+
+    <string name="regist">등록</string>
+    <string name="cancel">취소</string>
+    <string name="update">수정</string>
+
+    <string-array name="category_array">
+        <item>전자기기</item>
+        <item>지갑/가방</item>
+        <item>신분증/카드</item>
+        <item>열쇠</item>
+        <item>의류/악세서리</item>
+        <item>문서/서류</item>
+        <item>귀중품</item>
+        <item>기타</item>
+    </string-array>
+
+</resources>
+

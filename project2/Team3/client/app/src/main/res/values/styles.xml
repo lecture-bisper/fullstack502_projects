@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="bteween_element_margin">
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+    </style>
+
+    <!-- TextInputLayout 스타일 -->
+    <style name="OutlinedTextBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxStrokeColor">@color/focus_outline</item>
+        <item name="android:layout_width">@dimen/text_box_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/under_element_margin</item>
+        <!-- 그림자 -->
+        <item name="android:elevation">8dp</item>
+        <item name="android:translationZ">2dp</item>
+    </style>
+
+    <!-- TextInputEditText 스타일 -->
+    <style name="OutlinedTextBoxInner">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/trust_blue_text</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="OutlinedSearchTextBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundMode">none</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+
+
+    <!-- DatePicker 스피너로 보이는 테마 -->
+    <style name="SpinnerDatePickerDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:datePickerStyle">@style/SpinnerDatePickerStyle</item>
+<!--        텍스트 흰색이라 안보여서 변경함-->
+<!--        material 버전따라 이름 다른 듯 둘 다 넣음 그냥-->
+        <item name="colorAccent">@color/black</item>
+        <item name="colorPrimary">@color/black</item>
+    </style>
+
+    <style name="SpinnerDatePickerStyle" parent="@android:style/Widget.Material.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
+        <!-- 일부 기기/버전에선 calendarView가 켜져 있으면 스피너가 안 보일 수 있어 끔 -->
+        <item name="android:calendarViewShown">false</item>
+        <item name="android:spinnersShown">true</item>
+    </style>
+
+<!--    검색바 박스-->
+    <style name="topSearchBox">
+        <!-- 배경: surface -->
+        <item name="android:background">@color/trust_blue_surface</item>
+
+        <!-- 모서리 둥글게 (radius) -->
+        <item name="android:backgroundTint">@color/trust_blue_surface</item>
+        <item name="android:clipToOutline">true</item>
+
+        <!-- 그림자 -->
+        <item name="android:elevation">6dp</item>
+
+        <!-- 패딩 -->
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+
+        <!-- 레이아웃 -->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="list_background">
+        <item name="backgroundColor">@color/trust_blue_background</item>
+    </style>
+    <style name="list_item">
+        <item name="backgroundColor">@color/trust_blue_surface</item>
+    </style>
+
+    <style name="button_style_notBackColor">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:elevation">6dp</item>
+        <item name="android:translationZ">4dp</item>
+    </style>
+
+    <style name="button_style_backColor_surf">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:elevation">6dp</item>
+        <item name="android:translationZ">4dp</item>
+    </style>
+
+    <style name="ThemeOverlay.Pretendard" parent="">
+        <item name="android:fontFamily">@font/pretendard_variable</item>
+        <item name="fontFamily">@font/pretendard_variable</item>
+    </style>
+
+</resources>

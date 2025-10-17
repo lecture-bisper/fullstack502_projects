@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "462598239907",
+    "project_id": "lostandfound-78e63",
+    "storage_bucket": "lostandfound-78e63.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462598239907:android:7127462c38dfcfb035b116",
+        "android_client_info": {
+          "package_name": "bitc.full502.lostandfound"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUnWor1WLslbXSrNpyXtZE-ukxKeyz6CU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

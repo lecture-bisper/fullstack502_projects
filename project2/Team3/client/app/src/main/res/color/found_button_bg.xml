@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 선택됨 -->
+    <item android:color="@color/found_blue" android:state_checked="true"/>
+    <!-- 선택 해제 -->
+    <item android:color="@color/trust_blue_surface"/>
+</selector>

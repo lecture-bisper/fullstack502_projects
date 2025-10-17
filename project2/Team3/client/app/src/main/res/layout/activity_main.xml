@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/trust_blue_background"
+    android:theme="@style/ThemeOverlay.Pretendard">
+
+    <!-- 메인 콘텐츠 영역 -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- 네이버 지도 -->
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/map_fragment"
+            android:name="com.naver.maps.map.MapFragment"
+            android:layout_width="406dp"
+            android:layout_height="768dp" />
+
+        <LinearLayout
+            android:id="@+id/top_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp">
+            <!-- 메뉴버튼 -->
+            <ImageButton
+                android:id="@+id/menu_btn"
+                android:layout_width="40dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="32dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/hamburger" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLostFilter"
+                style="@style/button_style_notBackColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="@color/white"
+                android:text="분실물"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                app:strokeColor="#fe4b5f"
+                app:strokeWidth="1dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFoundFilter"
+                style="@style/button_style_notBackColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:backgroundTint="@color/white"
+                android:text="습득물"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                app:strokeColor="#4db0fe"
+                app:strokeWidth="1dp" />
+
+            <ImageButton
+                android:id="@+id/search_bar"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/search"
+                android:layout_marginLeft="32dp"/>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/box_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="70dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:elevation="10dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="130dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="12dp"
+                android:background="@android:color/white"
+                app:cardCornerRadius="16dp"
+                app:strokeColor="#fe4b5f"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="@color/white">
+
+                <TextView
+                    android:id="@+id/btn_lost_write"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="분실물 작성"
+                    android:textSize="16sp"
+                    android:textColor="@color/trust_blue_text"/>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="130dp"
+                android:layout_height="40dp"
+                android:background="@android:color/white"
+                app:cardCornerRadius="16dp"
+                app:strokeColor="#4db0fe"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="@color/white">
+
+                <TextView
+                    android:id="@+id/btn_found_write"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="습득물 작성"
+                    android:textSize="16sp"
+                    android:textColor="@color/trust_blue_text"/>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <!-- 오른쪽 하단 FloatingActionButton -->
+
+
+
+        <!-- 바텀시트: 드래그로 올리면 리스트가 뜸 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:elevation="8dp"
+            android:focusable="true"
+            app:behavior_draggable="true"
+            app:behavior_fitToContents="false"
+            app:behavior_hideable="false"
+            app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
+            app:cardCornerRadius="16dp"
+            app:layout_behavior="@string/bottom_sheet_behavior">
+            <!-- behavior_peekHeight기본 내려온 높이 -->
+            <!--behavior_hideable 완전 숨김 금지 -->
+            <!-- behavior_draggable expandedOffset 사용하려면 false -->
+
+            <!-- 바텀시트 내부 -->
+            <LinearLayout
+                style="@style/list_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="12dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="12dp"
+                android:background="@color/trust_blue_background">
+
+                <!-- 드래그 핸들(시각용) -->
+                <View
+                    android:layout_width="36dp"
+                    android:layout_height="4dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:importantForAccessibility="no" />
+                <!--                                    android:background="@drawable/drag_handle_bg"-->
+
+                <!-- 헤더(타이틀/필터 등) -->
+                <TextView
+                    android:id="@+id/bottom_sheet_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="목록"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/trust_blue_text"
+                    android:layout_margin="8dp"/>
+
+                <!--                 리스트 -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    style="@style/list_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="true" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <ImageButton
+            android:id="@+id/btn_write"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="16dp"
+            android:background="@null"
+            android:contentDescription="추가 버튼"
+            android:src="@drawable/ic_write" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- 네비게이션 드로어 메뉴 -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/drawer_menu"
+        android:backgroundTint="@color/trust_blue_background"
+        app:itemTextColor="@color/trust_blue_text"/>
+</androidx.drawerlayout.widget.DrawerLayout>

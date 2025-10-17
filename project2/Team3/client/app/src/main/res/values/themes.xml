@@ -1,0 +1,11 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.LostAndFound" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+<!--         <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    </style>
+
+    <!-- 앱 테마 (Manifest 에서 사용하는 최종 테마)에 추가 -->
+    <style name="Theme.LostAndFound" parent="Base.Theme.LostAndFound"/>
+</resources>

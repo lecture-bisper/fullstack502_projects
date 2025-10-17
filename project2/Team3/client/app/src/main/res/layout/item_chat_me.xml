@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp"
+    android:gravity="end"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.Pretendard">
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/message_outline"
+        android:padding="8dp"
+        android:text="내 메세지"
+        android:textColor="@color/trust_blue_text"
+        android:textSize="16sp"
+        android:layout_margin="4dp"
+        android:ellipsize="none"
+        android:scrollHorizontally="false"
+        android:singleLine="false"
+        android:inputType="textMultiLine" />
+</LinearLayout>
